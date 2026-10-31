@@ -16,7 +16,12 @@ header{background:#fff;box-shadow:0 1px 0 #e5e9f0}header b.text-white{color:#002
 .sect{font-size:11px;font-weight:700;letter-spacing:.05em;color:#0086c9;margin-bottom:10px}#queue>div{padding:18px!important;border-radius:14px}#queue button{padding:8px 18px!important;font-size:14px}#tickets td,#tickets th{padding:10px 8px}#profile td,#profile th{padding:6px 6px}#profile .text-\[11px\],#profile .text-\[10px\]{font-size:13px}
 </style><script src="https://cdn.tailwindcss.com"></script><script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <style>.md h1{font-size:20px;font-weight:700;margin:8px 0}.md h2{font-size:16px;font-weight:700;margin:14px 0 6px;color:#002e6e}.md h3{font-weight:700;margin:10px 0 4px}.md table{width:100%;font-size:12px;border-collapse:collapse;margin:6px 0}.md td,.md th{border:1px solid #e2e8f0;padding:4px 6px;text-align:left;vertical-align:top}.md th{background:#f1f5f9}.md ul{list-style:disc;padding-left:18px}.md code{background:#f1f5f9;padding:0 3px;border-radius:3px}</style>
-<style>.ph{transition:.3s}.vwave span{width:2px;background:#00a884;border-radius:1px;opacity:.45;transform-origin:bottom}.vplaying .vwave span{opacity:1;animation:vw .9s ease-in-out infinite}.vplaying .vwave span:nth-child(2n){animation-delay:.15s}.vplaying .vwave span:nth-child(3n){animation-delay:.3s}@keyframes vw{50%{transform:scaleY(.3)}}
+<style>.ph{transition:.3s}
+.vbtn-nav{width:68px;padding:10px 4px;border-radius:14px;font-size:11px;font-weight:600;color:#64748b;display:flex;flex-direction:column;align-items:center;gap:4px;line-height:1.15;text-align:center}
+.vbtn-nav span{font-size:22px}.vbtn-nav:hover{background:#f1f5f9}.vbtn-nav.on{background:#002e6e;color:#fff}
+body.view-phone main,body.view-team main{grid-template-columns:1fr!important}
+body.view-phone #team-side,body.view-phone #askbtn,body.view-phone #askdrawer,body.view-team #phone-side{display:none!important}
+body.view-phone #phone-side{width:100%;max-width:480px;margin:0 auto}.vwave span{width:2px;background:#00a884;border-radius:1px;opacity:.45;transform-origin:bottom}.vplaying .vwave span{opacity:1;animation:vw .9s ease-in-out infinite}.vplaying .vwave span:nth-child(2n){animation-delay:.15s}.vplaying .vwave span:nth-child(3n){animation-delay:.3s}@keyframes vw{50%{transform:scaleY(.3)}}
 @keyframes p{50%{opacity:.45}}.pulse{animation:p 1s infinite}@keyframes pop{0%{transform:scale(.6);opacity:0}100%{transform:scale(1);opacity:1}}.pop{animation:pop .35s ease-out}
 ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-thumb{background:#12384f;border-radius:3px}pre{white-space:pre-wrap;word-break:break-all}
 </style></head>
@@ -29,9 +34,16 @@ header{background:#fff;box-shadow:0 1px 0 #e5e9f0}header b.text-white{color:#002
   <div class="ml-auto flex items-center gap-2"><span class="text-[11px] font-bold text-slate-400" title="Demo-only triggers, not visible to merchants">🎬 STAGE CONTROLS</span><div class="flex gap-1.5 text-xs font-semibold" id="demos"></div>
   <button onclick="reset()" class="text-xs px-3 py-1.5 rounded border border-slate-300 text-slate-600 hover:bg-slate-50">↺ Reset</button></div>
 </header>
+<div class="flex-1 flex min-h-0">
+<!-- View switcher: same page, same flows — only what is shown changes -->
+<nav id="viewnav" class="w-[84px] shrink-0 bg-white border-r border-slate-200 flex flex-col items-center gap-2 py-4">
+  <button data-view="all" onclick="setView('all')" class="vbtn-nav" title="Everything side by side"><span>🧩</span>All-in-one</button>
+  <button data-view="phone" onclick="setView('phone')" class="vbtn-nav" title="Only the merchant / customer phone"><span>📱</span>User phone</button>
+  <button data-view="team" onclick="setView('team')" class="vbtn-nav" title="Only the Paytm team console"><span>🏢</span>Paytm team</button>
+</nav>
 <main class="flex-1 grid grid-cols-[440px_1fr] gap-4 p-4 min-h-0">
 <!-- CUSTOMER SIDE: the user's own phone — WhatsApp chat with Saathi + their Paytm app -->
-<section class="flex flex-col min-h-0">
+<section id="phone-side" class="flex flex-col min-h-0">
   <div class="flex items-center gap-2 mb-2">
     <span class="w-2 h-2 rounded-full bg-[#00a884]"></span><span class="text-[11px] font-bold text-slate-500">USER'S PHONE</span>
     <label class="ml-auto text-[11px] text-slate-500 flex items-center gap-1">Demo user
@@ -81,7 +93,7 @@ header{background:#fff;box-shadow:0 1px 0 #e5e9f0}header b.text-white{color:#002
   </div>
 </section>
 <!-- PAYTM SIDE: internal views, never shown to the merchant -->
-<section class="flex flex-col min-h-0">
+<section id="team-side" class="flex flex-col min-h-0">
   <div class="flex items-center gap-1.5 mb-3 flex-wrap" id="tabs">
     <span class="grp">LIVE DEMO</span>
     <button data-tab="livepay" class="tab">💸 Live Payment</button>
@@ -255,6 +267,7 @@ header{background:#fff;box-shadow:0 1px 0 #e5e9f0}header b.text-white{color:#002
   <div data-panel="report" class="panel hidden flex-col flex-1 min-h-0"><div class="card p-8 overflow-y-auto md flex-1" id="report">Loading…</div></div>
 </section>
 </main>
+</div>
 <!-- Ask Saathi: the staff teammate, reachable from every Paytm-team tab -->
 <button id="askbtn" onclick="toggleAsk()" class="fixed bottom-6 right-6 z-40 px-5 py-3 rounded-full bg-[#002e6e] text-white font-semibold shadow-xl hover:brightness-110">💬 Ask Saathi</button>
 <div id="askdrawer" class="hidden fixed bottom-24 right-6 z-40 w-[380px] h-[65vh] rounded-2xl shadow-2xl border border-slate-200 bg-[#efeae2] flex-col overflow-hidden">
@@ -770,8 +783,14 @@ function renderML(d) {
     <span class="px-2 py-0.5 rounded bg-[#002e6e] text-white font-bold">${d.action}</span><span class="px-2 py-0.5 rounded font-bold ${c}">risk ${d.risk} ${d.risk_score}</span>
     <span class="text-slate-500">sentiment ${d.sentiment} · ₹${(d.amount || 0).toLocaleString('en-IN')} · disputes ${d.disputes} · bank ${d.bank_status}</span></div>`);
 }
+function setView(v) {
+  if (!['all', 'phone', 'team'].includes(v)) v = 'all';
+  document.body.classList.remove('view-all', 'view-phone', 'view-team'); document.body.classList.add('view-' + v);
+  document.querySelectorAll('.vbtn-nav').forEach(b => b.classList.toggle('on', b.dataset.view === v));
+  localStorage.setItem('saathiView', v); history.replaceState(null, '', v === 'all' ? location.pathname : '?view=' + v);
+}
 function tab(t) { if (t === 'livepay') { H.lpu = null; setTimeout(() => renderLive(S), 0); } $('askbtn')?.classList.toggle('hidden', t === 'staff'); if (t === 'staff') toggleAsk(false); if (t === 'report' && !H.reportLoaded) get('/api/audit-report').then(r => { $('report').innerHTML = marked.parse(r.markdown); H.reportLoaded = 1; }); document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b.dataset.tab === t)); document.querySelectorAll('.panel').forEach(p => p.classList.toggle('hidden', p.dataset.panel !== t)); }
-document.querySelectorAll('.tab').forEach(b => b.onclick = () => tab(b.dataset.tab)); tab('inbox'); chips(); openApp('wa');
+document.querySelectorAll('.tab').forEach(b => b.onclick = () => tab(b.dataset.tab)); tab('inbox'); chips(); openApp('wa'); setView(new URLSearchParams(location.search).get('view') || localStorage.getItem('saathiView') || 'all');
 let lastQ = 0;
 get('/staff/state').then(renderStaff).catch(() => {});
 setPhase(''); get(sq()).then(renderState).catch(err);
