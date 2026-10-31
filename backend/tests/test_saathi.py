@@ -216,6 +216,22 @@ def test_staff_ping_then_approve_with_pin(c):
     assert "✅ Approved" in staff(c, "9811000002", f"approve {aid} {main.APPROVER_PIN}")[-1]["text"]
     assert main.APPROVALS[aid]["status"] == "APPROVED" and main.MERCHANTS["M1001"]["settlements"]["ST-9001"]["status"] == "SETTLED"
 
+def test_staff_recent_tickets_ordinal_and_id_lookup(c):
+    c.post("/demo/soundbox_offline"); done = chat(c, "Soundbox bol nahi raha")["session_id"]  # closed/verified ticket
+    chat(c, "Meri EMI bounce ho jayegi kya, late fee lagegi?", "C2002"); chat(c, "Kal ka settlement nahi aaya")
+    msgs = staff(c, "9811000001", "give me status of last 2 tickets")
+    assert msgs[-1]["text"].startswith("Last 2 ticket") and "1. " in msgs[-1]["text"]
+    assert "Pichhli list mein sirf 2" in staff(c, "9811000001", "3rd?")[-1]["text"]
+    assert "Lakshmi" in staff(c, "9811000001", "2nd")[-1]["text"]
+    detail = staff(c, "9811000001", f"{done} iska bta")[-1]["text"]
+    assert done in detail and "VERIFIED" in detail and "Saathi's last reply" in detail
+    assert "koi ticket nahi mila" in staff(c, "9811000001", "TK-ZZZZZZ ka status")[-1]["text"]
+
+def test_ticket_issue_reflects_what_was_acted_on(c):
+    r = chat(c, "349 की ट्रांजैक्शन दे दे")
+    row = next(t for t in c.get("/state").json()["tickets"] if t["id"] == r["session_id"])
+    assert row["issue"] != "EMI_Bounce_Fear"
+
 def test_staff_without_rights_cannot_approve(c):
     r = chat(c, "Kal ka settlement nahi aaya"); aid = r["approvals"][0]["id"]
     assert "access nahi" in staff(c, "9811000003", f"approve {aid} {main.APPROVER_PIN}")[-1]["text"]
@@ -226,7 +242,7 @@ def test_frontend_structure_and_js_syntax(tmp_path):
     html = open(os.path.join(ROOT, "frontend", "index.html"), encoding="utf-8").read()
     body = html[html.index("<body"):html.index("<script>\n")]
     assert body.count("<div") == body.count("</div>")
-    for el in ("app-wa", "app-pt", "app-sb", "queue", "tickets", "dir", "xmoney", "pin", "schat", "semps"): assert f'id="{el}"' in html
+    for el in ("app-wa", "app-pt", "app-sb", "queue", "tickets", "dir", "xmoney", "pin", "schat", "semps", "askdrawer", "dchat"): assert f'id="{el}"' in html
     assert 'id="mic" onclick="mic()"' not in html  # form-scope shadowing bug must not come back
     if not shutil.which("node"): pytest.skip("node not installed")
     js = tmp_path / "app.js"; js.write_text(re.findall(r"<script>\n(.*)</script>", html, re.S)[0], encoding="utf-8")

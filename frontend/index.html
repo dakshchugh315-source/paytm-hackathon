@@ -216,6 +216,19 @@ header{background:#fff;box-shadow:0 1px 0 #e5e9f0}header b.text-white{color:#002
   <div data-panel="report" class="panel hidden flex-col flex-1 min-h-0"><div class="card p-8 overflow-y-auto md flex-1" id="report">Loading…</div></div>
 </section>
 </main>
+<!-- Ask Saathi: the staff teammate, reachable from every Paytm-team tab -->
+<button id="askbtn" onclick="toggleAsk()" class="fixed bottom-6 right-6 z-40 px-5 py-3 rounded-full bg-[#002e6e] text-white font-semibold shadow-xl hover:brightness-110">💬 Ask Saathi</button>
+<div id="askdrawer" class="hidden fixed bottom-24 right-6 z-40 w-[380px] h-[65vh] rounded-2xl shadow-2xl border border-slate-200 bg-[#efeae2] flex-col overflow-hidden">
+  <div class="bg-[#075e54] text-white px-4 py-3 flex items-center gap-2">
+    <div><div class="font-semibold leading-tight">Ask Saathi · Internal</div><div class="text-[11px] text-white/75" id="askwho"></div></div>
+    <button onclick="tab('staff'); toggleAsk(false)" class="ml-auto text-[11px] underline text-white/80">Switch employee</button>
+    <button onclick="toggleAsk(false)" class="text-lg leading-none px-1">×</button></div>
+  <div id="dchat" class="flex-1 overflow-y-auto p-3 space-y-2"></div>
+  <div class="px-2 pt-2 flex gap-1 flex-wrap text-[11px]" id="dchips"></div>
+  <form onsubmit="event.preventDefault(); sendStaff($('dinp').value); $('dinp').value = ''" class="p-2 flex gap-2">
+    <input id="dinp" class="flex-1 rounded-full px-4 py-2 bg-white outline-none text-slate-800 text-sm" placeholder="e.g. last 5 tickets, TK-… , pending approvals">
+    <button class="w-9 h-9 rounded-full bg-[#00a884] text-white">➤</button></form>
+</div>
 <script>
 const API = location.protocol.startsWith('http') && location.port === '8000' ? location.origin : 'http://localhost:8000';
 const PH = ['UNDERSTAND','DIAGNOSE','ACT','VERIFY','HUMAN','FOLLOWUP'], LBL = ['01 Understand','02 Diagnose','03 Act','04 Verify','05 Human','06 Follow-up'];
@@ -517,11 +530,23 @@ function renderStaff(st) {
       <td>${e.can_approve ? '<span class="text-emerald-600 font-semibold">Yes</span>' : '<span class="text-slate-400">No</span>'}</td>
       <td>${e.verified ? '<span class="text-emerald-600">✓ Verified</span>' : '<span class="text-slate-400">—</span>'}</td><td>${e.subscribed ? '🔔 On' : '<span class="text-slate-400">Off</span>'}</td></tr>`).join('')}</table>`);
   const unread = Object.values(st.chats).reduce((a, c) => a + c.msgs.filter(m => m.alert).length, 0);
-  $('salert').textContent = unread; $('salert').classList.toggle('hidden', !unread);
+  renderDrawer(st); $('salert').textContent = unread; $('salert').classList.toggle('hidden', !unread);
 }
 async function sendStaff(text) {
   text = (text || '').trim(); if (!text) return; $('sinp').value = '';
   try { renderStaff(await api('/staff/chat', {body: JSON.stringify({phone: $('sphone').value, text})})); } catch (e) { err(e); }
+}
+function toggleAsk(open) {
+  const d = $('askdrawer'), show = open ?? d.classList.contains('hidden');
+  d.classList.toggle('hidden', !show); d.classList.toggle('flex', show); if (show) { H.dchat = null; renderStaff(SST); $('dinp').focus(); }
+}
+function renderDrawer(st) {
+  const ph = $('sphone').value, ch = st.chats[ph] || {msgs: []}, emp = st.employees.find(e => e.phone === ph);
+  $('askwho').textContent = emp ? `${emp.name} · ${emp.role}${ch.verified ? ' ✓' : ''}` : 'Unregistered number';
+  put('dchat', ch.msgs.length ? ch.msgs.slice(-30).map(m => `<div class="flex ${m.from === 'staff' ? 'justify-end' : ''}"><div class="max-w-[88%] rounded-lg px-3 py-2 text-[13px] shadow-sm ${m.from === 'staff' ? 'bg-[#d9fdd3]' : m.alert ? 'bg-amber-50 border border-amber-300' : 'bg-white'}">${wa(m.text)}</div></div>`).join('')
+    : '<div class="text-center text-[12px] text-slate-500 bg-white/70 rounded-lg p-3 m-4">Ask about tickets, approvals or any merchant — without leaving this screen.</div>');
+  if (H.dlen !== ch.msgs.length) { $('dchat').scrollTop = 1e9; H.dlen = ch.msgs.length; }
+  put('dchips', ['last 5 tickets', 'pending approvals', "today's summary", 'ping me'].map(t => `<button class="bg-white border border-slate-200 text-slate-700 rounded-full px-2 py-1" onclick="sendStaff(this.textContent)">${esc(t)}</button>`).join(''));
 }
 function renderCustomer(p) {
   put('profile', `<div class="text-slate-900 font-semibold">👤 ${esc(p.name)} <span class="text-[10px] px-2 py-0.5 rounded-full bg-slate-100">CUSTOMER</span></div>
@@ -577,7 +602,7 @@ function renderML(d) {
     <span class="px-2 py-0.5 rounded bg-[#002e6e] text-white font-bold">${d.action}</span><span class="px-2 py-0.5 rounded font-bold ${c}">risk ${d.risk} ${d.risk_score}</span>
     <span class="text-slate-500">sentiment ${d.sentiment} · ₹${(d.amount || 0).toLocaleString('en-IN')} · disputes ${d.disputes} · bank ${d.bank_status}</span></div>`);
 }
-function tab(t) { if (t === 'report' && !H.reportLoaded) get('/api/audit-report').then(r => { $('report').innerHTML = marked.parse(r.markdown); H.reportLoaded = 1; }); document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b.dataset.tab === t)); document.querySelectorAll('.panel').forEach(p => p.classList.toggle('hidden', p.dataset.panel !== t)); }
+function tab(t) { $('askbtn')?.classList.toggle('hidden', t === 'staff'); if (t === 'staff') toggleAsk(false); if (t === 'report' && !H.reportLoaded) get('/api/audit-report').then(r => { $('report').innerHTML = marked.parse(r.markdown); H.reportLoaded = 1; }); document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b.dataset.tab === t)); document.querySelectorAll('.panel').forEach(p => p.classList.toggle('hidden', p.dataset.panel !== t)); }
 document.querySelectorAll('.tab').forEach(b => b.onclick = () => tab(b.dataset.tab)); tab('inbox'); chips(); openApp('wa');
 let lastQ = 0;
 get('/staff/state').then(renderStaff).catch(() => {});

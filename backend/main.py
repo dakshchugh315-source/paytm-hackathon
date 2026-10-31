@@ -402,7 +402,9 @@ def pivot(s):
 def signature(intent, ctx): return f"{intent}:{ctx}"
 
 def run_agent(s, text, proactive=False, live=True):
-    if "ml" not in s and ml_route(s, text, proactive): return
+    if "ml" not in s:
+        if ml_route(s, text, proactive): s["ml"]["acted"] = True; return
+        s["ml"]["acted"] = False  # ML was unsure / not its case: the agent's own intent is what counts
     if s["merchant"] in CUSTOMERS: return handoff(s, "Unclassified customer query", text)
     if live and LLM_KEY: return llm_agent(s, text, proactive)
     m = MERCHANTS[s["merchant"]]; s["status"] = "DIAGNOSING"
@@ -900,7 +902,7 @@ CANON = {"UPI_Pending": "payment fail hua, paise kat gaye, refund chahiye", "EMI
 def ticket_row(x):
     d = x.get("ml") or {}; u = user(x["merchant"])
     return {"id": x["id"], "user": x["merchant"], "name": u.get("owner", u["name"]), "persona": "customer" if x["merchant"] in CUSTOMERS else "merchant",
-            "query": x.get("query") or "(proactive / agent)", "issue": d.get("issue") or x.get("intent"), "action": d.get("action"), "risk": d.get("risk"),
+            "query": x.get("query") or "(proactive / agent)", "issue": (d.get("issue") if d.get("acted", True) else None) or x.get("intent"), "action": d.get("action") if d.get("acted", True) else None, "risk": d.get("risk"),
             "forced": bool(d.get("forced_by")), "status": x["status"], "opened": x["opened"]}
 
 @app.post("/api/tickets/{sid}/override")
@@ -1000,7 +1002,7 @@ def _find_user(text):
     return next((k for k, v in {**MERCHANTS, **CUSTOMERS}.items()
                  if k.lower() in t or v["name"].lower().split()[0] in t or v.get("owner", v["name"]).lower().split()[0] in t), None)
 
-STAFF_HELP = ("Main Saathi hoon, aapka teammate. Aap mujhse keh sakte hain:\n• *show open tickets*\n• *pending approvals*\n• *approve AP-XXXX <PIN>* / *reject AP-XXXX*\n"
+STAFF_HELP = ("Main Saathi hoon, aapka teammate. Aap mujhse keh sakte hain:\n• *show open tickets* / *last 5 tickets*\n• *TK-XXXXXX* (ya list ke baad *3rd*) — ek ticket ka detail\n• *pending approvals*\n• *approve AP-XXXX <PIN>* / *reject AP-XXXX*\n"
               "• *status of Ramesh* (ya kisi bhi merchant/customer)\n• *today's summary*\n• *ping me* — jab bhi kisi case ko insaan chahiye, main WhatsApp karunga\n• *stop pings*")
 
 def staff_reply(phone, text):
@@ -1038,9 +1040,29 @@ def staff_reply(phone, text):
         return staff_say(phone, f"{len(aps)} approval pending:\n" + "\n".join(
             f"• *{a['id']}* · {a['tool']} {('₹' + format(a['args']['amount'], ',')) if a['args'].get('amount') else ''} · {_who(SESSIONS[a['ticket']]['merchant'])}\n  {a['summary'][:110]}" for a in aps)
             + ("\nReply *approve <ID> <PIN>* ya *reject <ID>*" if emp["can_approve"] else ""))
+    tid = re.search(r"TK-[A-Z0-9]{6}", t, re.I)
+    nth = re.search(r"\b(\d+)(?:st|nd|rd|th)\b|#(\d+)|\b(first|second|third|fourth|fifth|pehla|pehle|doosra|dusra|teesra|tisra|chautha)\b", low)
+    if not tid and nth and ch.get("last_list"):
+        words = {"first": 1, "pehla": 1, "pehle": 1, "second": 2, "doosra": 2, "dusra": 2, "third": 3, "teesra": 3, "tisra": 3, "fourth": 4, "chautha": 4, "fifth": 5}
+        i = int(nth.group(1) or nth.group(2) or words[nth.group(3)])
+        if not 1 <= i <= len(ch["last_list"]): return staff_say(phone, f"Pichhli list mein sirf {len(ch['last_list'])} ticket the. *recent tickets* likhiye poori list ke liye.")
+        tid = re.search(r"TK-[A-Z0-9]{6}", ch["last_list"][i - 1])
+    if tid:
+        x = SESSIONS.get(tid.group(0).upper())
+        if not x: return staff_say(phone, f"{tid.group(0).upper()} naam ka koi ticket nahi mila. *recent tickets* likhiye list dekhne ke liye.")
+        row_ = ticket_row(x); ap = next((a for a in APPROVALS.values() if a["ticket"] == x["id"] and a["status"] == "PENDING"), None)
+        last = next((m_["text"] for m_ in reversed(MSGS) if m_.get("ticket") == x["id"] and m_["from"] == "saathi"), "—")
+        return staff_say(phone, f"🎫 *{x['id']}* · {row_['name']} ({x['merchant']})\nIssue: {row_['issue'] or 'query'} · Status: *{x['status']}*\nOpened {datetime.fromtimestamp(x['opened']).strftime('%H:%M')} · said: “{(x.get('query') or '')[:90]}”\n"
+                                   f"Saathi's last reply: “{last[:140]}”" + (f"\n⏳ Waiting on *{ap['id']}* ({ap['tool']}) — reply *approve {ap['id']} <PIN>*" if ap else ""))
     reasoning = LLM_KEY and re.search(r"urgent|priority|kyun|why|which|kaunsa|sabse|should i|kya karu", low)
+    recent = re.search(r"\b(last|recent|latest|pichhle|saare|all)\b", low)
+    if re.search(r"ticket|case|issue|complaint", low) and recent and not reasoning:
+        n = int((re.search(r"\b(\d{1,2})\b", low) or [None, 10])[1]); lst = sorted(SESSIONS.values(), key=lambda x: -x["opened"])[:n]
+        ch["last_list"] = [x["id"] for x in lst]
+        return staff_say(phone, (f"Last {len(lst)} ticket:\n" + "\n".join(f"{i}. *{x['id']}* · {_who(x['merchant'])} · {ticket_row(x)['issue'] or 'query'} · {x['status']}" for i, x in enumerate(lst, 1))
+                                 + "\nKisi ka detail: ticket ID ya *3rd* likhiye") if lst else "Abhi tak koi ticket nahi aaya.")
     if re.search(r"ticket|case|issue|complaint", low) and not reasoning:
-        op = _open_tickets()
+        op = _open_tickets(); ch["last_list"] = [x["id"] for x in op]
         if not op: return staff_say(phone, f"Koi open ticket nahi ✅ Aaj total {len(SESSIONS)} tickets aaye, sab handle ho gaye.")
         return staff_say(phone, f"{len(op)} open ticket:\n" + "\n".join(
             f"• *{x['id']}* · {_who(x['merchant'])} · {(x.get('ml') or {}).get('issue') or x.get('intent') or 'query'} · {x['status']}\n  “{(x.get('query') or '')[:70]}”" for x in op))
@@ -1062,8 +1084,8 @@ def staff_reply(phone, text):
     if re.search(r"^(hi|hello|hey|help|namaste|menu)\b", low): return staff_say(phone, f"Namaste {emp['name'].split()[0]} 👋\n" + STAFF_HELP)
     if LLM_KEY:  # free-form question: answer from live ops context only
         try:
-            ctx = {"open_tickets": [ticket_row(x) for x in _open_tickets()][:10], "pending_approvals": [{k: a[k] for k in ("id", "tool", "summary")} for a in APPROVALS.values() if a["status"] == "PENDING"]}
-            msg, _, _ = llm_chat([{"role": "system", "content": f"You are Saathi, an internal teammate for Paytm employee {emp['name']} ({emp['role']}). Answer briefly (max 60 words, Hinglish ok) using ONLY this live ops data; if it is not there, say so and suggest a command. Data: {json.dumps(ctx, ensure_ascii=False, default=str)}"},
+            ctx = {"recent_tickets": [ticket_row(x) for x in sorted(SESSIONS.values(), key=lambda x: -x["opened"])][:15], "pending_approvals": [{k: a[k] for k in ("id", "tool", "summary")} for a in APPROVALS.values() if a["status"] == "PENDING"]}
+            msg, _, _ = llm_chat([{"role": "system", "content": f"You are Saathi, an internal teammate for Paytm employee {emp['name']} ({emp['role']}). Answer briefly (max 60 words, Hinglish ok) using ONLY this live ops data; if it is not there, say so. Never invent commands — the only commands are: show open tickets, recent tickets, <ticket ID>, pending approvals, approve/reject AP-ID, status of <name>, today's summary, ping me. Data: {json.dumps(ctx, ensure_ascii=False, default=str)}"},
                                   {"role": "user", "content": t}], tools=False)
             if msg.get("content"): return staff_say(phone, msg["content"].strip())
         except Exception: pass
