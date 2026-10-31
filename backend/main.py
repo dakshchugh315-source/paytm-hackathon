@@ -371,7 +371,7 @@ def pivot(s):
         reply(s, f"Waise, aapke store ki badhti bikri dekhte hue aap ₹{o['pre_approved']//100000} lakh ke Paytm Business Loan ke liye pre-approved hain, sirf ₹{o['emi_daily']}/din. 1-click mein apply kar doon?",
               cta={"label": "✅ Haan, apply karo", "product": o["product"], "amount": o["pre_approved"]}, kind="pitch")
     else:
-        reply(s, f"Waise, Soundbox Pro {o['offer']} pe mil raha hai. Upgrade kar doon?", cta={"label": "✅ Haan, upgrade karo", "product": o["product"], "amount": 0}, kind="pitch")
+        reply(s, f"Waise, Soundbox Pro {o['offer']} pe mil raha hai — ₹1 aapke agle settlement se adjust hoga. Upgrade kar doon?", cta={"label": "✅ Haan, ₹1 settlement se kaat ke upgrade karo", "product": o["product"], "amount": 0}, kind="pitch")
 
 def signature(intent, ctx): return f"{intent}:{ctx}"
 
@@ -998,7 +998,19 @@ def lead(sid: str, product: str = "Business Loan", amount: int = 0):
         reply(s, "Bilkul, koi baat nahi 🙏 Jab zaroorat ho, bas 'loan' likh dijiye."); return view(s)
     with LOCK: db.execute("INSERT INTO leads VALUES(?,?,?,?)", (datetime.now().isoformat(), s["merchant"], product, amount)); db.commit()
     audit(s, "ACT", f"🎯 Lead captured: {product}", {"amount": amount})
-    reply(s, f"Ho gaya! {product} application submit kar di ✅ Paise 24 ghante mein account mein." if product == "Business Loan" else "Ho gaya! Soundbox Pro kal deliver hoga ✅")
+    m = MERCHANTS[s["merchant"]]; acc = mask(m["bank"]["acc"]); oid = "ORD-" + uuid.uuid4().hex[:6].upper()
+    if product == "Business Loan":
+        emi = int(amount * 1.16 / 365)  # flat 16% p.a., daily from settlement
+        order = {"id": oid, "item": f"Business Loan ₹{amount:,}", "amount": amount, "direction": "CREDIT", "mode": f"Disbursal to bank {acc} within 24h",
+                 "recurring": f"₹{emi}/day auto-deducted from daily settlement × 365 days", "status": "SANCTIONED"}
+        text = f"Ho gaya! ₹{amount:,} ka loan sanction ✅ Order {oid}. Paisa 24 ghante mein aapke bank {acc} mein aayega. EMI ₹{emi}/din aapke roz ke settlement se apne aap kategi — alag se kuch bharna nahi."
+    else:
+        order = {"id": oid, "item": "Soundbox Pro (4G)", "amount": 1, "direction": "DEBIT", "mode": "Adjusted from next settlement (no card/UPI needed)",
+                 "recurring": "₹0 rental for 30 days, then ₹99/month from settlement", "status": "CONFIRMED · delivery tomorrow"}
+        text = f"Ho gaya! Soundbox Pro order {oid} confirm ✅ ₹1 activation aapke agle settlement se adjust hoga (bank {acc} mein ₹1 kam aayega). 30 din free, phir ₹99/mahina settlement se. Delivery kal."
+    m.setdefault("orders", []).append(order)
+    audit(s, "ACT", f"💳 {order['direction']} {order['item']} · ₹{order['amount']:,} · {order['mode']}", order)
+    reply(s, text)
     return view(s)
 
 def view(s):
@@ -1015,7 +1027,8 @@ def profile(mid="M1001"):
             "settlement": "HOLD" if any(v["status"] != "SETTLED" for v in m["settlements"].values()) else "OK", "bank_verified": m["bank"]["verified"],
             "bank": mask(m["bank"]["acc"]), "offer": e, "city": m.get("city", ""),
             "txns": [{"id": k, **{f: v.get(f) for f in ("time", "payer", "amount", "status", "refunded")}} for k, v in m["txns"].items()],
-            "settlements": [{"id": k, "amount": v["amount"], "date": v["date"], "status": v["status"], "utr": v.get("utr")} for k, v in m["settlements"].items()]}
+            "settlements": [{"id": k, "amount": v["amount"], "date": v["date"], "status": v["status"], "utr": v.get("utr")} for k, v in m["settlements"].items()],
+            "orders": m.get("orders", [])}
 
 @app.get("/state")
 def state(mid: str = "M1001", agent: str = ""):
