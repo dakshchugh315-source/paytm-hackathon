@@ -541,7 +541,7 @@ Rules:
 - A message starting with EVENT is a Paytm backend alert: message the merchant first, proactively, by name.
 - Do not pitch loans/offers unless the merchant asks.
 - Address the merchant by first name + "ji" only in the first reply of a conversation, not every message.
-- Multi-language support: Reply in the SAME language and script as the merchant's query. If English is used, reply in concise natural English. If Hinglish (Roman script) is used, reply in warm Hinglish. If pure Hindi (Devanagari) or another Indic language is used, reply in that language. Under 40 words, stating exactly what you did and verified. Mask account/phone numbers as XXXX-1234.
+- Multi-language support: judge the language ONLY from the merchant's LATEST message (ignore earlier turns). Reply in the SAME language and script as that message's query. If English is used, reply in concise natural English. If Hinglish (Roman script) is used, reply in warm Hinglish. If pure Hindi (Devanagari) or another Indic language is used, reply in that language. Under 40 words, stating exactly what you did and verified. Mask account/phone numbers as XXXX-1234.
 Merchant: {m['name']} (owner {m['owner']}, {m.get('city', '')}), id {s['merchant']}, Soundbox {m['soundbox']}, GMV Rs {m['monthly_volume']}/month.
 Account context (live): recent payments {json.dumps([{"ref": k, "time": v["time"], "amount": v["amount"], "payer": v["payer"][:3] + "…", "status": v["status"], "refunded": v["refunded"]} for k, v in m["txns"].items()], ensure_ascii=False)};
 settlements {json.dumps({k: {"amount": v["amount"], "status": v["status"]} for k, v in m["settlements"].items()})}; Soundbox online={DEVICES[m["soundbox"]]["online"]}.
@@ -751,7 +751,7 @@ def ml_route(s, text, proactive=False):
         open_ticket(s, "clarify"); s["status"] = "NEEDS_INFO"
         audit(s, "DIAGNOSE", f"🛑 Guardrail: not acting on a guess (ML {d['issue']} {d['issue_conf']}, fraud words={fraud_said}) — asking user", d)
         return speak(s, "Main sahi madad karna chahta hoon. Kya hua hai?", d, options=["Payment fail hua, paise kat gaye — refund chahiye", "Ye payment maine nahi kiya (fraud)", "EMI ke baare mein"]) or True
-    if d["issue_conf"] < 0.45: return False
+    if d["issue_conf"] < 0.6: return False  # not sure -> let the conversational agent handle it, never act on a guess
     if (d["persona_expected"] == "Customer") != cust: return False  # e.g. merchant says "customer ka paisa kata" -> merchant flows
     act = d["action"]; s["ctx"] = lambda tool, a: f"{u['name']} ({'customer' if cust else 'merchant'}, {d['lang']}, sentiment {d['sentiment']}): {d['issue']} ₹{d['amount'] or a.get('amount', 0):,}; ML risk {d['risk']} {d['risk_score']}. Asks: {tool}."
     if act == "FREEZE_AND_HUMAN_HANDOFF":
@@ -788,10 +788,11 @@ def ml_route(s, text, proactive=False):
         s["status"] = "NEEDS_INFO"; return True
     if not cust and act == "TRIGGER_WHATSAPP_CAMPAIGN":
         open_ticket(s, "campaign"); seg = call(s, "segment_repeat_buyers", days=90)
-        audit(s, "DIAGNOSE", f"Segment: {seg['count']} repeat buyers (≥3 visits, last 90d) across {len(seg['by_lang'])} languages", seg)
-        cmp_ = call(s, "send_whatsapp_campaign", offer="Diwali: 10% off + Paytm cashback", count=seg["count"], avg_ticket=seg["avg_ticket"])
-        speak(s, f"Ho gaya! Pichhle 90 din ke {seg['count']} regular customers ko unki bhasha mein Diwali offer aur payment link bhej diya. Live conversions neeche dekhiye 👇", d, kind="campaign", cta=None)
-        MSGS[-1]["campaign"] = cmp_["campaign"]; resolve(s, f"Campaign {cmp_['campaign']} live"); return True
+        audit(s, "DIAGNOSE", f"Segment: {seg['count']} repeat buyers (≥3 visits, last 90d) across {len(seg['by_lang'])} languages — awaiting merchant OK", seg)
+        langs = ", ".join(f"{l} {n}" for l, n in seg["by_lang"].items())
+        speak(s, f"Aapke {seg['count']} regular customers hain (pichhle 90 din mein 3+ baar aaye). Unhe unki bhasha mein ({langs}) 'Diwali: 10% off + Paytm cashback' ka WhatsApp aur payment link bhej doon? Sirf opted-in customers ko jayega.", d,
+              cta={"label": f"📣 Haan, {seg['count']} customers ko bhejo", "product": "CAMPAIGN", "amount": seg["count"]})
+        s["campaign_seg"] = seg; s["status"] = "NEEDS_INFO"; return True
     if not cust and act == "RELEASE_INSTANT_SETTLEMENT":
         st = check_settlement_status(uid)
         if st["bank_recently_changed"]: s.pop("ml_handled", None); return False  # bank-change hold -> existing approval flow
@@ -821,6 +822,15 @@ def ml_resume(s, ap):
         s["status"] = "ESCALATED"; return
     if tool in ("instant_refund", "release_instant_settlement"):
         audit(s, "VERIFY", f"{tool} verified", res); speak(s, f"Approval mil gaya, ₹{a['amount']:,} process ho gaya ✅", d, voice=True); resolve(s, "Approved & verified")
+
+def launch_campaign(s):
+    seg = s.get("campaign_seg") or segment_repeat_buyers(s["merchant"])
+    for x in MSGS:
+        if x.get("cta") and x.get("merchant") == s["merchant"]: x["cta_done"] = True
+    audit(s, "HUMAN", f"👍 Merchant approved broadcast to {seg['count']} customers", seg)
+    cmp_ = call(s, "send_whatsapp_campaign", offer="Diwali: 10% off + Paytm cashback", count=seg["count"], avg_ticket=seg["avg_ticket"])
+    reply(s, f"Bhej diya ✅ {seg['count']} customers ko unki bhasha mein offer gaya. Kitne ne khola aur kitne ne pay kiya, neeche live dikh raha hai 👇", kind="campaign")
+    MSGS[-1]["campaign"] = cmp_["campaign"]; resolve(s, f"Campaign {cmp_['campaign']} live"); return view(s)
 
 def pay_emi(s):
     c = CUSTOMERS[s["merchant"]]; e = c["emi"]
@@ -1011,6 +1021,7 @@ def lead(sid: str, product: str = "Business Loan", amount: int = 0):
     for x in MSGS:
         if x.get("cta"): x["cta_done"] = True
     if product == "EMI": return pay_emi(s)
+    if product == "CAMPAIGN": return launch_campaign(s)
     MERCHANTS[s["merchant"]]["pitched"] = True
     if product == "decline":
         audit(s, "ACT", "🙅 Offer declined — will not pitch again", {})

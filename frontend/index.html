@@ -40,7 +40,7 @@ header{background:#fff;box-shadow:0 1px 0 #e5e9f0}header b.text-white{color:#002
     <div id="chips" class="px-2 pt-2 flex gap-1 flex-wrap text-[11px]"></div>
     <form onsubmit="send(event)" class="p-2 flex gap-2">
       <input id="inp" class="flex-1 rounded-full px-4 py-2 bg-white outline-none text-slate-800" placeholder="Type in English, Hindi, Hinglish, or any regional language...">
-      <button type="button" id="mic" onclick="mic()" class="w-9 h-9 rounded-full bg-[#00a884] text-white">🎤</button>
+      <button type="button" id="mic" onclick="toggleMic()" class="w-9 h-9 rounded-full bg-[#00a884] text-white">🎤</button>
       <button class="w-9 h-9 rounded-full bg-[#00a884] text-white">➤</button></form>
   </div>
 </section>
@@ -254,7 +254,7 @@ const decide = (id, d) => !$('pin').value ? (tab('inbox'), $('pin').focus(), $('
 const csat = (t, v) => run(api(`/csat/${t}/${v}`));
 const lead = (t, p, a) => run(api(`/lead/${t}?product=${encodeURIComponent(p)}&amount=${a}`));
 let rec, chunks;
-async function mic() {
+async function toggleMic() {  // not "mic": inside a <form>, onclick="mic()" resolves to the #mic button itself
   if (rec?.state === 'recording') return rec.stop();
   let st; try { st = await navigator.mediaDevices.getUserMedia({audio: true}); } catch { return toast('Microphone blocked — allow mic access in the browser address bar.'); }
   rec = new MediaRecorder(st); chunks = []; const t0 = Date.now(), ph = $('inp').placeholder;
