@@ -594,7 +594,7 @@ def llm_loop(s, acted=False):
         s["llm_msgs"].append({"role": "assistant", "content": msg.get("content") or "", **({"tool_calls": calls} if calls else {})})
         if not calls:
             text = (msg.get("content") or "").strip() or "Ek minute, main check kar raha hoon 🙏"
-            reply(s, re.sub(r"<think>.*?</think>", "", text, flags=re.S).strip())
+            reply(s, re.sub(r"<think>.*?</think>", "", text, flags=re.S).strip(), voice=True)  # every agent turn ends with a voice note
             break
         audit(s, "DIAGNOSE", f"🧠 {LLM_MODEL} chose: " + ", ".join(c["function"]["name"] for c in calls), [c["function"] for c in calls], tokens=tk)
         for c in calls:

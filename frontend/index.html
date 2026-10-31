@@ -16,7 +16,7 @@ header{background:#fff;box-shadow:0 1px 0 #e5e9f0}header b.text-white{color:#002
 .sect{font-size:11px;font-weight:700;letter-spacing:.05em;color:#0086c9;margin-bottom:10px}#queue>div{padding:18px!important;border-radius:14px}#queue button{padding:8px 18px!important;font-size:14px}#tickets td,#tickets th{padding:10px 8px}#profile td,#profile th{padding:6px 6px}#profile .text-\[11px\],#profile .text-\[10px\]{font-size:13px}
 </style><script src="https://cdn.tailwindcss.com"></script><script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <style>.md h1{font-size:20px;font-weight:700;margin:8px 0}.md h2{font-size:16px;font-weight:700;margin:14px 0 6px;color:#002e6e}.md h3{font-weight:700;margin:10px 0 4px}.md table{width:100%;font-size:12px;border-collapse:collapse;margin:6px 0}.md td,.md th{border:1px solid #e2e8f0;padding:4px 6px;text-align:left;vertical-align:top}.md th{background:#f1f5f9}.md ul{list-style:disc;padding-left:18px}.md code{background:#f1f5f9;padding:0 3px;border-radius:3px}</style>
-<style>.ph{transition:.3s}
+<style>.ph{transition:.3s}.vwave span{width:2px;background:#00a884;border-radius:1px;opacity:.45;transform-origin:bottom}.vplaying .vwave span{opacity:1;animation:vw .9s ease-in-out infinite}.vplaying .vwave span:nth-child(2n){animation-delay:.15s}.vplaying .vwave span:nth-child(3n){animation-delay:.3s}@keyframes vw{50%{transform:scaleY(.3)}}
 @keyframes p{50%{opacity:.45}}.pulse{animation:p 1s infinite}@keyframes pop{0%{transform:scale(.6);opacity:0}100%{transform:scale(1);opacity:1}}.pop{animation:pop .35s ease-out}
 ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-thumb{background:#12384f;border-radius:3px}pre{white-space:pre-wrap;word-break:break-all}
 </style></head>
@@ -303,7 +303,11 @@ function renderChat(msgs) {
   const key = JSON.stringify([msgs.map(m => [m.ts, m.text, m.cta_done]), (S.exec?.campaigns || []).map(c => c.paid + c.clicked)]); if (H.chatKey === key) return; H.chatKey = key;
   $('chat').innerHTML = msgs.map((m, i) => `<div class="flex ${m.from === 'merchant' ? 'justify-end' : ''} ${i >= seen ? 'pop' : ''}"><div class="max-w-[82%] rounded-lg px-3 py-2 ${m.from === 'merchant' ? 'bg-[#d9fdd3] text-slate-800' : m.kind === 'pitch' ? 'bg-gradient-to-br from-white to-amber-50 border border-amber-300 text-slate-800' : 'bg-white text-slate-800 shadow-sm'}">
     ${m.kind === 'pitch' ? '<div class="text-[10px] text-amber-600 font-bold mb-1">💰 SUPPORT → SALES PIVOT</div>' : ''}${esc(m.text)}
-    ${m.voice ? `<button onclick="speak(_m[${i}])" class="mt-2 flex items-center gap-2 bg-slate-100 rounded-full px-3 py-1 text-[11px] w-full">▶ <span class="flex-1 h-1 bg-[#00a884] rounded"></span> ${(m.voice.lang && m.voice.lang.startsWith('en')) ? 'English voice' : 'Voice (' + (m.voice.lang || 'hi-IN') + ')'} · ${({bulbul: 'Sarvam Bulbul', neural: 'Neural'})[m.voice.source] || 'TTS'}</button>` : ''}
+    ${m.voice ? `<div data-vi="${i}" class="vnote mt-2 flex items-center gap-2 bg-slate-100 rounded-full pl-1 pr-3 py-1 text-[11px] w-full">
+      <button onclick="vplay(${i})" class="vbtn w-7 h-7 shrink-0 rounded-full bg-[#00a884] text-white text-xs" title="Play / pause">▶</button>
+      <span class="vwave flex items-end gap-[2px] h-4">${[5, 9, 13, 7, 11, 6, 12, 8, 10, 5].map(hh => `<span style="height:${hh}px"></span>`).join('')}</span>
+      <div class="flex-1 h-1.5 bg-slate-300 rounded overflow-hidden"><div class="vfill h-full bg-[#00a884]" style="width:0%"></div></div>
+      <span class="text-slate-500 whitespace-nowrap">${(m.voice.lang && m.voice.lang.startsWith('en')) ? 'English' : (m.voice.lang || 'hi-IN')} · ${({bulbul: 'Bulbul', neural: 'Neural'})[m.voice.source] || 'TTS'}</span></div>` : ''}
     ${m.cta && !m.cta_done ? `<div class="mt-2 flex gap-2"><button onclick="lead('${m.ticket}','${m.cta.product}',${m.cta.amount})" class="flex-1 bg-yellow-400 text-black font-bold rounded py-1">${m.cta.label}</button>${m.cta.product === 'EMI' ? '' : `<button onclick="lead('${m.ticket}','decline',0)" class="px-3 border border-slate-300 rounded text-slate-600">Abhi nahi</button>`}</div>` : m.cta ? '<div class="mt-1 text-[10px] text-slate-400">✓ Response recorded</div>' : ''}
     ${m.campaign ? (c => c ? `<div class="mt-2 grid grid-cols-4 gap-1 text-center bg-emerald-50 rounded p-1">${[['Sent', c.sent], ['Clicked', c.clicked], ['Paid', c.paid], ['GMV', '₹' + c.gmv.toLocaleString('en-IN')]].map(([l, v]) => `<div><b>${v}</b><div class="text-[9px] text-slate-500">${l}</div></div>`).join('')}</div>` : '')((S.exec?.campaigns || []).find(x => x.id === m.campaign)) : ''}
     ${m.options && i === msgs.length - 1 ? `<div class="mt-2 flex flex-col gap-1">${m.options.map(o => `<button onclick="say(this.textContent)" class="text-left text-xs border border-[#00a884] text-[#007a63] rounded-full px-3 py-1 hover:bg-emerald-50">${esc(o)}</button>`).join('')}</div>` : ''}
@@ -311,7 +315,37 @@ function renderChat(msgs) {
     <div class="text-[9px] text-slate-400 text-right">${new Date(m.ts * 1000).toLocaleTimeString().slice(0, 5)}</div></div></div>`).join('');
   $('chat').scrollTop = 1e9; window._m = msgs; seen = msgs.length;
   if (shown < 0) shown = msgs.length;  // don't replay old voice notes on page load
-  for (; shown < msgs.length; shown++) if (msgs[shown].voice) speak(msgs[shown]);
+  let newest = -1; for (; shown < msgs.length; shown++) if (msgs[shown].voice) newest = shown;
+  if (newest >= 0) vplay(newest, true); else vui();  // auto-play only the latest voice note; old ones never pile up
+}
+// ---- Voice-note player: one at a time, play / pause, live progress ----
+let VP = {i: null, a: null, tts: false, speaking: false};
+function vstop() { if (VP.a) VP.a.pause(); if (VP.tts) speechSynthesis.cancel(); VP = {i: null, a: null, tts: false, speaking: false}; }
+function vplay(i, auto = false) {
+  const m = window._m?.[i]; if (!m?.voice) return;
+  if (VP.i === i && !auto) {  // same note: toggle pause / resume
+    if (VP.a) { VP.a.paused ? VP.a.play() : VP.a.pause(); }
+    else if (VP.tts) { if (speechSynthesis.paused) { speechSynthesis.resume(); VP.speaking = true; } else if (VP.speaking) { speechSynthesis.pause(); VP.speaking = false; } else { vstop(); return vplay(i); } }
+    return vui();
+  }
+  vstop();
+  if (m.voice.audio) {
+    const a = new Audio(`data:${m.voice.mime};base64,${m.voice.audio}`); VP = {i, a, tts: false, speaking: false};
+    a.ontimeupdate = a.onplay = a.onpause = () => vui(); a.onended = () => vui(true); a.play().catch(() => vui());
+  } else {
+    const vs = speechSynthesis.getVoices(), u = new SpeechSynthesisUtterance(m.text.replace(/[^\p{L}\p{N}\s.,₹?!]/gu, ''));
+    u.voice = vs.find(v => v.lang === (m.voice.lang || 'hi-IN')) || vs.find(v => v.lang === 'hi-IN') || vs.find(v => /en-IN/.test(v.lang)) || null; u.lang = u.voice?.lang || 'hi-IN'; u.rate = 1.05;
+    VP = {i, a: null, tts: true, speaking: true}; u.onend = () => { VP.speaking = false; vui(true); }; speechSynthesis.speak(u);
+  }
+  vui();
+}
+function vui(done = false) {
+  document.querySelectorAll('[data-vi]').forEach(el => {
+    const on = VP.i === +el.dataset.vi, playing = on && (VP.a ? !VP.a.paused && !VP.a.ended : VP.speaking);
+    el.querySelector('.vbtn').textContent = playing ? '⏸' : '▶'; el.classList.toggle('vplaying', playing);
+    el.querySelector('.vfill').style.width = (on && VP.a?.duration ? 100 * VP.a.currentTime / VP.a.duration : on && (done || VP.tts && playing) ? 100 : 0) + '%';
+    el.querySelector('.vfill').style.transition = on && VP.tts && playing ? 'width 6s linear' : 'none';
+  });
 }
 function setPhase(p, closed) { const i = PH.indexOf(p); $('phases').innerHTML = LBL.map((l, j) => `<div class="ph rounded-lg py-2.5 ${closed || j < i ? 'done' : j === i ? 'on' : ''}">${l}</div>`).join(''); }
 function setBadge(s) { const [t, c] = BADGE[s] || BADGE.OPEN; $('badge').className = `ml-auto text-[11px] px-2 py-1 rounded-full text-white ${c}`; $('badge').textContent = t; }
