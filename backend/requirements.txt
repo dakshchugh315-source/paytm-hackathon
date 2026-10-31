@@ -5,3 +5,5 @@ python-multipart
 edge-tts
 psycopg[binary]
 
+sarvamai
+python-dotenv
