@@ -142,13 +142,15 @@ def save_world():
     msgs = [{**{k: v for k, v in m.items() if k != "voice"}, **({"voice": {"source": "browser"}} if m.get("voice") else {})} for m in MSGS]
     with LOCK:
         db.execute("INSERT INTO kv VALUES(?,?) ON CONFLICT(k) DO UPDATE SET v=excluded.v", ("world", json.dumps({"m": MERCHANTS, "d": DEVICES, "c": CACHE, "msgs": msgs,
-            "s": {k: {f: v for f, v in x.items() if f != "ctx"} for k, x in SESSIONS.items()}, "a": APPROVALS, "st": STAFF}, ensure_ascii=False, default=str))); db.commit()
+            "s": {k: {f: v for f, v in x.items() if f != "ctx"} for k, x in SESSIONS.items()}, "a": APPROVALS, "st": STAFF,
+            "cu": CUSTOMERS, "ca": CAMPAIGNS, "ml": ML_LOG[-200:], "ho": HANDOFFS, "bank": BANK_STATUS}, ensure_ascii=False, default=str))); db.commit()
 
 def load_world():
-    global MERCHANTS, DEVICES, CACHE, MSGS
+    global MERCHANTS, DEVICES, CACHE, MSGS, CUSTOMERS, CAMPAIGNS, ML_LOG, HANDOFFS, BANK_STATUS
     r = db.execute("SELECT v FROM kv WHERE k='world'").fetchone()
     if r:
         w = json.loads(r[0]); MERCHANTS, DEVICES, CACHE, MSGS = w["m"], w["d"], w["c"], w["msgs"]
+        CUSTOMERS = w.get("cu", CUSTOMERS); CAMPAIGNS = w.get("ca", CAMPAIGNS); ML_LOG = w.get("ml", ML_LOG); HANDOFFS = w.get("ho", HANDOFFS); BANK_STATUS = w.get("bank", BANK_STATUS)
         SESSIONS.update({k: {**x, "ctx": lambda t, a, x=x: f"{x.get('query', '')} → {t} {a}"} for k, x in w.get("s", {}).items()}); APPROVALS.update(w.get("a", {})); STAFF.update(w.get("st", {}))
 
 # ---------------- PII masking + immutable audit ----------------

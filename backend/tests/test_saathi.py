@@ -171,6 +171,15 @@ def test_approvals_survive_restart(c):
     assert aid in main.APPROVALS
     assert c.post(f"/approvals/{aid}/approve", headers=PIN).json()["status"] == "VERIFIED"
 
+def test_customer_money_survives_restart(c):
+    r = c.post("/pay", json={"customer_id": "C2002", "merchant_id": "M1003", "amount": 1100, "outcome": "stuck"}).json()
+    t = chat(c, r["complaint"], "C2002"); aid = t["approvals"][0]["id"]
+    main.reset_world(); main.load_world()  # server restart: memory wiped, world reloaded from the DB
+    assert any(x["amount"] == 1100 and x["status"] == "PENDING" for x in main.CUSTOMERS["C2002"]["txns"].values())
+    c.post(f"/approvals/{aid}/approve", headers=PIN)
+    pb = c.get("/state?mid=C2002").json()["profile"]["passbook"]
+    assert ("CREDIT", 1100) in [(e["kind"], e["amount"]) for e in pb] and any(e.get("status") == "REFUNDED" for e in pb)
+
 def test_followup_and_negative_csat(c):
     c.post("/demo/soundbox_offline"); chat(c, "Soundbox bol nahi raha")
     r = c.post("/followup").json(); tid = [m for m in r["messages"] if m.get("csat")][-1]["csat"]
