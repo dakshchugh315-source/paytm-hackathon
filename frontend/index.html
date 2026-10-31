@@ -12,7 +12,8 @@ header{background:#fff;box-shadow:0 1px 0 #e5e9f0}header b.text-white{color:#002
 .text-violet-400{color:#7c3aed}.text-amber-400{color:#b45309}.text-sky-400{color:#0284c7}.text-pink-400{color:#db2777}
 .ph{background:#f1f5f9;color:#94a3b8}.ph.on{background:#002e6e;color:#fff;box-shadow:0 0 0 4px #00baf233;transform:scale(1.04)}.ph.done{background:#dcfce7;color:#15803d}
 ::-webkit-scrollbar-thumb{background:#cbd5e1}
-.tab{padding:6px 14px;border-radius:10px;font-weight:600;color:#64748b;background:#fff;border:1px solid #e6eaf1}.tab.active{background:#002e6e;color:#fff;border-color:#002e6e}.panel:not(.hidden){display:flex}.grp{font-size:10px;font-weight:700;letter-spacing:.06em;color:#94a3b8;margin-right:2px}.sect{font-size:11px;font-weight:700;letter-spacing:.05em;color:#0086c9;margin-bottom:10px}#queue>div{padding:18px!important;border-radius:14px}#queue button{padding:8px 18px!important;font-size:14px}#tickets td,#tickets th{padding:10px 8px}#profile td,#profile th{padding:6px 6px}#profile .text-\[11px\],#profile .text-\[10px\]{font-size:13px}
+.tab{padding:6px 14px;border-radius:10px;font-weight:600;color:#64748b;background:#fff;border:1px solid #e6eaf1}.tab.active{background:#002e6e;color:#fff;border-color:#002e6e}.panel:not(.hidden){display:flex}.grp{font-size:10px;font-weight:700;letter-spacing:.06em;color:#94a3b8;margin-right:2px}.xh{font-size:15px;font-weight:700;color:#0f172a}.xs{font-size:12px;color:#64748b;margin:2px 0 10px}.kc{background:#fff;border:1px solid #e6eaf1;border-radius:16px;padding:16px 18px}.kv{font-size:26px;font-weight:700;color:#002e6e;line-height:1.1}.kl{font-size:13px;font-weight:600;color:#334155;margin-top:4px}.kn{font-size:11px;color:#94a3b8;margin-top:2px}
+.sect{font-size:11px;font-weight:700;letter-spacing:.05em;color:#0086c9;margin-bottom:10px}#queue>div{padding:18px!important;border-radius:14px}#queue button{padding:8px 18px!important;font-size:14px}#tickets td,#tickets th{padding:10px 8px}#profile td,#profile th{padding:6px 6px}#profile .text-\[11px\],#profile .text-\[10px\]{font-size:13px}
 </style><script src="https://cdn.tailwindcss.com"></script><script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <style>.md h1{font-size:20px;font-weight:700;margin:8px 0}.md h2{font-size:16px;font-weight:700;margin:14px 0 6px;color:#002e6e}.md h3{font-weight:700;margin:10px 0 4px}.md table{width:100%;font-size:12px;border-collapse:collapse;margin:6px 0}.md td,.md th{border:1px solid #e2e8f0;padding:4px 6px;text-align:left;vertical-align:top}.md th{background:#f1f5f9}.md ul{list-style:disc;padding-left:18px}.md code{background:#f1f5f9;padding:0 3px;border-radius:3px}</style>
 <style>.ph{transition:.3s}
@@ -136,18 +137,30 @@ header{background:#fff;box-shadow:0 1px 0 #e5e9f0}header b.text-white{color:#002
     </div>
   </div>
 
-  <!-- EXECUTIVE: outcomes for managers -->
-  <div data-panel="exec" class="panel hidden flex-col gap-4 flex-1 min-h-0 overflow-y-auto">
-    <div class="flex items-center"><div><div class="text-lg font-bold text-slate-900">Paytm ops & ROI — live</div>
-      <div class="text-sm text-slate-500">Computed from this session's tickets. Targets are pilot goals, not achieved results.</div></div>
-      <div class="ml-auto text-sm flex items-center gap-2 text-slate-600">Bank server <span id="bankbtns" class="flex gap-1"></span></div></div>
-    <div class="grid grid-cols-4 gap-4" id="execkpi"></div>
-    <div class="card p-6"><div class="sect">PILOT IMPACT</div><div class="grid grid-cols-3 gap-4" id="metrics"></div></div>
+  <!-- EXECUTIVE: business outcomes for the Paytm team -->
+  <div data-panel="exec" class="panel hidden flex-col gap-5 flex-1 min-h-0 overflow-y-auto pr-1">
+    <div class="flex items-center"><div><div class="text-xl font-bold text-slate-900">Paytm business dashboard</div>
+      <div class="text-sm text-slate-500">Live from every merchant and customer Saathi is serving in this demo.</div></div>
+      <div class="ml-auto text-sm flex items-center gap-2 text-slate-600" title="Simulate bank health to see Saathi change its decisions">Bank server <span id="bankbtns" class="flex gap-1"></span></div></div>
+
+    <div><div class="xh">💰 Money flowing through merchants</div><div class="xs">GMV is monthly sales on Paytm; today's numbers update as payments, settlements and refunds happen.</div>
+      <div class="grid grid-cols-4 gap-4" id="xmoney"></div></div>
+
+    <div><div class="xh">📈 Growth Saathi created</div><div class="xs">Revenue and sales that came from Saathi's conversations, not from a sales team.</div>
+      <div class="grid grid-cols-4 gap-4" id="xgrowth"></div></div>
+
+    <div><div class="xh">🏪 Merchants at a glance</div><div class="xs">One row per merchant. Red means something needs attention.</div>
+      <div class="card p-0 overflow-hidden"><div id="xmerch"></div></div></div>
+
+    <div><div class="xh">🤝 Service health</div><div class="xs">How well Saathi resolves issues and when it hands off to people.</div>
+      <div class="grid grid-cols-4 gap-4" id="execkpi"></div>
+      <div class="grid grid-cols-3 gap-4 mt-4" id="metrics"></div></div>
+
     <div class="grid grid-cols-2 gap-4">
-      <div class="card p-6"><div class="sect text-orange-600">LIVE HANDOFF QUEUE</div><div id="handq" class="space-y-3 text-sm"></div></div>
-      <div class="card p-6"><div class="sect">MARKETING & SALES LIFT</div><div id="camps" class="text-sm space-y-3"></div></div>
+      <div class="card p-6"><div class="sect text-orange-600">WAITING FOR A PERSON</div><div id="handq" class="space-y-3 text-sm"></div></div>
+      <div class="card p-6"><div class="sect">MERCHANT CAMPAIGNS</div><div id="camps" class="text-sm space-y-3"></div></div>
     </div>
-    <div class="card p-5 text-sm text-slate-600" id="mlcard"></div>
+    <details class="card p-5 text-sm text-slate-600"><summary class="cursor-pointer font-semibold text-slate-700">How decisions are made (ML model)</summary><div id="mlcard" class="mt-2"></div></details>
   </div>
 
   <!-- BRAIN: technical X-ray -->
@@ -460,7 +473,27 @@ function renderCustomer(p) {
     ${p.emi ? `<div class="mt-3 text-[10px] font-bold text-slate-500">LOAN</div><div class="text-[11px]">${esc(p.emi.loan)} · EMI ₹${p.emi.emi.toLocaleString('en-IN')} due ${p.emi.due} · late fee ₹${p.emi.late_fee} ${p.emi.waived ? '<b class="text-emerald-600">WAIVED</b>' : ''} · <b class="${p.emi.paid ? 'text-emerald-600' : 'text-amber-600'}">${p.emi.paid ? 'PAID' : 'UNPAID'}</b></div>` : ''}
     ${p.txns.length ? `<div class="mt-3 text-[10px] font-bold text-slate-500">RECENT UPI</div><table class="w-full text-[11px]">${p.txns.map(t => `<tr class="border-t border-slate-100"><td>${esc(t.time)}</td><td class="font-mono">${t.id}</td><td>→ ${esc(t.to)}</td><td class="text-right">₹${t.amount.toLocaleString('en-IN')}</td><td class="text-right font-semibold ${t.status === 'REFUNDED' ? 'text-sky-600' : t.status === 'PENDING' ? 'text-amber-600' : 'text-slate-700'}">${t.status}</td></tr>`).join('')}</table>` : ''}`);
 }
+function renderBiz(s) {
+  const b = s.exec.biz, k = (v, l, n, tone = '') => `<div class="kc"><div class="kv ${tone}">${v}</div><div class="kl">${l}</div><div class="kn">${n}</div></div>`;
+  put('xmoney', k(inr(b.gmv_month), 'Merchant GMV / month', `${b.merchants} merchants on Paytm`)
+    + k(inr(b.upi_today), "Today's UPI collections", 'Paid to merchants via Paytm QR / Soundbox')
+    + k(inr(b.settled), 'Settled to bank', b.held ? `<span class="text-orange-600 font-semibold">${inr(b.held)} still on hold</span>` : 'Nothing on hold', b.held ? '' : '')
+    + k(inr(b.refunds), 'Refunded to customers', 'Failed payments returned by Saathi'));
+  put('xgrowth', k(inr(b.loans), 'Loans sanctioned', `${b.loan_n} merchant${b.loan_n === 1 ? '' : 's'} took a Business Loan`, 'text-emerald-700')
+    + k(b.soundbox_n, 'Soundbox Pro orders', '₹1 activation, then ₹99/month', 'text-emerald-700')
+    + k(inr(b.campaign_gmv), 'Sales from merchant campaigns', 'Diwali offers sent through Saathi', 'text-emerald-700')
+    + k(inr(b.cash_today), 'Cash recorded by voice', b.cash_today ? 'Sales still happening in cash — UPI opportunity' : 'Merchants log cash on Soundbox', 'text-amber-600'));
+  const yes = '<span class="text-emerald-600">●</span>', no = '<span class="text-red-600">●</span>';
+  put('xmerch', `<table class="w-full text-sm"><tr class="bg-slate-50 text-left text-[12px] text-slate-500"><th class="px-4 py-2.5">Merchant</th><th>GMV / month</th><th>UPI today</th><th>Cash today</th><th>Settlement</th><th>Soundbox</th><th>Open tickets</th><th>Took from Saathi</th></tr>
+    ${s.exec.merchant_rows.map(r => `<tr class="border-t border-slate-100 cursor-pointer hover:bg-sky-50" onclick="viewUser('${r.id}'); tab('c360')">
+      <td class="px-4 py-3"><div class="font-semibold text-slate-800">${esc(r.name)}</div><div class="text-[11px] text-slate-500">${esc(r.owner)} · ${esc(r.city)}</div></td>
+      <td>${inr(r.gmv_month)}</td><td>${inr(r.upi_today)}</td><td class="text-slate-500">${r.cash_today ? inr(r.cash_today) : '—'}</td>
+      <td>${r.held ? `<span class="text-orange-600 font-semibold">${inr(r.held)} on hold</span>` : '<span class="text-emerald-600">✓ Settled</span>'}</td>
+      <td>${r.soundbox_online ? yes + ' Online' : no + ' Offline'}</td><td>${r.open ? `<span class="px-2 py-0.5 rounded-full bg-orange-100 text-orange-700 font-semibold">${r.open}</span>` : '—'}</td>
+      <td class="text-[12px]">${r.products.length ? r.products.map(esc).join('<br>') : '<span class="text-slate-400">—</span>'}</td></tr>`).join('')}</table>`);
+}
 function renderExec(s) {
+  renderBiz(s);
   const e = s.exec, k = (v, l, sub, ok) => `<div class="card p-3"><div class="text-2xl font-bold ${ok ? 'text-emerald-600' : 'text-slate-900'}">${v}</div><div class="text-[11px] text-slate-500">${l}</div><div class="text-[10px] text-slate-400">${sub}</div></div>`;
   put('execkpi', k(e.loop_closure_pct + '%', 'Autonomous loop closure', `${e.closed_autonomously}/${e.tickets} tickets closed with no human`, e.loop_closure_pct >= 50)
     + k(e.high_risk_caught, 'High-risk cases caught by ML', `${e.handoffs} handed off · avg ${e.handoff_ms ?? '—'}ms to human`, e.high_risk_caught > 0)

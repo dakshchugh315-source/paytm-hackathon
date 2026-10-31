@@ -148,6 +148,11 @@ def load_world():
         SESSIONS.update({k: {**x, "ctx": lambda t, a, x=x: f"{x.get('query', '')} → {t} {a}"} for k, x in w.get("s", {}).items()}); APPROVALS.update(w.get("a", {}))
 
 # ---------------- PII masking + immutable audit ----------------
+def inr(n):
+    """₹ in Indian grouping: 190000 -> ₹1,90,000."""
+    s_ = str(int(n)); head, tail = s_[:-3], s_[-3:]
+    return "₹" + (re.sub(r"(\d)(?=(\d\d)+$)", r"\1,", head) + "," + tail if head else tail)
+
 def mask(s: str) -> str:
     s = re.sub(r"\b\d{9,18}\b", lambda m: "XXXX-" + m.group()[-4:], s)
     return re.sub(r"\b[A-Z]{4}0[A-Z0-9]{6}\b", lambda m: m.group()[:4] + "0XXXXXX", s)
@@ -861,7 +866,29 @@ def exec_metrics(rows):
             "ml_decisions": len(ML_LOG), "ml_avg_ms": round(statistics.mean(x["latency_ms"] for x in ML_LOG), 1) if ML_LOG else None,
             "high_risk_caught": len(high), "handoffs": len(HANDOFFS), "handoff_ms": round(statistics.mean(h["latency_ms"] for h in HANDOFFS)) if HANDOFFS else None,
             "queue": queue, "campaigns": camp, "campaign_gmv": sum(c["gmv"] for c in camp), "campaign_paid": sum(c["paid"] for c in camp),
-            "lang_mix": {l: sum(x["lang"] == l for x in ML_LOG) for l in {x["lang"] for x in ML_LOG}}}
+            "lang_mix": {l: sum(x["lang"] == l for x in ML_LOG) for l in {x["lang"] for x in ML_LOG}}, **business_metrics(camp)}
+
+def business_metrics(camp):
+    """Business view for the Paytm team: money flowing through merchants and what Saathi added."""
+    open_t = {}
+    for x in SESSIONS.values():
+        if x["status"] not in ("VERIFIED", "CLOSED", "REASSIGNED", "ANSWERED"): open_t[x["merchant"]] = open_t.get(x["merchant"], 0) + 1
+    rows = []
+    for k, m in MERCHANTS.items():
+        upi = sum(t["amount"] for t in m["txns"].values() if t["status"] == "SUCCESS"); cash = sum(c["amount"] for c in m.get("cash", []))
+        rows.append({"id": k, "name": m["name"], "owner": m["owner"], "city": m.get("city", ""), "gmv_month": m["monthly_volume"], "upi_today": upi, "cash_today": cash,
+                     "settled": sum(x["amount"] for x in m["settlements"].values() if x["status"] == "SETTLED"),
+                     "held": sum(x["amount"] for x in m["settlements"].values() if x["status"] != "SETTLED"),
+                     "soundbox_online": DEVICES[m["soundbox"]]["online"], "open": open_t.get(k, 0),
+                     "products": [o["item"] for o in m.get("orders", [])]})
+    orders = [o for m in MERCHANTS.values() for o in m.get("orders", [])]
+    refunds = sum(t["amount"] for m in MERCHANTS.values() for t in m["txns"].values() if t["refunded"]) + sum(t["amount"] for c in CUSTOMERS.values() for t in c["txns"].values() if t["refunded"])
+    return {"biz": {"gmv_month": sum(r["gmv_month"] for r in rows), "upi_today": sum(r["upi_today"] for r in rows), "cash_today": sum(r["cash_today"] for r in rows),
+                    "settled": sum(r["settled"] for r in rows), "held": sum(r["held"] for r in rows), "refunds": refunds,
+                    "loans": sum(o["amount"] for o in orders if o["item"].startswith("Business Loan")), "loan_n": sum(o["item"].startswith("Business Loan") for o in orders),
+                    "soundbox_n": sum(o["item"].startswith("Soundbox") for o in orders), "campaign_gmv": sum(c["gmv"] for c in camp),
+                    "soundbox_online": sum(r["soundbox_online"] for r in rows), "merchants": len(rows)},
+            "merchant_rows": rows}
 
 CANON = {"UPI_Pending": "payment fail hua, paise kat gaye, refund chahiye", "EMI_Bounce_Fear": "EMI bounce aur late fee ki chinta hai",
          "Fraud_Unauthorized_Txn": "ye payment maine nahi kiya, fraud hai", "Settlement_Hold": "settlement nahi aaya",
@@ -1084,9 +1111,9 @@ def lead(sid: str, product: str = "Business Loan", amount: int = 0):
     m = MERCHANTS[s["merchant"]]; acc = mask(m["bank"]["acc"]); oid = "ORD-" + uuid.uuid4().hex[:6].upper()
     if product == "Business Loan":
         emi = int(amount * 1.16 / 365)  # flat 16% p.a., daily from settlement
-        order = {"id": oid, "item": f"Business Loan ₹{amount:,}", "amount": amount, "direction": "CREDIT", "mode": f"Disbursal to bank {acc} within 24h",
+        order = {"id": oid, "item": f"Business Loan {inr(amount)}", "amount": amount, "direction": "CREDIT", "mode": f"Disbursal to bank {acc} within 24h",
                  "recurring": f"₹{emi}/day auto-deducted from daily settlement × 365 days", "status": "SANCTIONED"}
-        text = f"Ho gaya! ₹{amount:,} ka loan sanction ✅ Order {oid}. Paisa 24 ghante mein aapke bank {acc} mein aayega. EMI ₹{emi}/din aapke roz ke settlement se apne aap kategi — alag se kuch bharna nahi."
+        text = f"Ho gaya! {inr(amount)} ka loan sanction ✅ Order {oid}. Paisa 24 ghante mein aapke bank {acc} mein aayega. EMI ₹{emi}/din aapke roz ke settlement se apne aap kategi — alag se kuch bharna nahi."
     else:
         order = {"id": oid, "item": "Soundbox Pro (4G)", "amount": 1, "direction": "DEBIT", "mode": "Adjusted from next settlement (no card/UPI needed)",
                  "recurring": "₹0 rental for 30 days, then ₹99/month from settlement", "status": "CONFIRMED · delivery tomorrow"}
