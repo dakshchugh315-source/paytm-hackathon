@@ -499,8 +499,13 @@ function renderApp(s) {
       ${p.emi ? `<div class="bg-white rounded-2xl p-4 shadow-sm"><div class="text-[11px] text-slate-500">${esc(p.emi.loan)}</div><div class="flex items-center"><b class="text-lg">${inr(p.emi.emi)}</b><span class="ml-2 text-[12px] text-slate-500">due ${esc(p.emi.due)}</span>
         <span class="ml-auto text-[12px] font-bold ${p.emi.paid ? 'text-emerald-600' : 'text-orange-600'}">${p.emi.paid ? '✓ Paid' : 'Unpaid'}</span></div>${p.emi.waived ? '<div class="text-[11px] text-emerald-600">Late fee ' + inr(p.emi.late_fee) + ' waived</div>' : ''}</div>` : ''}
       ${p.txns.slice(-1).map(t => row('↗️', 'Last payment to ' + esc(t.to), esc(t.time), inr(t.amount), '')).join('')}`;
-    if (PT === 'pass') h = `<div class="text-[12px] text-slate-500 px-1">Passbook</div>` + (p.txns.length ? p.txns.map(t => row(t.status === 'REFUNDED' ? '↩️' : '↗️', (t.status === 'REFUNDED' ? 'Refund from ' : 'Paid to ') + esc(t.to),
-        `${esc(t.time)} · ${t.status}${t.rrn ? ' · RRN ' + t.rrn : ''}`, (t.status === 'REFUNDED' ? '+' : '−') + inr(t.amount), t.status === 'REFUNDED' ? 'text-emerald-600' : t.status === 'PENDING' ? 'text-orange-600' : 'text-slate-800')).join('') : '<div class="text-center text-slate-400 py-6">No payments yet.</div>');
+    if (PT === 'pass') {
+      const pb = p.passbook || [], icon = {CREDIT: '⬇️', DEBIT: '↗️', INFO: '🎁'}, sign = {CREDIT: '+', DEBIT: '−', INFO: ''}, tone = {CREDIT: 'text-emerald-600', DEBIT: 'text-slate-800', INFO: 'text-sky-600'};
+      h = `<div class="flex text-[12px] text-slate-500 px-1"><span>Passbook</span><span class="ml-auto">${pb.length} entries · newest first</span></div>` + (pb.length ? pb.map(e => row(icon[e.kind],
+        esc(e.title) + (e.status && e.status !== 'SUCCESS' ? ` <span class="text-[10px] px-1.5 rounded ${e.status === 'PENDING' ? 'bg-orange-100 text-orange-700' : 'bg-sky-100 text-sky-700'}">${e.status}</span>` : ''),
+        `${esc(e.time)}${e.ref ? ' · ' + esc(e.ref) : ''}`, e.kind === 'INFO' ? 'saved ' + inr(e.amount) : sign[e.kind] + inr(e.amount), e.status === 'PENDING' ? 'text-orange-600' : tone[e.kind])).join('')
+        : '<div class="text-center text-slate-400 py-6">No transactions yet.</div>');
+    }
     if (PT === 'loan') h = p.emi ? `<div class="bg-white rounded-2xl p-4 shadow-sm space-y-1 text-[13px]"><b>${esc(p.emi.loan)}</b><div>EMI ${inr(p.emi.emi)} · due ${esc(p.emi.due)}</div><div>Late fee ${inr(p.emi.late_fee)} ${p.emi.waived ? '<span class="text-emerald-600">(waived)</span>' : ''}</div>
         <div class="font-bold ${p.emi.paid ? 'text-emerald-600' : 'text-orange-600'}">${p.emi.paid ? '✓ Paid — credit score safe' : 'Not paid yet'}</div>${p.emi.paid ? '' : `<button onclick="openApp('wa');say('Meri EMI bounce ho jayegi kya, late fee lagegi?')" class="mt-2 w-full py-2 rounded-xl bg-[#00baf2] text-white font-semibold">Need help? Ask Saathi</button>`}</div>`
       : '<div class="text-center text-slate-400 py-6">No active loans.</div>';

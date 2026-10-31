@@ -119,6 +119,16 @@ def test_customer_emi_waiver_and_pay(c):
     r = c.post(f"/lead/{r['session_id']}?product=EMI&amount=2150").json()
     assert r["status"] == "VERIFIED" and main.CUSTOMERS["C2002"]["emi"]["paid"]
 
+def test_customer_passbook_records_every_money_event(c):
+    chat(c, "Maine ₹420 bheje the, paisa kat gaya par dukaan wale ko nahi mila", "C2001")
+    pb = c.get("/state?mid=C2001").json()["profile"]["passbook"]
+    assert [(e["kind"], e["amount"]) for e in pb] == [("CREDIT", 420), ("DEBIT", 420)] and pb[0]["ref"].startswith("RRN")
+    r = chat(c, "Meri EMI bounce ho jayegi kya, late fee lagegi?", "C2002"); c.post(f"/lead/{r['session_id']}?product=EMI&amount=2150")
+    pb = c.get("/state?mid=C2002").json()["profile"]["passbook"]
+    assert [(e["kind"], e["amount"]) for e in pb] == [("DEBIT", 2150), ("INFO", 250)]
+    approve(c, chat(c, "I did NOT make this ₹12,000 payment!! someone stole my money", "C2003"))
+    assert ("CREDIT", 12000) in [(e["kind"], e["amount"]) for e in c.get("/state?mid=C2003").json()["profile"]["passbook"]]
+
 def test_emi_never_charged_twice(c):
     r = chat(c, "Meri EMI bounce ho jayegi kya, late fee lagegi?", "C2002"); first = r["session_id"]
     c.post(f"/lead/{first}?product=EMI&amount=2150")

@@ -672,15 +672,23 @@ def verify_utr(uid, txn_id):
     t = CUSTOMERS[uid]["txns"][txn_id]
     return {"txn": txn_id, "debited": t["debited"], "merchant_credited": t["credited"], "npci_status": "DEEMED" if BANK_STATUS != "UP" else "PENDING", "bank": BANK_STATUS}
 
+def passbook_add(uid, kind, title, amount, ref=""):
+    """Every money event becomes its own passbook line (CREDIT / DEBIT / INFO), like a real bank passbook."""
+    CUSTOMERS[uid].setdefault("ledger", []).append({"kind": kind, "title": title, "amount": amount, "ref": ref, "time": datetime.now().strftime("Today %H:%M"), "ts": time.time()})
+
 def instant_refund(uid, txn_id, amount):
     t = CUSTOMERS[uid]["txns"][txn_id]
     if t["refunded"]: return {"ok": False, "error": "IDEMPOTENT_BLOCK: already refunded"}
-    t.update(refunded=True, status="REFUNDED", rrn="RF" + uuid.uuid4().hex[:8].upper()); return {"ok": True, "txn": txn_id, "amount": amount, "rrn": t["rrn"]}
+    t.update(refunded=True, status="REFUNDED", rrn="RF" + uuid.uuid4().hex[:8].upper())
+    passbook_add(uid, "CREDIT", f"Refund from {t['to']}", amount, "RRN " + t["rrn"])
+    return {"ok": True, "txn": txn_id, "amount": amount, "rrn": t["rrn"]}
 
 def check_emi(uid): return dict(CUSTOMERS[uid]["emi"])
 
 def waive_late_fee(uid):
-    e = CUSTOMERS[uid]["emi"]; e["waived"] = True; return {"waived": e["late_fee"], "reason": "first delay, good history"}
+    e = CUSTOMERS[uid]["emi"]
+    if not e["waived"]: passbook_add(uid, "INFO", f"Late fee waived · {e['loan']}", e["late_fee"], "Saathi waiver")
+    e["waived"] = True; return {"waived": e["late_fee"], "reason": "first delay, good history"}
 
 def send_emi_payment_link(uid):
     return {"link": f"https://paytm.me/emi/{uuid.uuid4().hex[:6]}", "amount": CUSTOMERS[uid]["emi"]["emi"]}
@@ -689,7 +697,9 @@ def freeze_account(uid):
     CUSTOMERS[uid]["frozen"] = True; return {"frozen": True, "upi_blocked": True, "cards_blocked": True}
 
 def fraud_case_handoff(uid, txn_id, amount):
-    return {"case": "FRD-" + uuid.uuid4().hex[:5].upper(), "owner": "risk-02 (Meera)", "provisional_credit": amount, "chargeback": "RAISED"}
+    case = "FRD-" + uuid.uuid4().hex[:5].upper()
+    passbook_add(uid, "CREDIT", "Provisional credit · fraud case", amount, case)
+    return {"case": case, "owner": "risk-02 (Meera)", "provisional_credit": amount, "chargeback": "RAISED"}
 
 def check_ledger_and_kyc(mid, settlement_id):
     st = MERCHANTS[mid]["settlements"][settlement_id]
@@ -862,7 +872,8 @@ def pay_emi(s):
         reply(s, f"Ye EMI {inr(e['emi'])} pehle hi bhar di gayi hai ✅ Dobara koi paisa nahi kata."); return view(s)
     for x in MSGS:
         if x.get("cta") and x.get("merchant") == s["merchant"]: x["cta_done"] = True
-    e["paid"] = True; audit(s, "ACT", f"💳 EMI ₹{e['emi']:,} paid via link", e)
+    e["paid"] = True; passbook_add(s["merchant"], "DEBIT", f"EMI paid · {e['loan']}", e["emi"], "EMI-" + uuid.uuid4().hex[:6].upper())
+    audit(s, "ACT", f"💳 EMI ₹{e['emi']:,} paid via link", e)
     audit(s, "VERIFY", f"Loan ledger: EMI {e['due']} → PAID · late fee waived={e['waived']}", e)
     speak(s, f"Payment mil gaya ✅ ₹{e['emi']:,} ki EMI bhar di gayi, koi late fee nahi lagegi. Aapka credit score safe hai.", s.get("ml") or {"persona": "Customer", "lang": c["lang"], "sentiment": 0})
     resolve(s, "EMI paid in same turn"); return view(s)
@@ -1280,7 +1291,9 @@ def profile(mid="M1001"):
     if mid in CUSTOMERS:
         c = CUSTOMERS[mid]
         return {"persona": "customer", "id": mid, "name": c["name"], "lang": c["lang"], "city": c["city"], "frozen": c["frozen"], "disputes": c["disputes"],
-                "phone": mask(c["phone"]), "emi": c.get("emi"), "txns": [{"id": k, **v} for k, v in c["txns"].items()]}
+                "phone": mask(c["phone"]), "emi": c.get("emi"), "txns": [{"id": k, **v} for k, v in c["txns"].items()],
+                "passbook": ([{"kind": "DEBIT", "title": f"Paid to {v['to']}", "amount": v["amount"], "ref": "UPI " + k[-5:], "time": v["time"], "status": v["status"]} for k, v in c["txns"].items()]
+                             + c.get("ledger", []))[::-1]}
     m = MERCHANTS[mid]; d = DEVICES[m["soundbox"]]; e = check_loan_and_soundbox_eligibility(mid)
     return {"id": mid, "name": m["name"], "owner": m["owner"], "gmv": m["monthly_volume"], "soundbox": m["soundbox"], "soundbox_online": d["online"],
             "settlement": "HOLD" if any(v["status"] != "SETTLED" for v in m["settlements"].values()) else "OK", "bank_verified": m["bank"]["verified"],
