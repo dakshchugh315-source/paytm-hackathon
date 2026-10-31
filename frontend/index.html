@@ -21,14 +21,20 @@ header{background:#fff;box-shadow:0 1px 0 #e5e9f0}header b.text-white{color:#002
 .vbtn-nav span{font-size:22px}.vbtn-nav:hover{background:#f1f5f9}.vbtn-nav.on{background:#002e6e;color:#fff}
 body.view-phone main,body.view-team main{grid-template-columns:1fr!important}
 body.view-phone #team-side,body.view-phone #askbtn,body.view-phone #askdrawer,body.view-team #phone-side{display:none!important}
-body.view-phone #phone-side{width:100%;max-width:480px;margin:0 auto}.vwave span{width:2px;background:#00a884;border-radius:1px;opacity:.45;transform-origin:bottom}.vplaying .vwave span{opacity:1;animation:vw .9s ease-in-out infinite}.vplaying .vwave span:nth-child(2n){animation-delay:.15s}.vplaying .vwave span:nth-child(3n){animation-delay:.3s}@keyframes vw{50%{transform:scaleY(.3)}}
+html,body{overflow-x:hidden}main{min-width:0}
+body.view-phone main{place-items:center;background:radial-gradient(1200px 600px at 50% 40%,#e0f2fe 0%,#f4f6fb 60%)}
+body.view-phone #phone-side{width:400px;height:min(860px,100%);margin:0 auto}
+body.view-phone #phone-side>div:last-child{border-width:10px;border-radius:44px;box-shadow:0 30px 60px -20px rgba(0,46,110,.45)}
+body.view-phone #chips,body.view-phone #schips{flex-wrap:nowrap;overflow-x:auto;padding-bottom:6px;scrollbar-width:none}
+body.view-phone #chips button{white-space:nowrap;flex-shrink:0}
+body.view-phone #msel{max-width:250px}.vwave span{width:2px;background:#00a884;border-radius:1px;opacity:.45;transform-origin:bottom}.vplaying .vwave span{opacity:1;animation:vw .9s ease-in-out infinite}.vplaying .vwave span:nth-child(2n){animation-delay:.15s}.vplaying .vwave span:nth-child(3n){animation-delay:.3s}@keyframes vw{50%{transform:scaleY(.3)}}
 @keyframes p{50%{opacity:.45}}.pulse{animation:p 1s infinite}@keyframes pop{0%{transform:scale(.6);opacity:0}100%{transform:scale(1);opacity:1}}.pop{animation:pop .35s ease-out}
 ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-thumb{background:#12384f;border-radius:3px}pre{white-space:pre-wrap;word-break:break-all}
 </style></head>
 <body class="h-screen flex flex-col font-sans text-sm">
-<header class="px-4 py-2 flex items-center gap-3">
+<header class="px-4 py-2 flex flex-wrap items-center gap-x-3 gap-y-2">
   <b class="text-lg text-white">Saathi <span class="text-[#00baf2] font-normal">Command Center</span></b>
-  <span id="llm" class="text-xs px-2 py-0.5 rounded bg-slate-100 text-slate-600"></span>
+  <span id="llm" class="text-xs px-2 py-0.5 rounded bg-slate-100 text-slate-600 max-w-[420px] truncate" title="Which AI is answering"></span>
   <span id="cachebadge" class="hidden text-xs px-2 py-1 rounded-full bg-yellow-400 text-black font-bold pop">⚡ Verified Fix Cache Hit</span>
   <span class="text-xs px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 font-medium">🌐 Multilingual: English + Indic</span>
   <div class="ml-auto flex items-center gap-2"><span class="text-[11px] font-bold text-slate-400" title="Demo-only triggers, not visible to merchants">🎬 STAGE CONTROLS</span><div class="flex gap-1.5 text-xs font-semibold" id="demos"></div>
