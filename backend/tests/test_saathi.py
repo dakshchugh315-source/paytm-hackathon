@@ -299,6 +299,13 @@ def test_staff_ping_off_variants(c, off):
     assert "pings band" in staff(c, "9811000001", off)[-1]["text"]
     assert not c.get("/staff/state").json()["chats"]["9811000001"]["subscribed"]
 
+def test_staff_pin_as_followup_message(c):
+    aid = chat(c, "Kal ka settlement nahi aaya")["approvals"][0]["id"]
+    assert "PIN chahiye" in staff(c, "9811000002", f"approve {aid}")[-1]["text"]
+    assert "PIN galat" in staff(c, "9811000002", "1111")[-1]["text"] and main.APPROVALS[aid]["status"] == "PENDING"
+    assert "✅ Approved" in staff(c, "9811000002", main.APPROVER_PIN)[-1]["text"]
+    assert main.APPROVALS[aid]["status"] == "APPROVED"
+
 def test_staff_without_rights_cannot_approve(c):
     r = chat(c, "Kal ka settlement nahi aaya"); aid = r["approvals"][0]["id"]
     assert "access nahi" in staff(c, "9811000003", f"approve {aid} {main.APPROVER_PIN}")[-1]["text"]

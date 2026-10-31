@@ -1039,6 +1039,9 @@ def staff_reply(phone, text):
     if not ch["verified"]:
         ch["verified"] = True; staff_audit(emp, f"✅ Staff verified by phone match: {emp['name']} ({emp['id']})", {"phone": mask(phone)})
         staff_say(phone, f"Verified ✅ {emp['name']} · {emp['role']}, {emp['team']} ({emp['id']}). Number employee list se match ho gaya.")
+    pin_only = re.fullmatch(r"(?:pin\s*[:\-]?\s*)?(\d{4})", low)
+    if pin_only and ch.get("awaiting_pin"):  # reply to "send the PIN" for the approval we just asked about
+        t = f"approve {ch['awaiting_pin']} {pin_only.group(1)}"; low = t.lower()
     m = re.search(r"\b(approve|reject|override)\b\s+(AP-[A-Z0-9]+)(?:\s+(\d{4}))?", t, re.I)
     if m:
         verb, aid, pin = m.group(1).lower(), m.group(2).upper(), m.group(3)
@@ -1048,7 +1051,12 @@ def staff_reply(phone, text):
             staff_audit(emp, f"⛔ {emp['name']} tried to {verb} {aid} without approval rights", ap["args"])
             return staff_say(phone, f"Aapke role ({emp['role']}) ko approve/reject ka access nahi hai. Main Priya ya Arjun ko ping kar deta hoon.")
         if verb == "approve" and pin != APPROVER_PIN:
-            return staff_say(phone, f"Security ke liye PIN chahiye. Likhiye: *approve {aid} <PIN>*")
+            ch["awaiting_pin"] = aid
+            if pin:
+                staff_audit(emp, f"⛔ Wrong approver PIN from {emp['name']} for {aid}", {"aid": aid})
+                return staff_say(phone, f"PIN galat hai. {aid} approve karne ke liye sahi 4-digit PIN bhejiye.")
+            return staff_say(phone, f"Security ke liye PIN chahiye. Bas apna 4-digit PIN bhejiye (ya *approve {aid} <PIN>*).")
+        ch.pop("awaiting_pin", None)
         staff_audit(emp, f"📱 {emp['name']} {verb}d {aid} via Staff WhatsApp", ap["args"])
         r = decide(aid, "approve" if verb == "approve" else "override", APPROVER_PIN)
         last = next((x["text"] for x in reversed(MSGS) if x.get("ticket") == ap["ticket"] and x["from"] == "saathi"), "")
