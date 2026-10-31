@@ -208,7 +208,8 @@ def test_soundbox_cash_and_announcements(c, monkeypatch):
     monkeypatch.setattr(main, "stt", lambda audio, fname="": "डेढ़ सौ रुपये कैश")
     assert c.post("/soundbox/M1002/cash", files={"file": ("c.webm", b"x")}).json()["entry"]["amount"] == 150
     assert "prapt hue" in c.post("/soundbox/M1002/simulate-payment").json()["text"]
-    assert c.post("/soundbox/M1001/simulate-payment").status_code == 409  # Ramesh's Soundbox is offline
+    c.post("/demo/soundbox_offline?merchant_id=M1001")
+    assert c.post("/soundbox/M1001/simulate-payment").status_code == 409  # offline Soundbox can't announce
     assert c.post("/soundbox/C2001/cash", data={"text": "100"}).status_code == 404
 
 # ---------------- Live payment -> settlement ----------------

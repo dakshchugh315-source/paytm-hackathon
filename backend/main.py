@@ -129,7 +129,7 @@ def buyers(mid, n=60):
 
 def reset_world():
     global MERCHANTS, DEVICES, SESSIONS, APPROVALS, CACHE, MSGS
-    MERCHANTS = copy.deepcopy(SEED); DEVICES = {"SB-7781": {"online": False, "fault": "network", "last_ping": "14 min ago"}, "SB-8820": {"online": True, "fault": None, "last_ping": "just now"},
+    MERCHANTS = copy.deepcopy(SEED); DEVICES = {"SB-7781": {"online": True, "fault": None, "last_ping": "just now"}, "SB-8820": {"online": True, "fault": None, "last_ping": "just now"},
                "SB-9102": {"online": True, "fault": None, "last_ping": "just now"}}
     SESSIONS, APPROVALS, CACHE, MSGS = {}, {}, {}, []
     global CUSTOMERS, CAMPAIGNS, ML_LOG, BANK_STATUS, HANDOFFS
