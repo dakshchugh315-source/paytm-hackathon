@@ -3,7 +3,7 @@
 <title>Saathi Command Center — Paytm × Sarvam AI</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 body{background:#f4f6fb;color:#1e293b;font-family:Inter,system-ui,sans-serif}
-header{background:#fff;box-shadow:0 1px 0 #e5e9f0}header .text-white{color:#002e6e}header .text-slate-400{color:#64748b}
+header{background:#fff;box-shadow:0 1px 0 #e5e9f0}header b.text-white{color:#002e6e}header .text-slate-400{color:#64748b}
 .card{background:#fff;border:1px solid #e6eaf1;border-radius:16px;box-shadow:0 1px 2px #0f172a0a,0 4px 16px #0f172a08}
 .card .text-white,.card b.text-white{color:#0f172a}.card .text-slate-400,.card .text-slate-500{color:#64748b}.card .text-slate-300{color:#334155}
 .card .bg-black\/20{background:#f6f8fb;border:1px solid #eef1f6}.card pre{color:#475569}
@@ -12,7 +12,7 @@ header{background:#fff;box-shadow:0 1px 0 #e5e9f0}header .text-white{color:#002e
 .text-violet-400{color:#7c3aed}.text-amber-400{color:#b45309}.text-sky-400{color:#0284c7}.text-pink-400{color:#db2777}
 .ph{background:#f1f5f9;color:#94a3b8}.ph.on{background:#002e6e;color:#fff;box-shadow:0 0 0 4px #00baf233;transform:scale(1.04)}.ph.done{background:#dcfce7;color:#15803d}
 ::-webkit-scrollbar-thumb{background:#cbd5e1}
-.tab{padding:6px 14px;border-radius:10px;font-weight:600;color:#64748b;background:#fff;border:1px solid #e6eaf1}.tab.active{background:#002e6e;color:#fff;border-color:#002e6e}.panel.flex-col:not(.hidden){display:flex}
+.tab{padding:6px 14px;border-radius:10px;font-weight:600;color:#64748b;background:#fff;border:1px solid #e6eaf1}.tab.active{background:#002e6e;color:#fff;border-color:#002e6e}.panel:not(.hidden){display:flex}.grp{font-size:10px;font-weight:700;letter-spacing:.06em;color:#94a3b8;margin-right:2px}.sect{font-size:11px;font-weight:700;letter-spacing:.05em;color:#0086c9;margin-bottom:10px}#queue>div{padding:18px!important;border-radius:14px}#queue button{padding:8px 18px!important;font-size:14px}#tickets td,#tickets th{padding:10px 8px}#profile td,#profile th{padding:6px 6px}#profile .text-\[11px\],#profile .text-\[10px\]{font-size:13px}
 </style><script src="https://cdn.tailwindcss.com"></script><script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <style>.md h1{font-size:20px;font-weight:700;margin:8px 0}.md h2{font-size:16px;font-weight:700;margin:14px 0 6px;color:#002e6e}.md h3{font-weight:700;margin:10px 0 4px}.md table{width:100%;font-size:12px;border-collapse:collapse;margin:6px 0}.md td,.md th{border:1px solid #e2e8f0;padding:4px 6px;text-align:left;vertical-align:top}.md th{background:#f1f5f9}.md ul{list-style:disc;padding-left:18px}.md code{background:#f1f5f9;padding:0 3px;border-radius:3px}</style>
 <style>.ph{transition:.3s}
@@ -46,51 +46,89 @@ header{background:#fff;box-shadow:0 1px 0 #e5e9f0}header .text-white{color:#002e
 </section>
 <!-- PAYTM SIDE: internal views, never shown to the merchant -->
 <section class="flex flex-col min-h-0">
-  <div class="flex items-center gap-1 mb-2" id="tabs">
-    <span class="text-[11px] font-bold text-slate-500 mr-2 flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-[#002e6e]"></span>PAYTM INTERNAL</span>
-    <button data-tab="agent" class="tab">🧑‍💼 Agent Console <span id="qcount" class="hidden ml-1 px-1.5 rounded-full bg-orange-500 text-white text-[10px] pulse"></span></button>
-    <button data-tab="brain" class="tab">🧠 Saathi Brain (X-Ray)</button>
-    <button data-tab="impact" class="tab">📊 Pilot Impact</button>
-    <button data-tab="exec" class="tab">🏢 Paytm Executive</button>
-    <button data-tab="report" class="tab">📋 Effectiveness Audit</button>
+  <div class="flex items-center gap-1.5 mb-3 flex-wrap" id="tabs">
+    <span class="grp">FOR PAYTM TEAM</span>
+    <button data-tab="inbox" class="tab">📥 Inbox <span id="qcount" class="hidden ml-1 px-1.5 rounded-full bg-orange-500 text-white text-[10px] pulse"></span></button>
+    <button data-tab="tickets" class="tab">🎫 Tickets</button>
+    <button data-tab="c360" class="tab">👤 Customer 360</button>
+    <button data-tab="exec" class="tab">📊 Executive</button>
+    <span class="grp ml-3">UNDER THE HOOD</span>
+    <button data-tab="brain" class="tab">🧠 Saathi Brain</button>
+    <button data-tab="auditlog" class="tab">🔒 Audit Log</button>
+    <button data-tab="report" class="tab">📋 Report</button>
   </div>
-  <div data-panel="agent" class="panel grid grid-cols-2 gap-3 flex-1 min-h-0">
-    <div class="flex flex-col gap-3 min-h-0">
-      <div class="card p-3"><div class="text-[11px] font-bold text-[#00baf2] mb-2"><span id="viewing">MERCHANT 360</span></div><div id="profile"></div><div id="manual"></div></div>
-      <div class="card p-3 flex-1 min-h-0 overflow-y-auto"><div class="text-[11px] font-bold text-orange-400 mb-2">ONE-CLICK APPROVALS <input id="pin" type="password" maxlength="4" placeholder="PIN" class="ml-2 w-14 px-1 border rounded text-slate-700 font-normal" title="Approver PIN (demo: 2468)"></div><div id="queue" class="space-y-2"></div></div>
+
+  <!-- INBOX: only what needs a human decision -->
+  <div data-panel="inbox" class="panel hidden flex-col flex-1 min-h-0 overflow-y-auto">
+    <div class="card p-6 max-w-4xl w-full mx-auto">
+      <div class="flex items-center gap-4 mb-1">
+        <div><div class="text-lg font-bold text-slate-900">Actions waiting for you</div>
+          <div class="text-sm text-slate-500">Saathi paused these because they move money or carry risk. Read the summary, then approve or take over.</div></div>
+        <label class="ml-auto text-sm text-slate-600 flex items-center gap-2 whitespace-nowrap">Approver PIN
+          <input id="pin" type="password" maxlength="4" placeholder="••••" class="w-20 px-2 py-1.5 border border-slate-300 rounded-lg text-center" title="Demo PIN: 2468"></label>
+      </div>
+      <div id="queue" class="space-y-4 mt-5"></div>
     </div>
-    <div class="flex flex-col gap-3 min-h-0">
-    <div class="card p-3 max-h-[45%] overflow-y-auto"><div class="text-[11px] font-bold text-[#00baf2] mb-1">ALL TICKETS · click to inspect & take control</div><div id="tickets" class="text-[11px]"></div></div>
-    <div class="card p-3 min-h-0 flex flex-col flex-1"><div class="text-[11px] font-bold text-[#00baf2] mb-1">IMMUTABLE AUDIT TRAIL · PII MASKED <span id="chain" class="ml-1"></span></div>
-      <div id="audit" class="flex-1 overflow-y-auto font-mono text-[10px] space-y-1"></div></div></div>
   </div>
+
+  <!-- TICKETS: every conversation, with manual control -->
+  <div data-panel="tickets" class="panel hidden flex-1 min-h-0 gap-4">
+    <div class="card p-6 flex-[3] min-h-0 overflow-y-auto">
+      <div class="text-lg font-bold text-slate-900">All tickets</div>
+      <div class="text-sm text-slate-500 mb-4">Every conversation Saathi handled. Click a row to inspect or correct it.</div>
+      <div id="tickets"></div>
+    </div>
+    <div class="card p-6 flex-[2] min-h-0 overflow-y-auto">
+      <div class="text-lg font-bold text-slate-900">Manual control</div>
+      <div class="text-sm text-slate-500 mb-3">Override Saathi when the AI picked the wrong issue.</div>
+      <div id="manual"></div>
+    </div>
+  </div>
+
+  <!-- CUSTOMER 360 -->
+  <div data-panel="c360" class="panel hidden flex-col flex-1 min-h-0 overflow-y-auto">
+    <div class="card p-6 max-w-4xl w-full mx-auto">
+      <div class="text-lg font-bold text-slate-900 mb-1" id="viewing">Customer 360</div>
+      <div id="profile" class="mt-3"></div>
+    </div>
+  </div>
+
+  <!-- EXECUTIVE: outcomes for managers -->
+  <div data-panel="exec" class="panel hidden flex-col gap-4 flex-1 min-h-0 overflow-y-auto">
+    <div class="flex items-center"><div><div class="text-lg font-bold text-slate-900">Paytm ops & ROI — live</div>
+      <div class="text-sm text-slate-500">Computed from this session's tickets. Targets are pilot goals, not achieved results.</div></div>
+      <div class="ml-auto text-sm flex items-center gap-2 text-slate-600">Bank server <span id="bankbtns" class="flex gap-1"></span></div></div>
+    <div class="grid grid-cols-4 gap-4" id="execkpi"></div>
+    <div class="card p-6"><div class="sect">PILOT IMPACT</div><div class="grid grid-cols-3 gap-4" id="metrics"></div></div>
+    <div class="grid grid-cols-2 gap-4">
+      <div class="card p-6"><div class="sect text-orange-600">LIVE HANDOFF QUEUE</div><div id="handq" class="space-y-3 text-sm"></div></div>
+      <div class="card p-6"><div class="sect">MARKETING & SALES LIFT</div><div id="camps" class="text-sm space-y-3"></div></div>
+    </div>
+    <div class="card p-5 text-sm text-slate-600" id="mlcard"></div>
+  </div>
+
+  <!-- BRAIN: technical X-ray -->
   <div data-panel="brain" class="panel hidden flex-col gap-3 flex-1 min-h-0">
-    <div class="card p-3" id="mlbox"><div class="text-[11px] font-bold text-[#00baf2]">ML DECISION ENGINE (runs before LLM)</div><div class="text-xs text-slate-400">—</div></div>
-    <div class="card p-3"><div class="text-[11px] font-bold text-[#00baf2] mb-2">6-STEP AUTONOMOUS LOOP</div>
+    <div class="card p-4" id="mlbox"><div class="sect">ML DECISION ENGINE (runs before LLM)</div><div class="text-xs text-slate-400">—</div></div>
+    <div class="card p-4"><div class="sect">6-STEP AUTONOMOUS LOOP</div>
       <div class="grid grid-cols-6 gap-1.5 text-center text-[11px] font-semibold" id="phases"></div></div>
-    <div class="card p-3"><div class="text-[11px] font-bold text-[#00baf2] mb-1">SOP MATCH</div><div id="sop" class="text-xs text-slate-400">—</div></div>
+    <div class="card p-4"><div class="sect">SOP MATCH</div><div id="sop" class="text-xs text-slate-400">—</div></div>
     <div class="grid grid-cols-2 gap-3 flex-1 min-h-0">
-      <div class="card p-3 min-h-0 flex flex-col"><div class="text-[11px] font-bold text-[#00baf2] mb-1 flex">X-RAY TRACE · TOOL CALLS <span id="tel" class="ml-auto text-slate-400 font-normal"></span></div>
+      <div class="card p-4 min-h-0 flex flex-col"><div class="sect flex">X-RAY TRACE · TOOL CALLS <span id="tel" class="ml-auto text-slate-400 font-normal"></span></div>
         <div id="trace" class="flex-1 overflow-y-auto space-y-1 font-mono text-[11px]"></div></div>
-      <div class="card p-3 min-h-0 overflow-y-auto"><div class="text-[11px] font-bold text-[#00baf2] mb-1">POST-ACTION VERIFICATION DIFF</div>
+      <div class="card p-4 min-h-0 overflow-y-auto"><div class="sect">POST-ACTION VERIFICATION DIFF</div>
         <div id="diff" class="grid grid-cols-2 gap-2 font-mono text-[10px] text-slate-400">—</div></div>
     </div>
   </div>
-  <div data-panel="exec" class="panel hidden flex-col gap-3 flex-1 min-h-0 overflow-y-auto">
-    <div class="card p-3 flex items-center gap-3"><div class="text-[11px] font-bold text-[#00baf2]">PAYTM OPS & ROI · LIVE</div>
-      <div class="ml-auto text-xs flex items-center gap-1">Bank switch: <span id="bankbtns" class="flex gap-1"></span></div></div>
-    <div class="grid grid-cols-4 gap-3" id="execkpi"></div>
-    <div class="grid grid-cols-2 gap-3">
-      <div class="card p-3"><div class="text-[11px] font-bold text-orange-500 mb-2">LIVE HANDOFF QUEUE · read 1 line, act</div><div id="handq" class="space-y-2 text-xs"></div></div>
-      <div class="card p-3"><div class="text-[11px] font-bold text-[#00baf2] mb-2">MARKETING & SALES LIFT</div><div id="camps" class="text-xs space-y-2"></div></div>
-    </div>
-    <div class="card p-3 text-xs" id="mlcard"></div>
+
+  <!-- AUDIT LOG -->
+  <div data-panel="auditlog" class="panel hidden flex-col flex-1 min-h-0">
+    <div class="card p-6 flex-1 min-h-0 flex flex-col"><div class="flex items-center mb-3"><div class="text-lg font-bold text-slate-900">Immutable audit trail</div>
+      <span class="ml-3 text-sm" id="chain"></span><span class="ml-auto text-sm text-slate-500">PII masked · append-only · SHA-256 hash-chained</span></div>
+      <div id="audit" class="flex-1 overflow-y-auto font-mono text-[11px] space-y-1.5"></div></div>
   </div>
-  <div data-panel="report" class="panel hidden flex-col flex-1 min-h-0"><div class="card p-5 overflow-y-auto md flex-1" id="report">Loading…</div></div>
-  <div data-panel="impact" class="panel hidden flex-col gap-3 flex-1 min-h-0">
-    <div class="card p-4"><div class="text-[11px] font-bold text-[#00baf2] mb-3">LIVE PILOT IMPACT <span class="font-normal text-slate-400">· computed from this session's tickets · targets from pilot design</span></div>
-      <div class="grid grid-cols-3 gap-3" id="metrics"></div></div>
-  </div>
+
+  <div data-panel="report" class="panel hidden flex-col flex-1 min-h-0"><div class="card p-8 overflow-y-auto md flex-1" id="report">Loading…</div></div>
 </section>
 </main>
 <script>
@@ -152,7 +190,7 @@ async function apply(r) {
   $('sop').innerHTML = r.sop ? `<b class="text-white">${r.sop.id}</b> <span class="text-emerald-400">score ${r.sop.score}</span> <span class="text-slate-400">${r.sop.method || ''}</span><div>${esc(r.sop.steps)}</div>` : '—';
   $('diff').innerHTML = r.diff ? ['before', 'after'].map(k => `<div class="rounded p-2 ${k === 'before' ? 'bg-red-500/10 border border-red-500/30' : 'bg-emerald-500/10 border border-emerald-500/30'}"><b class="${k === 'before' ? 'text-red-400' : 'text-emerald-400'}">${k.toUpperCase()}</b><pre>${esc(JSON.stringify(r.diff[k], null, 1))}</pre></div>`).join('') : '—';
   renderML(r.ml);
-  if (r.status === 'WAITING_APPROVAL') tab('agent');
+  if (r.status === 'WAITING_APPROVAL') tab('inbox');
   setBadge(r.status); if (['VERIFIED', 'CLOSED'].includes(r.status)) setPhase(r.status === 'CLOSED' ? 'FOLLOWUP' : 'VERIFY', r.status === 'CLOSED');
   renderState(r);
 }
@@ -186,7 +224,7 @@ function renderState(s) {
     + tile(m.leads, 'Sales leads captured', '₹' + m.pipeline.toLocaleString('en-IN') + ' pipeline', m.leads > 0)
     + tile(m.csat != null ? m.csat + '%' : '—', `CSAT 👍 (${m.csat_n} ratings)`, `${m.resolved}/${m.tickets} resolved · target +10 pts`, m.csat >= 80));
   $('qcount').textContent = s.approvals.length; $('qcount').classList.toggle('hidden', !s.approvals.length);
-  if (s.approvals.length > lastQ) tab('agent'); lastQ = s.approvals.length;
+  if (s.approvals.length > lastQ) tab('inbox'); lastQ = s.approvals.length;
   put('queue', s.approvals.length ? s.approvals.map(a => `<div class="border-l-4 border-orange-500 bg-orange-500/10 rounded p-2 pop">
     <div class="flex justify-between"><b class="text-white">${a.tool}(₹${(a.args.amount || 0).toLocaleString('en-IN')})</b><span class="text-[10px] text-slate-400">${a.id} · ${a.ticket}</span></div>
     <div class="text-[11px] text-orange-300 my-1">⚠ NEEDS_APPROVAL — ${esc(a.risk)}</div>
@@ -212,20 +250,23 @@ async function say(text) {
   await run(api('/chat', {body: JSON.stringify({text, session_id: sid, merchant_id: MID})}));
 }
 const send = e => { e.preventDefault(); say($('inp').value); };
-const decide = (id, d) => !$('pin').value ? (tab('agent'), $('pin').focus(), $('pin').classList.add('ring-2', 'ring-red-500'), toast('Enter the approver PIN first (demo PIN: 2468)')) : run(api(`/approvals/${id}/${d}`, {headers: {'Content-Type': 'application/json', 'x-approver-pin': $('pin').value}}));
+const decide = (id, d) => !$('pin').value ? (tab('inbox'), $('pin').focus(), $('pin').classList.add('ring-2', 'ring-red-500'), toast('Enter the approver PIN first (demo PIN: 2468)')) : run(api(`/approvals/${id}/${d}`, {headers: {'Content-Type': 'application/json', 'x-approver-pin': $('pin').value}}));
 const csat = (t, v) => run(api(`/csat/${t}/${v}`));
 const lead = (t, p, a) => run(api(`/lead/${t}?product=${encodeURIComponent(p)}&amount=${a}`));
 let rec, chunks;
 async function mic() {
   if (rec?.state === 'recording') return rec.stop();
-  try {
-    const st = await navigator.mediaDevices.getUserMedia({audio: true}); rec = new MediaRecorder(st); chunks = [];
-    rec.ondataavailable = e => chunks.push(e.data); $('mic').classList.add('bg-red-500', 'pulse');
-    rec.onstop = () => { st.getTracks().forEach(t => t.stop()); $('mic').classList.remove('bg-red-500', 'pulse');
-      const f = new FormData(); f.append('file', new Blob(chunks, {type: 'audio/webm'}), 'note.webm'); f.append('hint', $('inp').value); f.append('merchant_id', MID); traceLen = 0;
-      run(api('/voice', {body: f})); };
-    rec.start();
-  } catch { say('🎤 Kal ka settlement nahi aaya'); }
+  let st; try { st = await navigator.mediaDevices.getUserMedia({audio: true}); } catch { return toast('Microphone blocked — allow mic access in the browser address bar.'); }
+  rec = new MediaRecorder(st); chunks = []; const t0 = Date.now(), ph = $('inp').placeholder;
+  rec.ondataavailable = e => chunks.push(e.data); $('mic').classList.add('bg-red-500', 'pulse'); $('mic').textContent = '⏹';
+  const tick = setInterval(() => $('inp').placeholder = `🔴 Recording ${Math.round((Date.now() - t0) / 1000)}s… tap ⏹ to send`, 300);
+  rec.onstop = async () => {
+    clearInterval(tick); st.getTracks().forEach(t => t.stop()); $('mic').classList.remove('bg-red-500', 'pulse'); $('mic').textContent = '🎤'; $('inp').placeholder = ph;
+    if (Date.now() - t0 < 700) return toast('Too short — hold on a second longer and speak.');
+    const f = new FormData(); f.append('file', new Blob(chunks, {type: 'audio/webm'}), 'note.webm'); f.append('merchant_id', MID); traceLen = 0;
+    toast('🎧 Sarvam Saarika is transcribing…', false); await run(api('/voice', {body: f}));
+  };
+  rec.start();
 }
 async function autoApprove() {
   await sleep(2200); const a = S.approvals?.find(x => x.ticket === sid); if (!a) return;  // only this demo's own approval
@@ -252,7 +293,8 @@ function renderTickets(s) {
     <div class="text-[11px] text-slate-500 mb-1">ML says: <b>${ISSUES[t.issue] || t.issue || '—'}</b> → ${t.action || '—'}</div>
     <div class="flex gap-1 flex-wrap"><select id="ovr" class="border rounded text-[11px] px-1">${Object.entries(ISSUES).map(([k, v]) => `<option value="${k}" ${k === t.issue ? 'selected' : ''}>${v}</option>`).join('')}</select>
     <button onclick="overrideT('${t.id}')" class="bg-violet-600 text-white text-[11px] px-2 py-0.5 rounded">Reclassify & run</button>
-    <button onclick="closeT('${t.id}')" class="border border-slate-300 text-[11px] px-2 py-0.5 rounded">Close manually</button></div></div>` : '<div class="mt-3 text-[10px] text-slate-400">Pick a ticket on the right to correct its issue or close it.</div>');
+    <button onclick="closeT('${t.id}')" class="border border-slate-300 text-[11px] px-2 py-0.5 rounded">Close manually</button>
+    <button onclick="tab('c360')" class="text-[11px] px-2 py-0.5 rounded text-[#0086c9] underline">Open ${esc(t.name)}'s 360 →</button></div></div>` : '<div class="text-sm text-slate-400">← Pick a ticket to correct its issue, close it, or open the customer 360.</div>');
 }
 function pick(tid, uid) { SELT = tid; AID = uid; H.tickets = H.manual = H.profile = null; get(sq()).then(renderState); }
 function follow() { AID = null; SELT = null; H.manual = H.profile = null; get(sq()).then(renderState); }
@@ -293,7 +335,7 @@ function renderML(d) {
     <span class="text-slate-500">sentiment ${d.sentiment} · ₹${(d.amount || 0).toLocaleString('en-IN')} · disputes ${d.disputes} · bank ${d.bank_status}</span></div>`);
 }
 function tab(t) { if (t === 'report' && !H.reportLoaded) get('/api/audit-report').then(r => { $('report').innerHTML = marked.parse(r.markdown); H.reportLoaded = 1; }); document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b.dataset.tab === t)); document.querySelectorAll('.panel').forEach(p => p.classList.toggle('hidden', p.dataset.panel !== t)); }
-document.querySelectorAll('.tab').forEach(b => b.onclick = () => tab(b.dataset.tab)); tab('brain'); chips();
+document.querySelectorAll('.tab').forEach(b => b.onclick = () => tab(b.dataset.tab)); tab('inbox'); chips();
 let lastQ = 0;
 setPhase(''); get(sq()).then(renderState).catch(err);
 setInterval(() => !busy && get(sq()).then(renderState).catch(() => {}), 4000);

@@ -920,7 +920,8 @@ def chat(m: Msg):
 @app.post("/voice")
 async def voice(file: UploadFile = File(...), merchant_id: str = Form("M1001"), hint: str = Form("")):
     if merchant_id not in MERCHANTS: raise HTTPException(404, "merchant")
-    text = stt(await file.read(), file.filename) or hint or "Kal ka settlement nahi aaya"
+    text = (stt(await file.read(), file.filename) or hint or "").strip()
+    if not text: raise HTTPException(422, "Could not hear anything — check SARVAM_API_KEY or speak a bit louder")
     return handle(session(None, merchant_id), text, True)
 
 @app.post("/webhook/{event}")
