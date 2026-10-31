@@ -211,6 +211,27 @@ def test_soundbox_cash_and_announcements(c, monkeypatch):
     assert c.post("/soundbox/M1001/simulate-payment").status_code == 409  # Ramesh's Soundbox is offline
     assert c.post("/soundbox/C2001/cash", data={"text": "100"}).status_code == 404
 
+# ---------------- Live payment -> settlement ----------------
+def test_live_payment_reaches_merchant_and_settles_with_fees(c):
+    r = c.post("/pay", json={"customer_id": "C2001", "merchant_id": "M1003", "amount": 1100, "method": "UPI"}).json()
+    assert r["ok"] and r["fee"] == 0 and r["net"] == 1100 and "1100 rupaye prapt hue" in r["soundbox"]["text"]
+    c.post("/pay", json={"customer_id": "C2003", "merchant_id": "M1003", "amount": 1000, "method": "WALLET"})
+    p = c.get("/state?mid=M1003").json()["profile"]
+    assert len(p["unsettled"]) == 2 and any(t["amount"] == 1100 and t["status"] == "SUCCESS" for t in p["txns"])
+    s = c.post("/settle/M1003").json()
+    assert s["gross"] == 2100 and s["fee"] == 19.9 and s["gst"] == 3.58 and s["net"] == 2076.52
+    assert c.post("/settle/M1003").status_code == 409  # nothing left to settle
+    assert any(e["title"] == "Paid to Raju Chai Stall" for e in c.get("/state?mid=C2001").json()["profile"]["passbook"])
+
+def test_stuck_payment_becomes_a_refund_ticket(c):
+    r = c.post("/pay", json={"customer_id": "C2001", "merchant_id": "M1003", "amount": 1100, "outcome": "stuck"}).json()
+    assert not r["ok"] and r["complaint"]
+    assert not c.get("/state?mid=M1003").json()["profile"]["unsettled"]
+    t = chat(c, r["complaint"], "C2001")
+    assert [a["tool"] for a in t["approvals"]] == ["instant_refund"] and t["approvals"][0]["args"]["amount"] == 1100
+    approve(c, t)
+    assert any(e["kind"] == "CREDIT" and e["amount"] == 1100 for e in c.get("/state?mid=C2001").json()["profile"]["passbook"])
+
 # ---------------- Staff WhatsApp (internal teammate) ----------------
 def staff(c, phone, text):
     return c.post("/staff/chat", json={"phone": phone, "text": text}).json()["chats"][phone]["msgs"]
@@ -261,7 +282,7 @@ def test_frontend_structure_and_js_syntax(tmp_path):
     html = open(os.path.join(ROOT, "frontend", "index.html"), encoding="utf-8").read()
     body = html[html.index("<body"):html.index("<script>\n")]
     assert body.count("<div") == body.count("</div>")
-    for el in ("app-wa", "app-pt", "app-sb", "queue", "tickets", "dir", "xmoney", "pin", "schat", "semps", "askdrawer", "dchat"): assert f'id="{el}"' in html
+    for el in ("app-wa", "app-pt", "app-sb", "queue", "tickets", "dir", "xmoney", "pin", "schat", "semps", "askdrawer", "dchat", "lp-steps", "lp-paybtn"): assert f'id="{el}"' in html
     assert 'id="mic" onclick="mic()"' not in html  # form-scope shadowing bug must not come back
     if not shutil.which("node"): pytest.skip("node not installed")
     js = tmp_path / "app.js"; js.write_text(re.findall(r"<script>\n(.*)</script>", html, re.S)[0], encoding="utf-8")

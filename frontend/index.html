@@ -83,7 +83,9 @@ header{background:#fff;box-shadow:0 1px 0 #e5e9f0}header b.text-white{color:#002
 <!-- PAYTM SIDE: internal views, never shown to the merchant -->
 <section class="flex flex-col min-h-0">
   <div class="flex items-center gap-1.5 mb-3 flex-wrap" id="tabs">
-    <span class="grp">FOR PAYTM TEAM</span>
+    <span class="grp">LIVE DEMO</span>
+    <button data-tab="livepay" class="tab">💸 Live Payment</button>
+    <span class="grp ml-3">FOR PAYTM TEAM</span>
     <button data-tab="inbox" class="tab">📥 Inbox <span id="qcount" class="hidden ml-1 px-1.5 rounded-full bg-orange-500 text-white text-[10px] pulse"></span></button>
     <button data-tab="tickets" class="tab">🎫 Tickets</button>
     <button data-tab="c360" class="tab">👤 Customer 360</button>
@@ -189,6 +191,40 @@ header{background:#fff;box-shadow:0 1px 0 #e5e9f0}header b.text-white{color:#002
         <div>✅ <b>approve AP-XXXX &lt;PIN&gt;</b> / 🛑 <b>reject AP-XXXX</b> — only roles with approval rights, PIN required</div>
         <div>🔔 <b>ping me</b> — Saathi messages you the moment a case needs a human (approval, fraud, escalation) · <b>stop pings</b></div>
         <div class="text-slate-400">Every staff action is written to the audit log with the employee's ID.</div></div>
+    </div>
+  </div>
+
+  <!-- LIVE PAYMENT: a customer pays a merchant, Paytm settles it — end to end, live -->
+  <div data-panel="livepay" class="panel hidden flex-col gap-4 flex-1 min-h-0 overflow-y-auto">
+    <div><div class="text-xl font-bold text-slate-900">Live payment, end to end</div>
+      <div class="text-sm text-slate-500">A customer pays a merchant on Paytm. Watch the money reach Paytm, the Soundbox speak, and the settlement land in the merchant's bank.</div></div>
+    <div class="grid grid-cols-2 gap-4">
+      <!-- customer side -->
+      <div class="card p-6">
+        <div class="sect">👤 CUSTOMER PAYS</div>
+        <div class="grid grid-cols-2 gap-3 text-sm">
+          <label class="flex flex-col gap-1 text-slate-600">Customer<select id="lp-cust" class="border border-slate-300 rounded-lg px-2 py-2 text-slate-800"></select></label>
+          <label class="flex flex-col gap-1 text-slate-600">Pays to<select id="lp-merch" class="border border-slate-300 rounded-lg px-2 py-2 text-slate-800"></select></label>
+        </div>
+        <div class="mt-4 flex items-center gap-2"><span class="text-3xl font-bold text-slate-400">₹</span>
+          <input id="lp-amt" type="number" min="1" value="1100" class="flex-1 text-3xl font-bold text-slate-900 border-b-2 border-[#00baf2] outline-none py-1"></div>
+        <div class="mt-4 flex gap-2" id="lp-methods"></div>
+        <div class="mt-1 text-[11px] text-slate-400" id="lp-mdr"></div>
+        <label class="mt-4 flex items-center gap-2 text-sm text-slate-600"><input id="lp-stuck" type="checkbox" class="w-4 h-4"> Simulate bank delay (money debited, merchant not credited)</label>
+        <button onclick="livePay()" id="lp-paybtn" class="mt-5 w-full py-3 rounded-xl bg-[#00baf2] text-white text-lg font-bold shadow hover:brightness-105">Pay</button>
+        <div id="lp-result" class="mt-5"></div>
+      </div>
+      <!-- merchant side -->
+      <div class="card p-6">
+        <div class="sect">🏪 MERCHANT RECEIVES <span id="lp-mname" class="text-slate-500 font-normal"></span></div>
+        <div id="lp-steps" class="space-y-3"><div class="text-sm text-slate-400">Make a payment on the left to see each step land here.</div></div>
+        <div class="mt-6 border-t pt-4">
+          <div class="sect">🏦 SETTLEMENT TO MERCHANT'S BANK</div>
+          <div id="lp-unsettled" class="text-sm"></div>
+          <button onclick="liveSettle()" class="mt-3 px-4 py-2 rounded-lg bg-[#002e6e] text-white font-semibold">Run settlement batch (T+1)</button>
+          <div id="lp-settled" class="mt-3"></div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -299,7 +335,7 @@ function renderState(s) {
   $('llm').textContent = (s.live_llm ? `🟢 LIVE agent: ${s.live_llm}` : s.sarvam ? '● Sarvam-M · Saarika · Bulbul LIVE' : '● Scripted fallback (no LLM key)') + ` · 🗄 ${s.db}`;
   put('chain', s.chain_ok ? '<span class="text-emerald-600">🔒 SHA-256 chain verified</span>' : '<span class="text-red-600 font-bold">⚠ CHAIN BROKEN</span>');
   if ($('msel').options.length !== s.merchants.length) $('msel').innerHTML = s.merchants.map(m => `<option class="text-black" value="${m.id}">${m.persona === 'customer' ? '👤 Customer · ' + esc(m.name) : '🏪 Merchant · ' + esc(m.owner) + ' (' + esc(m.name) + ')'}</option>`).join(''); $('msel').value = MID;
-  renderExec(s); renderApp(s);
+  renderExec(s); renderApp(s); renderLive(s);
   if (s.agent_profile) H.lastAP = s.agent_profile;
   const P = AID && AID !== MID ? (s.agent_profile || H.lastAP || s.profile) : s.profile;
   put('viewing', `${P.persona === 'customer' ? 'CUSTOMER' : 'MERCHANT'} 360 · ${esc(P.name)} ${AID ? `<button onclick="follow()" class="ml-2 text-[10px] font-normal underline text-slate-500">↺ follow phone</button>` : '<span class="font-normal text-slate-400">(following phone)</span>'}`);
@@ -487,7 +523,7 @@ function renderApp(s) {
       const items = [...p.txns.map(t => t.status === 'SUCCESS' ? row('⬇️', 'Received from ' + esc(t.payer.replace(/^(.{3}).*@/, '$1…@')), esc(t.time) + ' · UPI ' + t.id.slice(-4), '+' + inr(t.amount), 'text-emerald-600')
           : t.status === 'REFUNDED' ? row('↩️', 'Refunded to customer', esc(t.time) + ' · UPI ' + t.id.slice(-4), inr(t.amount), 'text-sky-600')
           : row('⚠️', 'Payment failed · not credited', esc(t.time) + ' · ' + esc(t.payer.replace(/^(.{3}).*@/, '$1…@')), inr(t.amount), 'text-red-600 line-through')),
-        ...p.settlements.map(x => row('🏦', 'Settlement to bank ' + p.bank, `${esc(x.date)} · ${x.status === 'SETTLED' ? 'UTR ' + (x.utr || '') : x.status}`, (x.status === 'SETTLED' ? '' : '⏸ ') + inr(x.amount), x.status === 'SETTLED' ? 'text-slate-700' : 'text-orange-600')),
+        ...p.settlements.map(x => row('🏦', 'Settlement to bank ' + p.bank, `${esc(x.date)} · ${x.status === 'SETTLED' ? (x.gross ? `${inr(x.gross)} − fee ${inr(x.fee + x.gst)} · ` : '') + 'UTR ' + (x.utr || '') : x.status}`, (x.status === 'SETTLED' ? '' : '⏸ ') + inr(x.amount), x.status === 'SETTLED' ? 'text-slate-700' : 'text-orange-600')),
         ...(p.cash || []).map(c => row('💵', 'Cash received <span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-200 text-slate-600 font-bold">CASH · not Paytm</span>', esc(c.time) + ' · voice entry “' + esc(c.heard).slice(0, 28) + '”', '+' + inr(c.amount), 'text-slate-600')),
         ...(p.orders || []).map(o => row(o.direction === 'DEBIT' ? '🧾' : '💰', esc(o.item), esc(o.mode), (o.direction === 'DEBIT' ? '−' : '+') + inr(o.amount), o.direction === 'DEBIT' ? 'text-red-600' : 'text-emerald-600'))];
       h = `<div class="text-[12px] text-slate-500 px-1">Every rupee in and out of your account</div>` + items.join('');
@@ -554,6 +590,63 @@ function renderDrawer(st) {
   if (H.dlen !== ch.msgs.length) { $('dchat').scrollTop = 1e9; H.dlen = ch.msgs.length; }
   put('dchips', ['last 5 tickets', 'pending approvals', "today's summary", 'ping me'].map(t => `<button class="bg-white border border-slate-200 text-slate-700 rounded-full px-2 py-1" onclick="sendStaff(this.textContent)">${esc(t)}</button>`).join(''));
 }
+// ---- Live payment (customer -> Paytm -> merchant -> settlement) ----
+const LP_MDR = {UPI: 0, WALLET: 1.99, CARD: 2.0};
+let LP_METHOD = 'UPI', LP_LAST = null;
+function lpInit(s) {
+  if ($('lp-cust').options.length) return;
+  $('lp-cust').innerHTML = s.merchants.filter(u => u.persona === 'customer').map(u => `<option value="${u.id}">${esc(u.name)}</option>`).join('');
+  $('lp-merch').innerHTML = s.merchants.filter(u => u.persona === 'merchant').map(u => `<option value="${u.id}" ${u.id === 'M1003' ? 'selected' : ''}>${esc(u.name)}</option>`).join('');
+  $('lp-merch').onchange = () => { H.lpu = null; renderLive(S); };
+  lpMethods();
+}
+function lpMethods() {
+  $('lp-methods').innerHTML = Object.keys(LP_MDR).map(m => `<button onclick="LP_METHOD='${m}'; lpMethods()" class="flex-1 py-2 rounded-lg border text-sm font-semibold ${LP_METHOD === m ? 'bg-[#002e6e] text-white border-[#002e6e]' : 'border-slate-300 text-slate-600'}">${m === 'WALLET' ? 'Paytm Wallet' : m}</button>`).join('');
+  $('lp-mdr').textContent = LP_METHOD === 'UPI' ? 'UPI to merchants: zero MDR — merchant gets the full amount.' : `Merchant fee (MDR) ${LP_MDR[LP_METHOD]}% + 18% GST on the fee — illustrative rate, not Paytm's tariff.`;
+}
+const lpStep = (ok, label) => `<div class="flex items-start gap-3 pop"><div class="w-7 h-7 shrink-0 rounded-full grid place-items-center text-white text-sm font-bold ${ok === true ? 'bg-emerald-500' : ok === false ? 'bg-red-500' : 'bg-amber-400'}">${ok === true ? '✓' : ok === false ? '!' : '⏳'}</div><div class="text-sm text-slate-700 pt-1">${esc(label)}</div></div>`;
+async function livePay() {
+  const amt = parseInt($('lp-amt').value, 10); if (!amt || amt < 1) return toast('Enter an amount');
+  const body = {customer_id: $('lp-cust').value, merchant_id: $('lp-merch').value, amount: amt, method: LP_METHOD, outcome: $('lp-stuck').checked ? 'stuck' : 'success'};
+  $('lp-paybtn').disabled = true; $('lp-paybtn').textContent = 'Paying…'; $('lp-steps').innerHTML = ''; $('lp-result').innerHTML = '';
+  try {
+    const r = await api('/pay', {body: JSON.stringify(body)}); LP_LAST = r;
+    $('lp-result').innerHTML = r.ok
+      ? `<div class="text-center pop"><div class="mx-auto w-20 h-20 rounded-full bg-emerald-500 grid place-items-center text-white text-5xl">✓</div><div class="mt-2 text-lg font-bold text-slate-900">Paid ${inr(r.amount)} to ${esc(r.merchant)}</div><div class="text-[12px] text-slate-500">via ${r.method} · ref ...${r.rrn.slice(-4)}</div></div>`
+      : `<div class="text-center pop"><div class="mx-auto w-20 h-20 rounded-full bg-amber-400 grid place-items-center text-white text-4xl">⏳</div><div class="mt-2 text-lg font-bold text-slate-900">${inr(r.amount)} debited, payment pending</div>
+         <button onclick="lpComplain()" class="mt-3 px-4 py-2 rounded-lg bg-[#00a884] text-white font-semibold">💬 Customer complains to Saathi on WhatsApp</button></div>`;
+    for (const st of r.steps) { $('lp-steps').insertAdjacentHTML('beforeend', lpStep(st.ok, st.label)); await sleep(650); }
+    if (r.soundbox) { speak({voice: r.soundbox.voice, text: r.soundbox.text}); }
+    if (r.ok) { await switchMerchant(body.merchant_id); openApp('sb'); }  // the merchant's phone shows the Soundbox moment
+    H.lpu = null; get(sq()).then(renderState);
+  } catch (e) { err(e); }
+  $('lp-paybtn').disabled = false; $('lp-paybtn').textContent = 'Pay';
+}
+async function lpComplain() {
+  if (!LP_LAST?.complaint) return;
+  await switchMerchant($('lp-cust').value); openApp('wa'); await say(LP_LAST.complaint);
+}
+async function liveSettle() {
+  try {
+    const r = await api('/settle/' + $('lp-merch').value);
+    $('lp-settled').innerHTML = `<div class="rounded-xl bg-emerald-50 border border-emerald-200 p-4 pop"><div class="font-bold text-emerald-800">🏦 ${inr(r.net)} credited to ${esc(r.merchant)} · ${r.bank}</div>
+      <table class="w-full text-sm mt-2"><tr><td>Collections (${r.count} payment${r.count === 1 ? '' : 's'})</td><td class="text-right">${inr(r.gross)}</td></tr><tr><td>Paytm fee (MDR)</td><td class="text-right text-red-600">−${inr(r.fee)}</td></tr>
+      <tr><td>GST on fee (18%)</td><td class="text-right text-red-600">−${inr(r.gst)}</td></tr><tr class="font-bold border-t"><td>Credited to bank</td><td class="text-right">${inr(r.net)}</td></tr></table>
+      <div class="text-[11px] font-mono text-slate-500 mt-1">${r.settlement} · ${r.utr}</div></div>`;
+    H.lpu = null; get(sq()).then(renderState);
+  } catch (e) { err(e); }
+}
+function renderLive(s) {
+  if (!$('lp-cust')) return; lpInit(s);
+  if (document.querySelector('[data-panel="livepay"]').classList.contains('hidden')) return;  // only poll while the tab is open
+  const mid = $('lp-merch').value, row = (s.exec?.merchant_rows || []).find(r => r.id === mid), name = row?.name || '';
+  $('lp-mname').textContent = name ? '· ' + name : '';
+  get('/state?mid=' + mid).then(st => {
+    const un = st.profile.unsettled || [];
+    put('lp-unsettled', un.length ? `<div class="text-slate-600">${un.length} payment${un.length === 1 ? '' : 's'} waiting for the next batch: <b>${inr(un.reduce((a, x) => a + x.gross, 0))}</b> gross → <b>${inr(un.reduce((a, x) => a + x.net, 0))}</b> to bank after fees</div>`
+      : '<div class="text-slate-400">No payments waiting — everything is settled.</div>');
+  }).catch(() => {});
+}
 function renderCustomer(p) {
   put('profile', `<div class="text-slate-900 font-semibold">👤 ${esc(p.name)} <span class="text-[10px] px-2 py-0.5 rounded-full bg-slate-100">CUSTOMER</span></div>
     <div class="text-[11px] text-slate-500">${p.id} · ${esc(p.city)} · prefers ${p.lang} · phone ${p.phone} · past disputes ${p.disputes}</div>
@@ -608,7 +701,7 @@ function renderML(d) {
     <span class="px-2 py-0.5 rounded bg-[#002e6e] text-white font-bold">${d.action}</span><span class="px-2 py-0.5 rounded font-bold ${c}">risk ${d.risk} ${d.risk_score}</span>
     <span class="text-slate-500">sentiment ${d.sentiment} · ₹${(d.amount || 0).toLocaleString('en-IN')} · disputes ${d.disputes} · bank ${d.bank_status}</span></div>`);
 }
-function tab(t) { $('askbtn')?.classList.toggle('hidden', t === 'staff'); if (t === 'staff') toggleAsk(false); if (t === 'report' && !H.reportLoaded) get('/api/audit-report').then(r => { $('report').innerHTML = marked.parse(r.markdown); H.reportLoaded = 1; }); document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b.dataset.tab === t)); document.querySelectorAll('.panel').forEach(p => p.classList.toggle('hidden', p.dataset.panel !== t)); }
+function tab(t) { if (t === 'livepay') { H.lpu = null; setTimeout(() => renderLive(S), 0); } $('askbtn')?.classList.toggle('hidden', t === 'staff'); if (t === 'staff') toggleAsk(false); if (t === 'report' && !H.reportLoaded) get('/api/audit-report').then(r => { $('report').innerHTML = marked.parse(r.markdown); H.reportLoaded = 1; }); document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b.dataset.tab === t)); document.querySelectorAll('.panel').forEach(p => p.classList.toggle('hidden', p.dataset.panel !== t)); }
 document.querySelectorAll('.tab').forEach(b => b.onclick = () => tab(b.dataset.tab)); tab('inbox'); chips(); openApp('wa');
 let lastQ = 0;
 get('/staff/state').then(renderStaff).catch(() => {});

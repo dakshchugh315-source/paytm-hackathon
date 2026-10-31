@@ -126,7 +126,7 @@ def buyers(mid, n=60):
 def reset_world():
     global MERCHANTS, DEVICES, SESSIONS, APPROVALS, CACHE, MSGS
     MERCHANTS = copy.deepcopy(SEED); DEVICES = {"SB-7781": {"online": False, "fault": "network", "last_ping": "14 min ago"}, "SB-8820": {"online": True, "fault": None, "last_ping": "just now"},
-               "SB-9102": {"online": False, "fault": "network", "last_ping": "2 h ago"}}
+               "SB-9102": {"online": True, "fault": None, "last_ping": "just now"}}
     SESSIONS, APPROVALS, CACHE, MSGS = {}, {}, {}, []
     global CUSTOMERS, CAMPAIGNS, ML_LOG, BANK_STATUS, HANDOFFS
     CUSTOMERS, CAMPAIGNS, ML_LOG, BANK_STATUS, HANDOFFS = copy.deepcopy(CUSTOMER_SEED), {}, [], "DEGRADED", []
@@ -1121,6 +1121,55 @@ def staff_state():
     return {"employees": [{"phone": p, "masked": mask(p), **e, "verified": STAFF.get(p, {}).get("verified", False), "subscribed": STAFF.get(p, {}).get("subscribed", False)} for p, e in EMPLOYEES.items()],
             "chats": STAFF}
 
+# ---------------- Live payment: customer pays a merchant, Paytm settles to the merchant's bank ----------------
+# Illustrative merchant discount rates (MDR): UPI P2M is zero-MDR; wallet/card rates are demo values, not Paytm's tariff.
+MDR = {"UPI": 0.0, "WALLET": 0.0199, "CARD": 0.02}
+GST_ON_FEE = 0.18
+
+class PayReq(BaseModel):
+    customer_id: str = "C2001"; merchant_id: str = "M1003"; amount: int = 1100; method: str = "UPI"; outcome: str = "success"; note: str = ""
+
+@app.post("/pay")
+def live_pay(r: PayReq):
+    if r.customer_id not in CUSTOMERS or r.merchant_id not in MERCHANTS: raise HTTPException(404, "customer or merchant")
+    if r.amount <= 0 or r.amount > 200000: raise HTTPException(422, "amount must be between ₹1 and ₹2,00,000")
+    method = r.method.upper() if r.method.upper() in MDR else "UPI"
+    c, m = CUSTOMERS[r.customer_id], MERCHANTS[r.merchant_id]; now = datetime.now().strftime("Today %H:%M")
+    rrn = "4307" + uuid.uuid4().hex[:8].upper(); ok = r.outcome != "stuck"
+    c["txns"]["UPI-" + rrn[-5:]] = {"amount": r.amount, "to": m["name"], "time": now, "status": "SUCCESS" if ok else "PENDING", "debited": True, "credited": ok, "refunded": False, "rrn_ref": rrn}
+    fee = round(r.amount * MDR[method], 2); gst = round(fee * GST_ON_FEE, 2); net = round(r.amount - fee - gst, 2)
+    steps = [{"key": "debited", "label": f"₹{r.amount:,} debited from {c['name']}", "ok": True}]
+    sb = None
+    if ok:
+        m["txns"][rrn] = {"amount": r.amount, "time": now, "payer": c["name"].split()[0].lower() + "@paytm", "status": "SUCCESS", "debited": True, "refunded": False, "method": method}
+        m.setdefault("unsettled", []).append({"rrn": rrn, "gross": r.amount, "fee": fee, "gst": gst, "net": net, "method": method, "time": now})
+        steps.append({"key": "paytm", "label": f"Paytm received ₹{r.amount:,} ({method}, ref ...{rrn[-4:]})", "ok": True})
+        if DEVICES[m["soundbox"]]["online"]:
+            sb = sb_say(m, f"Paytm par {r.amount} rupaye prapt hue", "upi"); steps.append({"key": "soundbox", "label": f"Soundbox {m['soundbox']}: “{sb['text']}”", "ok": True})
+        else:
+            steps.append({"key": "soundbox", "label": f"Soundbox {m['soundbox']} is offline — payment received but not announced", "ok": False})
+        steps.append({"key": "ledger", "label": f"{m['name']} ledger +₹{r.amount:,}", "ok": True})
+        steps.append({"key": "settle", "label": f"Next settlement (T+1): gross ₹{r.amount:,} − fee ₹{fee:,} − GST ₹{gst:,} = ₹{net:,}", "ok": None})
+    else:
+        steps.append({"key": "paytm", "label": "Bank didn't confirm — money debited but not credited to the merchant", "ok": False})
+    audit({"id": "PAY-" + rrn[-6:], "trace": [], "opened": time.time(), "tokens": 0, "phase": ""}, "ACT",
+          f"💸 Live payment {c['name']} → {m['name']} ₹{r.amount:,} via {method}: {'SUCCESS' if ok else 'STUCK (debited, not credited)'}", {"rrn": rrn, "fee": fee, "gst": gst, "net": net})
+    return {"ok": ok, "rrn": rrn, "method": method, "amount": r.amount, "fee": fee, "gst": gst, "net": net, "steps": steps, "soundbox": sb,
+            "customer": c["name"], "merchant": m["name"], "complaint": None if ok else f"Maine {m['name']} ko ₹{r.amount:,} bheje, paisa kat gaya par unhe mila nahi"}
+
+@app.post("/settle/{mid}")
+def run_settlement(mid: str):
+    """Settlement batch: Paytm pays the merchant's bank the day's collections minus MDR and GST on it."""
+    if mid not in MERCHANTS: raise HTTPException(404, "merchant")
+    m = MERCHANTS[mid]; batch = m.get("unsettled", [])
+    if not batch: raise HTTPException(409, "Nothing to settle — no new payments since the last batch")
+    g, f, t, n = (round(sum(x[k] for x in batch), 2) for k in ("gross", "fee", "gst", "net"))
+    sid = "ST-" + uuid.uuid4().hex[:4].upper(); utr = "UTR" + uuid.uuid4().hex[:10].upper()
+    m["settlements"][sid] = {"amount": n, "date": "today", "status": "SETTLED", "reason": "", "utr": utr, "gross": g, "fee": f, "gst": t, "count": len(batch)}
+    m["unsettled"] = []
+    audit({"id": sid, "trace": [], "opened": time.time(), "tokens": 0, "phase": ""}, "ACT", f"🏦 Settlement {sid} to {mask(m['bank']['acc'])}: ₹{g:,} − fee ₹{f:,} − GST ₹{t:,} = ₹{n:,}", {"utr": utr, "payments": len(batch)})
+    return {"settlement": sid, "utr": utr, "gross": g, "fee": f, "gst": t, "net": n, "count": len(batch), "bank": mask(m["bank"]["acc"]), "merchant": m["name"]}
+
 class MLReq(BaseModel):
     text: str; persona: str = "Customer"; amount: int | None = None; disputes: int = 0; bank: str | None = None
 
@@ -1299,7 +1348,8 @@ def profile(mid="M1001"):
             "settlement": "HOLD" if any(v["status"] != "SETTLED" for v in m["settlements"].values()) else "OK", "bank_verified": m["bank"]["verified"],
             "bank": mask(m["bank"]["acc"]), "offer": e, "city": m.get("city", ""),
             "txns": [{"id": k, **{f: v.get(f) for f in ("time", "payer", "amount", "status", "refunded")}} for k, v in m["txns"].items()],
-            "settlements": [{"id": k, "amount": v["amount"], "date": v["date"], "status": v["status"], "utr": v.get("utr")} for k, v in m["settlements"].items()],
+            "settlements": [{"id": k, "amount": v["amount"], "date": v["date"], "status": v["status"], "utr": v.get("utr"), **{f: v[f] for f in ("gross", "fee", "gst", "count") if f in v}} for k, v in m["settlements"].items()],
+            "unsettled": m.get("unsettled", []),
             "orders": m.get("orders", []), "cash": m.get("cash", []), "sb_log": m.get("sb_log", [])[::-1]}
 
 @app.get("/state")
