@@ -83,15 +83,28 @@ def verify_chain():
         prev = h
     return True
 
-SEED = {"M1001": {"name": "Sharma General Store", "owner": "Ramesh ji", "phone": "9876543210", "monthly_volume": 260000, "has_loan": False, "soundbox": "SB-7781",
-                  "bank": {"acc": "50100234567890", "ifsc": "HDFC0001234", "changed_days_ago": 1, "verified": False},
-                  "settlements": {"ST-9001": {"amount": 18450, "date": "yesterday", "status": "FAILED", "reason": "Beneficiary account mismatch (bank changed)"}},
-                  "txns": {"TX-5511": {"amount": 349, "status": "FAILED", "debited": True, "refunded": False},
-                           "TX-5512": {"amount": 1200, "status": "FAILED", "debited": True, "refunded": False}}}}
+SEED = {
+    "M1001": {"name": "Sharma General Store", "owner": "Ramesh Sharma", "city": "Delhi", "phone": "9876543210", "monthly_volume": 260000, "has_loan": False, "soundbox": "SB-7781",
+              "bank": {"acc": "50100234567890", "ifsc": "HDFC0001234", "changed_days_ago": 1, "verified": False},
+              "settlements": {"ST-9001": {"amount": 18450, "date": "yesterday", "status": "FAILED", "reason": "Beneficiary account mismatch (bank changed)"}},
+              "txns": {"430711225511": {"amount": 349, "time": "Today 10:32", "payer": "rahul.k@okaxis", "status": "FAILED", "debited": True, "refunded": False},
+                       "430711225512": {"amount": 1200, "time": "Today 09:47", "payer": "priya88@ybl", "status": "FAILED", "debited": True, "refunded": False},
+                       "430711225498": {"amount": 560, "time": "Today 09:15", "payer": "amit.s@paytm", "status": "SUCCESS", "debited": True, "refunded": False}}},
+    "M1002": {"name": "Gupta Medicals", "owner": "Sunita Gupta", "city": "Jaipur", "phone": "9812345670", "monthly_volume": 480000, "has_loan": False, "soundbox": "SB-8820",
+              "bank": {"acc": "33090011223344", "ifsc": "SBIN0004321", "changed_days_ago": 90, "verified": True},
+              "settlements": {"ST-9102": {"amount": 42300, "date": "yesterday", "status": "SETTLED", "reason": "", "utr": "UTR8821AB09"}},
+              "txns": {"430722310045": {"amount": 2450, "time": "Today 11:05", "payer": "dr.mehta@icici", "status": "FAILED", "debited": True, "refunded": False},
+                       "430722310031": {"amount": 180, "time": "Today 10:20", "payer": "neha.v@okhdfc", "status": "SUCCESS", "debited": True, "refunded": False}}},
+    "M1003": {"name": "Raju Chai Stall", "owner": "Raju", "city": "Lucknow", "phone": "9900112233", "monthly_volume": 45000, "has_loan": False, "soundbox": "SB-9102",
+              "bank": {"acc": "12340098765432", "ifsc": "PUNB0123400", "changed_days_ago": 400, "verified": True},
+              "settlements": {"ST-9203": {"amount": 1520, "date": "yesterday", "status": "SETTLED", "reason": "", "utr": "UTR7710CD12"}},
+              "txns": {"430733401120": {"amount": 20, "time": "Today 08:02", "payer": "student21@ybl", "status": "FAILED", "debited": True, "refunded": False}}},
+}
 
 def reset_world():
     global MERCHANTS, DEVICES, SESSIONS, APPROVALS, CACHE, MSGS
-    MERCHANTS = copy.deepcopy(SEED); DEVICES = {"SB-7781": {"online": False, "fault": "network", "last_ping": "14 min ago"}}
+    MERCHANTS = copy.deepcopy(SEED); DEVICES = {"SB-7781": {"online": False, "fault": "network", "last_ping": "14 min ago"}, "SB-8820": {"online": True, "fault": None, "last_ping": "just now"},
+               "SB-9102": {"online": False, "fault": "network", "last_ping": "2 h ago"}}
     SESSIONS, APPROVALS, CACHE, MSGS = {}, {}, {}, []
 reset_world()
 
@@ -121,8 +134,14 @@ def audit(s, phase, event, detail="", tokens=0):
     s["trace"].append({"phase": phase, "event": event, "detail": d, "ms": int((time.time() - s["opened"]) * 1000), "tokens": tokens})
 
 # ---------------- Mock Paytm ecosystem ----------------
+def find_txn(merchant_id, ref):
+    ref = re.sub(r"\D", "", str(ref or ""))
+    return next((k for k in MERCHANTS[merchant_id]["txns"] if ref and k.endswith(ref)), None)
+
 def lookup_transaction(merchant_id, txn_id=None):
-    return {k: dict(v) for k, v in MERCHANTS[merchant_id]["txns"].items() if not txn_id or k == txn_id}
+    k = find_txn(merchant_id, txn_id) if txn_id else None
+    if txn_id and not k: return {"found": False, "searched": txn_id}
+    return {x: dict(v) for x, v in MERCHANTS[merchant_id]["txns"].items() if not k or x == k}
 
 def check_settlement_status(merchant_id):
     m = MERCHANTS[merchant_id]; b = m["bank"]
@@ -140,6 +159,8 @@ def trigger_resettlement(merchant_id, settlement_id, amount):
     st.update(status="SETTLED", utr="UTR" + uuid.uuid4().hex[:10].upper()); return {"ok": True, **st}
 
 def process_refund(merchant_id, txn_id, amount):
+    txn_id = find_txn(merchant_id, txn_id) or txn_id
+    if txn_id not in MERCHANTS[merchant_id]["txns"]: return {"ok": False, "error": "txn not found"}
     if MERCHANTS[merchant_id]["txns"][txn_id]["refunded"]: return {"ok": False, "error": "IDEMPOTENT_BLOCK: already refunded"}
     MERCHANTS[merchant_id].setdefault("auto_refunded", 0); MERCHANTS[merchant_id]["auto_refunded"] += amount if amount < AUTO_LIMIT else 0
     MERCHANTS[merchant_id]["txns"][txn_id].update(refunded=True, status="REFUNDED"); return {"ok": True, "txn": txn_id, "amount": amount}
@@ -289,7 +310,7 @@ def snapshot(mid):
 
 def reply(s, text, facts=None, voice=False, cta=None, kind=None, options=None):
     text = phrase(s, text, facts) if facts is not None else text
-    msg = {"from": "saathi", "text": text, "ts": time.time(), "ticket": s["id"]}
+    msg = {"from": "saathi", "text": text, "ts": time.time(), "ticket": s["id"], "merchant": s["merchant"]}
     if voice: msg["voice"] = tts(text)
     if cta: msg["cta"] = cta
     if kind: msg["kind"] = kind
@@ -358,7 +379,7 @@ def run_agent(s, text, proactive=False, live=True):
             audit(s, "DIAGNOSE", "Root cause: BANK_CHANGE_HOLD (account changed 1 day ago, unverified)", "→ send link + request re-settlement")
             link = call(s, "send_bank_update_link")
             amt = sum(v["amount"] for v in failed.values())
-            lead = f"Namaste {m['owner']}, aapke shikayat karne se pehle hi bata doon — " if proactive else "Samajh gaya 🙏 "
+            lead = f"Namaste {m['owner'].split()[0]} ji, aapke shikayat karne se pehle hi bata doon — " if proactive else "Samajh gaya 🙏 "
             reply(s, f"{lead}aapka ₹{amt:,} ka settlement bank change ki wajah se ruka tha. Verification link {mask(link['to'])} pe bhej diya hai, re-settlement ke liye approval le raha hoon.", voice=proactive)
         for sid, v in failed.items():
             s["ctx"] = lambda tool, a, v=v: f"{m['name']}: settlement {a['settlement_id']} ₹{a['amount']:,} failed ({v['reason']}). Bank changed {m['bank']['changed_days_ago']}d ago → link sent, new account now penny-drop verified. Merchant already informed."
@@ -367,7 +388,7 @@ def run_agent(s, text, proactive=False, live=True):
         return
     if intent == "soundbox":
         dev = m["soundbox"]; before = call(s, "ping_soundbox", device_id=dev)
-        if proactive: reply(s, f"Namaste {m['owner']}, aapka Soundbox {dev} {before['last_ping']} se offline dikh raha hai. Main abhi remotely theek kar raha hoon 🔧")
+        if proactive: reply(s, f"Namaste {m['owner'].split()[0]} ji, aapka Soundbox {dev} {before['last_ping']} se offline dikh raha hai. Main abhi remotely theek kar raha hoon 🔧")
         call(s, "restart_soundbox_iot", device_id=dev)
         after = call(s, "ping_soundbox", device_id=dev)
         s["diff"] = {"before": before, "after": after}; audit(s, "VERIFY", f"Re-ping: online {before['online']} → {after['online']}", s["diff"])
@@ -382,12 +403,12 @@ def run_agent(s, text, proactive=False, live=True):
         s["ctx"] = lambda tool, a: f"{m['name']}: txn {a['txn_id']} ₹{a['amount']:,} debited but failed. Refund ≥ ₹{AUTO_LIMIT} needs approval."
         cands = {k: t for k, t in tx.items() if t["debited"] and t["status"] == "FAILED" and not t["refunded"]}
         nums = set(re.findall(r"\d+", text.replace(",", "")))
-        picked = {k: t for k, t in cands.items() if k.upper() in text.upper() or str(t["amount"]) in nums}
+        picked = {k: t for k, t in cands.items() if k in text or k[-4:] in nums or str(t["amount"]) in nums}
         if not cands:
             reply(s, "Maine aapke recent transactions check kiye — koi failed ya atka hua payment nahi mila ✅ Customer se UPI ref number mangwa lijiye, main turant check karunga."); return resolve(s, "No failed txn")
         if not picked and len(cands) > 1:
             s["status"] = "NEEDS_INFO"; audit(s, "DIAGNOSE", f"{len(cands)} failed txns found → asking merchant which one (no refund yet)", cands)
-            reply(s, "Mujhe ye failed payments mile. Kaunsa wala?", options=[f"{k} ka ₹{t['amount']:,} refund karo" for k, t in cands.items()]); return
+            reply(s, "Mujhe ye failed payments mile. Kaunsa wala?", options=[f"{t['time'].replace('Today ', '')} wala ₹{t['amount']:,} ({t['payer'][:3]}…) — ref ...{k[-4:]}" for k, t in cands.items()]); return
         pending = False
         for tid, t in (picked or cands).items():
             if True:
@@ -461,12 +482,18 @@ def llm_system(s, sop, cached):
 Loop: UNDERSTAND the query -> DIAGNOSE with the SOP -> ACT with tools -> VERIFY by re-querying state after any change -> then reply.
 Rules:
 - Never guess. If the merchant's problem is unclear, ask ONE short clarifying question and call no tools.
+- NEVER ask the merchant for data you can fetch. Merchants don't know txn IDs: call lookup_transaction first, then identify the payment by amount/time/payer (e.g. "10:32 wala ₹349, rahul.k@… se?").
+- If the merchant gives an ID/number that doesn't match, say it wasn't found and list the matching recent payments (time, amount, masked payer, last 4 of ref).
 - If several transactions could match, ask which one; act only on the one the merchant means.
 - Some tools need human approval; if a tool returns PENDING_HUMAN_APPROVAL, tell the merchant it is with a senior for approval. Never claim it is done.
 - A message starting with EVENT is a Paytm backend alert: message the merchant first, proactively, by name.
 - Do not pitch loans/offers unless the merchant asks.
-- Reply in warm natural Hinglish (Roman script) matching the merchant, under 40 words, stating exactly what you did and verified. Mask account/phone numbers as XXXX-1234.
-Merchant: {m['name']} ({m['owner']}), id {s['merchant']}, Soundbox {m['soundbox']}, GMV Rs {m['monthly_volume']}/month.
+- Address the merchant by first name + "ji" only in the first reply of a conversation, not every message.
+- Reply in warm natural Hinglish in ROMAN script only (no Devanagari), under 40 words, stating exactly what you did and verified. Mask account/phone numbers as XXXX-1234.
+Merchant: {m['name']} (owner {m['owner']}, {m.get('city', '')}), id {s['merchant']}, Soundbox {m['soundbox']}, GMV Rs {m['monthly_volume']}/month.
+Account context (live): recent payments {json.dumps([{"ref": k, "time": v["time"], "amount": v["amount"], "payer": v["payer"][:3] + "…", "status": v["status"], "refunded": v["refunded"]} for k, v in m["txns"].items()], ensure_ascii=False)};
+settlements {json.dumps({k: {"amount": v["amount"], "status": v["status"]} for k, v in m["settlements"].items()})}; Soundbox online={DEVICES[m["soundbox"]]["online"]}.
+Mention refs to the merchant only as last 4 digits. Use this context to propose the likely payment right away (e.g. "10:32 wala ₹349?") instead of asking open questions; still call tools to act and to verify.
 Retrieved SOP: {json.dumps(sop, ensure_ascii=False) if sop else 'none'}
 {('Verified fix from a past ticket (reuse it, skip re-diagnosis): ' + ' -> '.join(cached['plan'])) if cached else ''}"""
 
@@ -474,7 +501,7 @@ def llm_chat(msgs):
     """Try providers in order; a 429/quota/5xx/timeout puts that provider on cooldown and falls through to the next."""
     global LLM_PROVIDER, LLM_MODEL
     errs = []
-    for p in LLM_CHAIN:
+    for p in LLM_CHAIN + LLM_CHAIN:  # second pass = one retry per provider (transient 400/503)
         if p["cool_until"] > time.time(): continue
         try:
             r = httpx.post(f"{p['base']}/chat/completions", headers={"Authorization": f"Bearer {p['key']}"}, timeout=40,
@@ -483,7 +510,7 @@ def llm_chat(msgs):
                 LLM_PROVIDER, LLM_MODEL = p["name"], p["model"]; j = r.json()
                 return j["choices"][0]["message"], j.get("usage", {}).get("total_tokens", 0), errs
             errs.append(f"{p['name']} {r.status_code}: {r.text[:120]}")
-            if r.status_code in (401, 402, 403, 429) or r.status_code >= 500: p["cool_until"] = time.time() + 120
+            if r.status_code in (401, 402, 403, 429): p["cool_until"] = time.time() + 120
         except Exception as e:
             errs.append(f"{p['name']}: {e}"); p["cool_until"] = time.time() + 30
     raise RuntimeError(" | ".join(errs) or "all LLM providers cooling down")
@@ -505,6 +532,10 @@ def llm_loop(s, acted=False):
                 args = json.loads(c["function"].get("arguments") or "{}")
                 if name not in TOOLS: raise ValueError("unknown tool")
                 if acted and name in READ_ONLY: audit(s, "VERIFY", f"🔎 Re-checking state via {name}", args)
+                if name == "process_refund" and not merchant_picked(s, args.get("txn_id")):
+                    out = {"error": "BLOCKED: several failed payments match. Ask the merchant which one (time + amount) before refunding."}
+                    audit(s, "DIAGNOSE", "🛑 Guardrail: refund blocked until merchant confirms which payment", args)
+                    s["llm_msgs"].append({"role": "tool", "tool_call_id": c.get("id", name), "content": json.dumps(out)}); continue
                 res = call(s, name, **args)
                 out = {"status": "PENDING_HUMAN_APPROVAL"} if res is None else res
                 if res is not None and name not in READ_ONLY: acted = True
@@ -521,6 +552,14 @@ def llm_loop(s, acted=False):
     if s["nudges"] > 2: s["status"] = "ESCALATED"; return reply(s, "Ye case main senior ko poori summary ke saath de raha hoon 🙏")
     s["llm_msgs"].append({"role": "user", "content": f"[SYSTEM] Not resolved yet: {why}. Continue the SOP (use the approval-gated tool if needed). Do not tell the merchant it is fixed until verified."})
     return llm_loop(s, acted)
+
+def merchant_picked(s, ref):
+    """Refund only what the merchant identified: unique candidate, or their own words name its amount/time/ref."""
+    mid = s["merchant"]; k = find_txn(mid, ref)
+    cands = [x for x, t in MERCHANTS[mid]["txns"].items() if t["debited"] and t["status"] == "FAILED" and not t["refunded"]]
+    if not k or len(cands) <= 1: return True
+    t = MERCHANTS[mid]["txns"][k]; said = " ".join(x["text"] for x in MSGS if x.get("merchant") == mid and x["from"] == "merchant")[-400:].replace(",", "")
+    return str(t["amount"]) in said or t["time"].split()[-1] in said or k[-4:] in said or k[-3:] in said
 
 def healthy(s):
     """Ground-truth check of the world state, independent of what the LLM claims."""
@@ -544,7 +583,7 @@ def llm_agent(s, text, proactive=False):
     with LOCK:
         db.execute("INSERT INTO tix VALUES(?,?,?,?,?,?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET intent=excluded.intent, cache=excluded.cache",
                    (s["id"], s["merchant"], s["intent"], "OPEN", 1, int(s["cache_hit"]), 0, 0, s["opened"], None)); db.commit()
-    hist = [{"role": "user" if x["from"] == "merchant" else "assistant", "content": x["text"].replace("🎤 ", "")} for x in MSGS[-9:-1] if x.get("text")]
+    hist = [{"role": "user" if x["from"] == "merchant" else "assistant", "content": x["text"].replace("🎤 ", "")} for x in [y for y in MSGS if y.get("merchant") == s["merchant"]][-9:-1] if x.get("text")]
     s["llm_msgs"] = [{"role": "system", "content": llm_system(s, s["sop"], cached)}, *hist, {"role": "user", "content": text}]
     s["ctx"] = lambda tool, a: f"{m['name']}: live agent requests {tool}({', '.join(f'{k}={v}' for k, v in a.items())}). Query: '{text}'"
     try: llm_loop(s)
@@ -572,7 +611,7 @@ def session(sid, merchant):
     return SESSIONS[sid]
 
 def handle(s, text, voice_in=False):
-    MSGS.append({"from": "merchant", "text": ("🎤 " if voice_in else "") + text, "ts": time.time()}); run_agent(s, text); return view(s)
+    MSGS.append({"from": "merchant", "text": ("🎤 " if voice_in else "") + text, "ts": time.time(), "merchant": s["merchant"]}); run_agent(s, text); return view(s)
 
 @app.post("/chat")
 def chat(m: Msg):
@@ -581,6 +620,7 @@ def chat(m: Msg):
 
 @app.post("/voice")
 async def voice(file: UploadFile = File(...), merchant_id: str = Form("M1001"), hint: str = Form("")):
+    if merchant_id not in MERCHANTS: raise HTTPException(404, "merchant")
     text = stt(await file.read(), file.filename) or hint or "Kal ka settlement nahi aaya"
     return handle(session(None, merchant_id), text, True)
 
@@ -681,23 +721,27 @@ def lead(sid: str, product: str = "Business Loan", amount: int = 0):
 
 def view(s):
     return {"session_id": s["id"], "status": s["status"], "phase": s["phase"], "trace": s["trace"], "sop": s["sop"], "diff": s["diff"],
-            "cache_hit": s["cache_hit"], "intent": s.get("intent"), **state()}
+            "cache_hit": s["cache_hit"], "intent": s.get("intent"), **state(s["merchant"])}
 
 def profile(mid="M1001"):
     m = MERCHANTS[mid]; d = DEVICES[m["soundbox"]]; e = check_loan_and_soundbox_eligibility(mid)
     return {"id": mid, "name": m["name"], "owner": m["owner"], "gmv": m["monthly_volume"], "soundbox": m["soundbox"], "soundbox_online": d["online"],
             "settlement": "HOLD" if any(v["status"] != "SETTLED" for v in m["settlements"].values()) else "OK", "bank_verified": m["bank"]["verified"],
-            "bank": mask(m["bank"]["acc"]), "offer": e}
+            "bank": mask(m["bank"]["acc"]), "offer": e, "city": m.get("city", ""),
+            "txns": [{"id": k, **{f: v.get(f) for f in ("time", "payer", "amount", "status", "refunded")}} for k, v in m["txns"].items()],
+            "settlements": [{"id": k, "amount": v["amount"], "date": v["date"], "status": v["status"], "utr": v.get("utr")} for k, v in m["settlements"].items()]}
 
 @app.get("/state")
-def state():
+def state(mid: str = "M1001"):
+    mid = mid if mid in MERCHANTS else "M1001"
     rows = db.execute("SELECT status, auto, cache, cost, opened, resolved FROM tix").fetchall()
     res = [r for r in rows if r[0] in ("VERIFIED", "CLOSED")]
     ttr = [r[5] - r[4] for r in res]; cache_ttr = [r[5] - r[4] for r in res if r[2]]
     avg_cost = round(sum(r[3] for r in res) / len(res), 2) if res else 0
     cs = db.execute("SELECT AVG(score), COUNT(*) FROM csat").fetchone()
     lc = db.execute("SELECT COUNT(*), COALESCE(SUM(amount),0) FROM leads").fetchone()
-    return {"messages": MSGS, "profile": profile(), "cache": CACHE,
+    return {"messages": [x for x in MSGS if x.get("merchant", "M1001") == mid], "profile": profile(mid),
+            "merchants": [{"id": k, "name": v["name"], "owner": v["owner"]} for k, v in MERCHANTS.items()], "cache": CACHE,
             "approvals": [{k: v for k, v in a.items()} for a in APPROVALS.values() if a["status"] == "PENDING"],
             "metrics": {"tickets": len(rows), "resolved": len(res), "closed": sum(r[0] == "CLOSED" for r in rows),
                         "median_ttr_s": round(statistics.median(ttr), 1) if ttr else 0,
