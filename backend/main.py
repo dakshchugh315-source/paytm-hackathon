@@ -138,14 +138,14 @@ def save_world():
     msgs = [{**{k: v for k, v in m.items() if k != "voice"}, **({"voice": {"source": "browser"}} if m.get("voice") else {})} for m in MSGS]
     with LOCK:
         db.execute("INSERT INTO kv VALUES(?,?) ON CONFLICT(k) DO UPDATE SET v=excluded.v", ("world", json.dumps({"m": MERCHANTS, "d": DEVICES, "c": CACHE, "msgs": msgs,
-            "s": {k: {f: v for f, v in x.items() if f != "ctx"} for k, x in SESSIONS.items()}, "a": APPROVALS}, ensure_ascii=False, default=str))); db.commit()
+            "s": {k: {f: v for f, v in x.items() if f != "ctx"} for k, x in SESSIONS.items()}, "a": APPROVALS, "st": STAFF}, ensure_ascii=False, default=str))); db.commit()
 
 def load_world():
     global MERCHANTS, DEVICES, CACHE, MSGS
     r = db.execute("SELECT v FROM kv WHERE k='world'").fetchone()
     if r:
         w = json.loads(r[0]); MERCHANTS, DEVICES, CACHE, MSGS = w["m"], w["d"], w["c"], w["msgs"]
-        SESSIONS.update({k: {**x, "ctx": lambda t, a, x=x: f"{x.get('query', '')} → {t} {a}"} for k, x in w.get("s", {}).items()}); APPROVALS.update(w.get("a", {}))
+        SESSIONS.update({k: {**x, "ctx": lambda t, a, x=x: f"{x.get('query', '')} → {t} {a}"} for k, x in w.get("s", {}).items()}); APPROVALS.update(w.get("a", {})); STAFF.update(w.get("st", {}))
 
 # ---------------- PII masking + immutable audit ----------------
 def inr(n):
@@ -351,7 +351,9 @@ def call(s, tool, **args):
                           "summary": s["ctx"](tool, args), "created": time.time(), "ml": s.get("ml"),
                           "actions": [t["event"] for t in s["trace"] if t["phase"] == "ACT"][-4:]}
         s["status"] = "WAITING_APPROVAL"; s["auto"] = False
-        audit(s, "HUMAN", f"⏸ {tool} → NEEDS_APPROVAL ({aid})", {"tool": tool, "args": args, "tier": t, "reason": why}); return None
+        audit(s, "HUMAN", f"⏸ {tool} → NEEDS_APPROVAL ({aid})", {"tool": tool, "args": args, "tier": t, "reason": why})
+        amt = f" ₹{args['amount']:,}" if args.get("amount") else ""
+        staff_notify(f"Approval needed *{aid}* · {tool}{amt}\n{APPROVALS[aid]['summary'][:140]}\nReply *approve {aid} <PIN>* ya *reject {aid}*", aid); return None
     res = TOOLS[tool](s["merchant"], **args); s["tools"] += 1
     audit(s, "ACT", f"✔ {tool} [AUTO]", {"tool": tool, "args": args, "tier": t, "result": res}); return res
 
@@ -746,7 +748,7 @@ def open_ticket(s, intent):
 
 def handoff(s, why, text):
     s["status"] = "WAITING_APPROVAL"; s["auto"] = False
-    audit(s, "HUMAN", f"🙋 Handoff: {why}", text)
+    audit(s, "HUMAN", f"🙋 Handoff: {why}", text); staff_notify(f"Handoff {s['id']}: {why} — “{text[:80]}”")
     return reply(s, "Main aapka case abhi ek senior teammate ko de raha hoon, poori jaankari ke saath — aapko dobara kuch batana nahi padega 🙏")
 
 def ml_route(s, text, proactive=False):
@@ -964,6 +966,121 @@ def pin_check(x_approver_pin: str = Header("")):
     if x_approver_pin != APPROVER_PIN: raise HTTPException(401, "bad approver PIN")
     return {"ok": True, "approver": APPROVER}
 
+# ---------------- Staff WhatsApp: Saathi as a co-worker for Paytm employees ----------------
+EMPLOYEES = {
+    "9811000001": {"id": "E101", "name": "Priya Sharma", "role": "Support agent", "team": "Merchant Support", "can_approve": True},
+    "9811000002": {"id": "E102", "name": "Arjun Mehta", "role": "Ops manager", "team": "Settlements Ops", "can_approve": True},
+    "9811000003": {"id": "E103", "name": "Neha Kapoor", "role": "Risk analyst", "team": "Fraud & Risk", "can_approve": False},
+}
+STAFF = {}  # phone -> {"msgs": [...], "verified": bool, "subscribed": bool}
+
+def staff_chat(phone):
+    return STAFF.setdefault(phone, {"msgs": [], "verified": False, "subscribed": False})
+
+def staff_say(phone, text, **kw):
+    staff_chat(phone)["msgs"].append({"from": "saathi", "text": text, "ts": time.time(), **kw})
+
+def staff_audit(emp, event, detail=""):
+    audit({"id": "STAFF-" + (emp["id"] if emp else "UNKNOWN"), "trace": [], "opened": time.time(), "tokens": 0, "phase": ""}, "HUMAN", event, detail)
+
+def staff_notify(text, aid=None):
+    """Ping every verified, subscribed employee when a case needs a human."""
+    for phone, ch in STAFF.items():
+        if ch["verified"] and ch["subscribed"]:
+            staff_say(phone, "🔔 " + text, alert=True, **({"approval": aid} if aid else {}))
+
+def _open_tickets():
+    return [x for x in SESSIONS.values() if x["status"] not in ("VERIFIED", "CLOSED", "REASSIGNED", "ANSWERED")]
+
+def _who(uid):
+    u = user(uid); return u.get("owner", u["name"])
+
+def _find_user(text):
+    t = text.lower()
+    return next((k for k, v in {**MERCHANTS, **CUSTOMERS}.items()
+                 if k.lower() in t or v["name"].lower().split()[0] in t or v.get("owner", v["name"]).lower().split()[0] in t), None)
+
+STAFF_HELP = ("Main Saathi hoon, aapka teammate. Aap mujhse keh sakte hain:\n• *show open tickets*\n• *pending approvals*\n• *approve AP-XXXX <PIN>* / *reject AP-XXXX*\n"
+              "• *status of Ramesh* (ya kisi bhi merchant/customer)\n• *today's summary*\n• *ping me* — jab bhi kisi case ko insaan chahiye, main WhatsApp karunga\n• *stop pings*")
+
+def staff_reply(phone, text):
+    ch = staff_chat(phone); emp = EMPLOYEES.get(phone); t = text.strip(); low = t.lower()
+    ch["msgs"].append({"from": "staff", "text": t, "ts": time.time()})
+    if not emp:
+        staff_audit(None, f"⛔ Staff WhatsApp from unregistered number {mask(phone)}", t)
+        return staff_say(phone, f"Ye number ({mask(phone)}) Paytm employee list mein nahi hai. Internal data share nahi kar sakta. Apne registered work number se message kijiye.")
+    if not ch["verified"]:
+        ch["verified"] = True; staff_audit(emp, f"✅ Staff verified by phone match: {emp['name']} ({emp['id']})", {"phone": mask(phone)})
+        staff_say(phone, f"Verified ✅ {emp['name']} · {emp['role']}, {emp['team']} ({emp['id']}). Number employee list se match ho gaya.")
+    m = re.search(r"\b(approve|reject|override)\b\s+(AP-[A-Z0-9]+)(?:\s+(\d{4}))?", t, re.I)
+    if m:
+        verb, aid, pin = m.group(1).lower(), m.group(2).upper(), m.group(3)
+        ap = APPROVALS.get(aid)
+        if not ap or ap["status"] != "PENDING": return staff_say(phone, f"{aid} pending nahi hai (shayad already handle ho gaya).")
+        if not emp["can_approve"]:
+            staff_audit(emp, f"⛔ {emp['name']} tried to {verb} {aid} without approval rights", ap["args"])
+            return staff_say(phone, f"Aapke role ({emp['role']}) ko approve/reject ka access nahi hai. Main Priya ya Arjun ko ping kar deta hoon.")
+        if verb == "approve" and pin != APPROVER_PIN:
+            return staff_say(phone, f"Security ke liye PIN chahiye. Likhiye: *approve {aid} <PIN>*")
+        staff_audit(emp, f"📱 {emp['name']} {verb}d {aid} via Staff WhatsApp", ap["args"])
+        r = decide(aid, "approve" if verb == "approve" else "override", APPROVER_PIN)
+        last = next((x["text"] for x in reversed(MSGS) if x.get("ticket") == ap["ticket"] and x["from"] == "saathi"), "")
+        return staff_say(phone, f"{'✅ Approved' if verb == 'approve' else '🛑 Taken over'} {aid} ({ap['tool']}). Ticket {ap['ticket']} ab {r['status']}.\nMerchant ko gaya: “{last[:140]}”")
+    if re.search(r"\b(stop|unsubscribe|mute)\b", low):
+        ch["subscribed"] = False; staff_audit(emp, f"🔕 {emp['name']} stopped pings")
+        return staff_say(phone, "Theek hai, pings band. Wapas chahiye toh *ping me* likhiye.")
+    if re.search(r"\b(ping|notify|alert|batana|bata dena)\b", low):
+        ch["subscribed"] = True; staff_audit(emp, f"🔔 {emp['name']} subscribed to human-needed pings")
+        return staff_say(phone, "Done 🔔 Jab bhi koi case insaan ki zaroorat wala aayega (approval, fraud, escalation), main turant yahin message karunga.")
+    if re.search(r"approval|pending|queue|waiting", low):
+        aps = [a for a in APPROVALS.values() if a["status"] == "PENDING"]
+        if not aps: return staff_say(phone, "Abhi koi approval pending nahi hai ✅")
+        return staff_say(phone, f"{len(aps)} approval pending:\n" + "\n".join(
+            f"• *{a['id']}* · {a['tool']} {('₹' + format(a['args']['amount'], ',')) if a['args'].get('amount') else ''} · {_who(SESSIONS[a['ticket']]['merchant'])}\n  {a['summary'][:110]}" for a in aps)
+            + ("\nReply *approve <ID> <PIN>* ya *reject <ID>*" if emp["can_approve"] else ""))
+    reasoning = LLM_KEY and re.search(r"urgent|priority|kyun|why|which|kaunsa|sabse|should i|kya karu", low)
+    if re.search(r"ticket|case|issue|complaint", low) and not reasoning:
+        op = _open_tickets()
+        if not op: return staff_say(phone, f"Koi open ticket nahi ✅ Aaj total {len(SESSIONS)} tickets aaye, sab handle ho gaye.")
+        return staff_say(phone, f"{len(op)} open ticket:\n" + "\n".join(
+            f"• *{x['id']}* · {_who(x['merchant'])} · {(x.get('ml') or {}).get('issue') or x.get('intent') or 'query'} · {x['status']}\n  “{(x.get('query') or '')[:70]}”" for x in op))
+    uid = _find_user(t)
+    if uid or re.search(r"status|360|kaisa|details", low):
+        if not uid: return staff_say(phone, "Kis merchant/customer ka? Naam ya ID likhiye, jaise *status of Ramesh* ya *C2003*.")
+        p = profile(uid); mine = [x for x in SESSIONS.values() if x["merchant"] == uid]
+        if p.get("persona") == "customer":
+            info = f"👤 {p['name']} ({uid}, {p['city']}) · {'🔒 FROZEN' if p['frozen'] else 'active'} · disputes {p['disputes']}" + (f" · EMI ₹{p['emi']['emi']:,} {'paid' if p['emi']['paid'] else 'unpaid'}" if p.get("emi") else "")
+        else:
+            held = sum(x["amount"] for x in p["settlements"] if x["status"] != "SETTLED")
+            info = f"🏪 {p['name']} · {p['owner']} ({uid}, {p['city']}) · GMV ₹{p['gmv']:,}/mo · Soundbox {'online' if p['soundbox_online'] else 'OFFLINE'} · " + (f"₹{held:,} on hold" if held else "settlements clear")
+        return staff_say(phone, info + f"\nTickets: {len(mine)} (" + ", ".join(f"{x['id']} {x['status']}" for x in mine[-3:]) + ")" if mine else info + "\nKoi ticket nahi.")
+    if re.search(r"summary|report|dashboard|metrics|aaj|today|kitna", low):
+        rows = db.execute("SELECT status, auto FROM tix").fetchall(); b = business_metrics([campaign_live(x) for x in CAMPAIGNS.values()])["biz"]
+        done = [r for r in rows if r[0] in ("VERIFIED", "CLOSED")]
+        return staff_say(phone, f"📊 Aaj ka summary\n• Tickets {len(rows)} · resolved {len(done)} · bina insaan ke {sum(r[1] for r in done)}\n• Open {len(_open_tickets())} · approvals pending {sum(a['status'] == 'PENDING' for a in APPROVALS.values())}\n"
+                                   f"• UPI today {inr(b['upi_today'])} · settled {inr(b['settled'])} · on hold {inr(b['held'])}\n• Loans {inr(b['loans'])} · refunds {inr(b['refunds'])} · cash logged {inr(b['cash_today'])}")
+    if re.search(r"^(hi|hello|hey|help|namaste|menu)\b", low): return staff_say(phone, f"Namaste {emp['name'].split()[0]} 👋\n" + STAFF_HELP)
+    if LLM_KEY:  # free-form question: answer from live ops context only
+        try:
+            ctx = {"open_tickets": [ticket_row(x) for x in _open_tickets()][:10], "pending_approvals": [{k: a[k] for k in ("id", "tool", "summary")} for a in APPROVALS.values() if a["status"] == "PENDING"]}
+            msg, _, _ = llm_chat([{"role": "system", "content": f"You are Saathi, an internal teammate for Paytm employee {emp['name']} ({emp['role']}). Answer briefly (max 60 words, Hinglish ok) using ONLY this live ops data; if it is not there, say so and suggest a command. Data: {json.dumps(ctx, ensure_ascii=False, default=str)}"},
+                                  {"role": "user", "content": t}], tools=False)
+            if msg.get("content"): return staff_say(phone, msg["content"].strip())
+        except Exception: pass
+    return staff_say(phone, "Ye main abhi nahi kar sakta.\n" + STAFF_HELP)
+
+class StaffMsg(BaseModel):
+    phone: str; text: str
+
+@app.post("/staff/chat")
+def staff_chat_api(m: StaffMsg):
+    staff_reply(re.sub(r"\D", "", m.phone)[-10:], m.text); return staff_state()
+
+@app.get("/staff/state")
+def staff_state():
+    return {"employees": [{"phone": p, "masked": mask(p), **e, "verified": STAFF.get(p, {}).get("verified", False), "subscribed": STAFF.get(p, {}).get("subscribed", False)} for p, e in EMPLOYEES.items()],
+            "chats": STAFF}
+
 class MLReq(BaseModel):
     text: str; persona: str = "Customer"; amount: int | None = None; disputes: int = 0; bank: str | None = None
 
@@ -1172,7 +1289,7 @@ def state(mid: str = "M1001", agent: str = ""):
 @app.post("/reset")
 def reset():
     global LAST_HASH
-    reset_world()
+    reset_world(); STAFF.clear()
     with LOCK:
         if db.pg: db.execute("TRUNCATE audit_chain, tix, leads, csat, kv")
         else:

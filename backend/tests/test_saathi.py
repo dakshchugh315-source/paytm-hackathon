@@ -192,12 +192,41 @@ def test_soundbox_cash_and_announcements(c, monkeypatch):
     assert c.post("/soundbox/M1001/simulate-payment").status_code == 409  # Ramesh's Soundbox is offline
     assert c.post("/soundbox/C2001/cash", data={"text": "100"}).status_code == 404
 
+# ---------------- Staff WhatsApp (internal teammate) ----------------
+def staff(c, phone, text):
+    return c.post("/staff/chat", json={"phone": phone, "text": text}).json()["chats"][phone]["msgs"]
+
+def test_staff_unknown_number_denied(c):
+    msgs = staff(c, "9999999999", "show open tickets")
+    assert "employee list mein nahi" in msgs[-1]["text"] and not c.get("/staff/state").json()["chats"]["9999999999"]["verified"]
+
+def test_staff_verified_lists_tickets_and_status(c):
+    chat(c, "Kal ka settlement nahi aaya")
+    msgs = staff(c, "9811000001", "show open tickets")
+    assert "Verified ✅ Priya Sharma" in msgs[-2]["text"] and "Ramesh" in msgs[-1]["text"]
+    assert "Gupta Medicals" in staff(c, "9811000001", "status of Sunita")[-1]["text"]
+    assert "Aaj ka summary" in staff(c, "9811000001", "today's summary")[-1]["text"]
+
+def test_staff_ping_then_approve_with_pin(c):
+    staff(c, "9811000002", "ping me")
+    r = chat(c, "Kal ka settlement nahi aaya"); aid = r["approvals"][0]["id"]
+    alert = c.get("/staff/state").json()["chats"]["9811000002"]["msgs"][-1]
+    assert alert.get("alert") and aid in alert["text"]
+    assert "PIN chahiye" in staff(c, "9811000002", f"approve {aid}")[-1]["text"]
+    assert "✅ Approved" in staff(c, "9811000002", f"approve {aid} {main.APPROVER_PIN}")[-1]["text"]
+    assert main.APPROVALS[aid]["status"] == "APPROVED" and main.MERCHANTS["M1001"]["settlements"]["ST-9001"]["status"] == "SETTLED"
+
+def test_staff_without_rights_cannot_approve(c):
+    r = chat(c, "Kal ka settlement nahi aaya"); aid = r["approvals"][0]["id"]
+    assert "access nahi" in staff(c, "9811000003", f"approve {aid} {main.APPROVER_PIN}")[-1]["text"]
+    assert main.APPROVALS[aid]["status"] == "PENDING"
+
 # ---------------- Frontend sanity ----------------
 def test_frontend_structure_and_js_syntax(tmp_path):
     html = open(os.path.join(ROOT, "frontend", "index.html"), encoding="utf-8").read()
     body = html[html.index("<body"):html.index("<script>\n")]
     assert body.count("<div") == body.count("</div>")
-    for el in ("app-wa", "app-pt", "app-sb", "queue", "tickets", "dir", "xmoney", "pin"): assert f'id="{el}"' in html
+    for el in ("app-wa", "app-pt", "app-sb", "queue", "tickets", "dir", "xmoney", "pin", "schat", "semps"): assert f'id="{el}"' in html
     assert 'id="mic" onclick="mic()"' not in html  # form-scope shadowing bug must not come back
     if not shutil.which("node"): pytest.skip("node not installed")
     js = tmp_path / "app.js"; js.write_text(re.findall(r"<script>\n(.*)</script>", html, re.S)[0], encoding="utf-8")

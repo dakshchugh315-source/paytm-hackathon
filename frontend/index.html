@@ -88,6 +88,7 @@ header{background:#fff;box-shadow:0 1px 0 #e5e9f0}header b.text-white{color:#002
     <button data-tab="tickets" class="tab">🎫 Tickets</button>
     <button data-tab="c360" class="tab">👤 Customer 360</button>
     <button data-tab="exec" class="tab">📊 Executive</button>
+    <button data-tab="staff" class="tab">💬 Staff WhatsApp <span id="salert" class="hidden ml-1 px-1.5 rounded-full bg-amber-500 text-white text-[10px]"></span></button>
     <span class="grp ml-3">UNDER THE HOOD</span>
     <button data-tab="brain" class="tab">🧠 Saathi Brain</button>
     <button data-tab="auditlog" class="tab">🔒 Audit Log</button>
@@ -161,6 +162,34 @@ header{background:#fff;box-shadow:0 1px 0 #e5e9f0}header b.text-white{color:#002
       <div class="card p-6"><div class="sect">MERCHANT CAMPAIGNS</div><div id="camps" class="text-sm space-y-3"></div></div>
     </div>
     <details class="card p-5 text-sm text-slate-600"><summary class="cursor-pointer font-semibold text-slate-700">How decisions are made (ML model)</summary><div id="mlcard" class="mt-2"></div></details>
+  </div>
+
+  <!-- STAFF WHATSAPP: Saathi as an internal co-worker for Paytm employees -->
+  <div data-panel="staff" class="panel hidden flex-1 min-h-0 gap-4">
+    <div class="w-[380px] shrink-0 flex flex-col min-h-0">
+      <div class="flex items-center gap-2 mb-2"><span class="text-[11px] font-bold text-slate-500">EMPLOYEE'S PHONE</span>
+        <label class="ml-auto text-[11px] text-slate-500 flex items-center gap-1">Sender number
+          <select id="sphone" onchange="H.schat = null; renderStaff(SST)" class="text-xs border border-slate-300 rounded-lg px-2 py-1 bg-white"></select></label></div>
+      <div class="flex flex-col rounded-[28px] overflow-hidden flex-1 min-h-0 border-[7px] border-slate-800 shadow-xl bg-[#efeae2]">
+        <div class="bg-[#075e54] text-white px-3 py-2.5 flex items-center gap-2"><div class="w-9 h-9 rounded-full bg-[#002e6e] grid place-items-center font-bold">S</div>
+          <div><div class="font-semibold leading-tight">Saathi · Paytm Internal</div><div class="text-[10px] text-white/70" id="sverified">Your AI teammate</div></div></div>
+        <div id="schat" class="flex-1 overflow-y-auto p-3 space-y-2"></div>
+        <div id="schips" class="px-2 pt-2 flex gap-1 flex-wrap text-[11px]"></div>
+        <form onsubmit="event.preventDefault(); sendStaff($('sinp').value)" class="p-2 flex gap-2">
+          <input id="sinp" class="flex-1 rounded-full px-4 py-2 bg-white outline-none text-slate-800" placeholder="Ask Saathi… e.g. pending approvals">
+          <button class="w-9 h-9 rounded-full bg-[#00a884] text-white">➤</button></form>
+      </div>
+    </div>
+    <div class="flex-1 flex flex-col gap-4 min-h-0 overflow-y-auto">
+      <div class="card p-6"><div class="text-lg font-bold text-slate-900">Employee directory</div>
+        <div class="text-sm text-slate-500 mb-4">Saathi only talks to numbers on this list. The WhatsApp sender number is matched automatically — no password to type.</div>
+        <div id="semps"></div></div>
+      <div class="card p-6 text-sm text-slate-600 space-y-2"><div class="text-lg font-bold text-slate-900">What staff can do on WhatsApp</div>
+        <div>📋 <b>show open tickets</b> · ⏳ <b>pending approvals</b> · 👤 <b>status of Ramesh</b> · 📊 <b>today's summary</b></div>
+        <div>✅ <b>approve AP-XXXX &lt;PIN&gt;</b> / 🛑 <b>reject AP-XXXX</b> — only roles with approval rights, PIN required</div>
+        <div>🔔 <b>ping me</b> — Saathi messages you the moment a case needs a human (approval, fraud, escalation) · <b>stop pings</b></div>
+        <div class="text-slate-400">Every staff action is written to the audit log with the employee's ID.</div></div>
+    </div>
   </div>
 
   <!-- BRAIN: technical X-ray -->
@@ -466,6 +495,34 @@ function renderApp(s) {
   if (PT === 'help') h = `<div class="text-[12px] text-slate-500 px-1">Your help requests</div>` + helpList(s);
   put('pt-body', h);
 }
+// ---- Staff WhatsApp (internal teammate) ----
+let SST = {employees: [], chats: {}}, staffSeen = {};
+const wa = t => esc(t).replace(/\*\*([^*\n]+)\*\*/g, '<b>$1</b>').replace(/\*([^*\n]+)\*/g, '<b>$1</b>').replace(/\n/g, '<br>');
+function renderStaff(st) {
+  SST = st; const sel = $('sphone');
+  if (sel.options.length !== st.employees.length + 1) {
+    sel.innerHTML = st.employees.map(e => `<option value="${e.phone}">${esc(e.name)} · ${e.phone.slice(0, 5)} ${e.phone.slice(5)}</option>`).join('') + '<option value="9999999999">Unknown · 99999 99999</option>';
+  }
+  const ph = sel.value, ch = st.chats[ph] || {msgs: []}, emp = st.employees.find(e => e.phone === ph);
+  $('sverified').textContent = ch.verified ? `✓ Verified · ${emp.name}, ${emp.role}` : emp ? 'Not verified yet — send any message' : 'Unregistered number';
+  put('schat', ch.msgs.length ? ch.msgs.map(m => `<div class="flex ${m.from === 'staff' ? 'justify-end' : ''}"><div class="max-w-[85%] rounded-lg px-3 py-2 text-[13px] shadow-sm ${m.from === 'staff' ? 'bg-[#d9fdd3]' : m.alert ? 'bg-amber-50 border border-amber-300' : 'bg-white'}">
+      ${wa(m.text)}${m.approval && emp?.can_approve ? `<div class="mt-2 flex gap-2"><button onclick="$('sinp').value='approve ${m.approval} '; $('sinp').focus()" class="px-2 py-0.5 rounded bg-emerald-600 text-white text-[11px]">Approve…</button><button onclick="sendStaff('reject ${m.approval}')" class="px-2 py-0.5 rounded border border-red-400 text-red-600 text-[11px]">Take over</button></div>` : ''}
+      <div class="text-[9px] text-slate-400 text-right">${new Date(m.ts * 1000).toLocaleTimeString().slice(0, 5)}</div></div></div>`).join('')
+    : '<div class="text-center text-[12px] text-slate-500 bg-white/70 rounded-lg p-3 mx-4 mt-6">Messages from this number are matched against the Paytm employee list.<br>Say <b>hi</b> to start.</div>');
+  if (staffSeen[ph] !== ch.msgs.length) { $('schat').scrollTop = 1e9; staffSeen[ph] = ch.msgs.length; }
+  put('schips', ['hi', 'show open tickets', 'pending approvals', 'ping me', 'status of Ramesh', "today's summary"].map(t => `<button class="bg-white border border-slate-200 text-slate-700 rounded-full px-2 py-1" onclick="sendStaff(this.textContent)">${esc(t)}</button>`).join(''));
+  put('semps', `<table class="w-full text-sm"><tr class="text-left text-[12px] text-slate-500 border-b"><th class="py-2">Employee</th><th>Role</th><th>Work number</th><th>Can approve</th><th>WhatsApp</th><th>Pings</th></tr>
+    ${st.employees.map(e => `<tr class="border-b border-slate-100 cursor-pointer hover:bg-sky-50" onclick="$('sphone').value='${e.phone}'; H.schat = null; renderStaff(SST)">
+      <td class="py-3"><div class="font-semibold text-slate-800">${esc(e.name)}</div><div class="text-[11px] text-slate-500">${e.id} · ${esc(e.team)}</div></td><td>${esc(e.role)}</td><td class="font-mono text-[12px]">${e.masked}</td>
+      <td>${e.can_approve ? '<span class="text-emerald-600 font-semibold">Yes</span>' : '<span class="text-slate-400">No</span>'}</td>
+      <td>${e.verified ? '<span class="text-emerald-600">✓ Verified</span>' : '<span class="text-slate-400">—</span>'}</td><td>${e.subscribed ? '🔔 On' : '<span class="text-slate-400">Off</span>'}</td></tr>`).join('')}</table>`);
+  const unread = Object.values(st.chats).reduce((a, c) => a + c.msgs.filter(m => m.alert).length, 0);
+  $('salert').textContent = unread; $('salert').classList.toggle('hidden', !unread);
+}
+async function sendStaff(text) {
+  text = (text || '').trim(); if (!text) return; $('sinp').value = '';
+  try { renderStaff(await api('/staff/chat', {body: JSON.stringify({phone: $('sphone').value, text})})); } catch (e) { err(e); }
+}
 function renderCustomer(p) {
   put('profile', `<div class="text-slate-900 font-semibold">👤 ${esc(p.name)} <span class="text-[10px] px-2 py-0.5 rounded-full bg-slate-100">CUSTOMER</span></div>
     <div class="text-[11px] text-slate-500">${p.id} · ${esc(p.city)} · prefers ${p.lang} · phone ${p.phone} · past disputes ${p.disputes}</div>
@@ -523,6 +580,7 @@ function renderML(d) {
 function tab(t) { if (t === 'report' && !H.reportLoaded) get('/api/audit-report').then(r => { $('report').innerHTML = marked.parse(r.markdown); H.reportLoaded = 1; }); document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b.dataset.tab === t)); document.querySelectorAll('.panel').forEach(p => p.classList.toggle('hidden', p.dataset.panel !== t)); }
 document.querySelectorAll('.tab').forEach(b => b.onclick = () => tab(b.dataset.tab)); tab('inbox'); chips(); openApp('wa');
 let lastQ = 0;
+get('/staff/state').then(renderStaff).catch(() => {});
 setPhase(''); get(sq()).then(renderState).catch(err);
-setInterval(() => !busy && get(sq()).then(renderState).catch(() => {}), 4000);
+setInterval(() => { if (!busy) { get(sq()).then(renderState).catch(() => {}); get('/staff/state').then(renderStaff).catch(() => {}); } }, 4000);
 </script></body></html>
