@@ -26,7 +26,7 @@ header{background:#fff;box-shadow:0 1px 0 #e5e9f0}header b.text-white{color:#002
   <span id="llm" class="text-xs px-2 py-0.5 rounded bg-slate-100 text-slate-600"></span>
   <span id="cachebadge" class="hidden text-xs px-2 py-1 rounded-full bg-yellow-400 text-black font-bold pop">⚡ Verified Fix Cache Hit</span>
   <span class="text-xs px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 font-medium">🌐 Multilingual: English + Indic</span>
-  <div class="ml-auto flex items-center gap-2"><span class="text-[11px] font-bold text-slate-400">🎬 DEMO</span><div class="flex gap-1.5 text-xs font-semibold" id="demos"></div>
+  <div class="ml-auto flex items-center gap-2"><span class="text-[11px] font-bold text-slate-400" title="Demo-only triggers, not visible to merchants">🎬 STAGE CONTROLS</span><div class="flex gap-1.5 text-xs font-semibold" id="demos"></div>
   <button onclick="reset()" class="text-xs px-3 py-1.5 rounded border border-slate-300 text-slate-600 hover:bg-slate-50">↺ Reset</button></div>
 </header>
 <main class="flex-1 grid grid-cols-[440px_1fr] gap-4 p-4 min-h-0">
@@ -241,9 +241,11 @@ const sq = () => '/state?mid=' + MID + (AID ? '&agent=' + AID : '');
 async function switchMerchant(id) { MID = id; H['pt-body'] = H['pt-nav'] = null; PT = 'home'; chips(); $('phonetitle').textContent = id.startsWith('C') ? 'Paytm Help' : 'Saathi · Paytm for Business'; $('msel').value = id; sid = null; traceLen = 0; H.chatKey = null; H.profile = null; const st = await get('/state?mid=' + id); shown = st.messages.length; seen = shown; renderState(st); }
 let sid = null, busy = false, shown = -1, traceLen = 0, S = {}, seen = 0;
 const H = {}; function put(id, h) { if (H[id] === h) return false; H[id] = h; $(id).innerHTML = h; return true; }
-[['🎙 1 · Settlement','demo1()','bg-[#002e6e] text-white'],['🔊 2 · Soundbox','demo2()','bg-emerald-600 text-white'],
- ['📡 3 · Proactive','demo3()','bg-violet-600 text-white'],['⏩ +24h','ff()','bg-pink-500 text-white']]
- .forEach(([l, f, c]) => $('demos').insertAdjacentHTML('beforeend', `<button onclick="${f}" class="${c} rounded-lg px-3 py-1.5 shadow-sm hover:brightness-110 hover:-translate-y-0.5 transition">${l}</button>`));
+// Stage-only triggers for things a merchant can't cause by typing
+[['🔇 Break Soundbox', 'demo2()', 'bg-emerald-600 text-white', "Takes the merchant's Soundbox offline, then the merchant complains"],
+ ['📡 Paytm alert', 'demo3()', 'bg-violet-600 text-white', 'A Paytm backend event arrives — Saathi messages the merchant first'],
+ ['⏩ Skip 24h', 'ff()', 'bg-pink-500 text-white', 'Runs the 24-hour follow-up now']]
+ .forEach(([l, f, c, tip]) => $('demos').insertAdjacentHTML('beforeend', `<button onclick="${f}" title="${tip}" class="${c} rounded-lg px-3 py-1.5 shadow-sm hover:brightness-110 hover:-translate-y-0.5 transition">${l}</button>`));
 const SCEN = {
   M1001: ['Kal ka settlement nahi aaya', 'Yesterday settlement not credited', 'Soundbox bol nahi raha', 'Soundbox is silent / no audio', 'Customer ka paisa kat gaya, payment fail', 'Customer money debited, payment failed', 'Mujhe bank account badalna hai'],
   M1002: ['Subah se ₹8,500 ka settlement hold pe hai', 'Mere regular customers ko Diwali offer bhej do', 'Mujhe loan chahiye', 'I want a business loan'],
@@ -377,7 +379,6 @@ async function autoApprove() {
   $('pin').value = '2468'; await unlock(); $('ap-' + a.id)?.classList.add('ring-4', 'ring-emerald-300', 'pulse'); await sleep(1600); await decide(a.id, 'approve');
 }
 async function reset() { await api('/reset'); sid = null; shown = 0; seen = 0; H.chatKey = null; traceLen = 0; $('trace').innerHTML = ''; $('sop').textContent = $('diff').textContent = '—'; $('cachebadge').classList.add('hidden'); setPhase(''); setBadge('OPEN'); renderState(await get(sq())); }
-async function demo1() { await reset(); await switchMerchant('M1001'); await say('🎤 Kal ka settlement nahi aaya'); await autoApprove(); }
 async function demo2() { await api('/demo/soundbox_offline?merchant_id=' + MID); renderState(await get(sq())); await sleep(600); await say('Soundbox bol nahi raha, payment ki awaaz nahi aa rahi'); }
 async function demo3() { traceLen = 0; await run(api('/webhook/settlement_failed?merchant_id=' + MID)); await autoApprove(); }
 async function ff() { traceLen = 0; await run(api('/followup')); }
