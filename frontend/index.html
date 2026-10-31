@@ -57,9 +57,24 @@ header{background:#fff;box-shadow:0 1px 0 #e5e9f0}header b.text-white{color:#002
       </div>
       <div id="pt-body" class="flex-1 overflow-y-auto p-3 space-y-3"></div>
     </div>
+    <!-- App 3: Soundbox companion (merchants only) -->
+    <div id="app-sb" class="hidden flex-col flex-1 min-h-0 bg-slate-900 text-white overflow-y-auto">
+      <div class="px-4 pt-3 flex items-center"><b>🔊 Soundbox</b><span id="sb-id" class="ml-2 text-[11px] text-white/50"></span><span id="sb-led" class="ml-auto text-[11px]"></span></div>
+      <div class="mx-auto my-4 w-40 h-40 rounded-full bg-slate-800 border-4 border-slate-700 grid place-items-center shadow-inner relative">
+        <div class="absolute inset-4 rounded-full" style="background:radial-gradient(circle,#334155 1.5px,transparent 1.6px) 0 0/9px 9px"></div>
+        <div id="sb-lcd" class="relative bg-[#0b3d2e] text-[#5eead4] font-mono text-[11px] px-2 py-1 rounded text-center max-w-[130px]">Ready</div></div>
+      <div class="px-4 space-y-3 pb-4">
+        <button id="sb-mic" onclick="cashMic()" class="w-full py-4 rounded-2xl bg-amber-400 text-slate-900 font-bold text-base">🎤 Cash entry — tap & speak</button>
+        <div class="text-[11px] text-white/60 text-center -mt-1">Say: “150 rupaye cash”. Saved as CASH, separate from Paytm money.</div>
+        <form onsubmit="cashTyped(event)" class="flex gap-2"><input id="sb-amt" type="number" min="1" placeholder="or type ₹ amount" class="flex-1 rounded-xl px-3 py-2 text-slate-900 outline-none"><button class="px-4 rounded-xl bg-white/15">Add</button></form>
+        <button onclick="sbPay()" class="w-full py-2 rounded-xl border border-white/20 text-sm">▶ Simulate customer UPI payment</button>
+        <div class="text-[11px] font-bold text-white/50 pt-1">RECENT ANNOUNCEMENTS</div><div id="sb-log" class="space-y-1.5 text-[12px]"></div>
+      </div>
+    </div>
     <!-- Home dock: switch apps like a real phone -->
     <div class="flex border-t border-slate-200 bg-white text-[11px] font-semibold">
       <button onclick="openApp('wa')" id="dock-wa" class="dock flex-1 py-2 flex flex-col items-center"><span class="text-lg">💬</span>WhatsApp</button>
+      <button onclick="openApp('sb')" id="dock-sb" class="dock flex-1 py-2 flex flex-col items-center"><span class="text-lg">🔊</span>Soundbox</button>
       <button onclick="openApp('pt')" id="dock-pt" class="dock flex-1 py-2 flex flex-col items-center"><span class="text-lg">₹</span><span id="dock-pt-name">Paytm for Business</span></button>
     </div>
   </div>
@@ -323,10 +338,33 @@ async function closeT(tid) { await run(api(`/api/tickets/${tid}/close`)); }
 // ---- Phone: WhatsApp <-> Paytm app (per selected merchant/customer) ----
 let APP = 'wa', PT = 'home';
 function openApp(a) {
-  APP = a; $('app-wa').classList.toggle('hidden', a !== 'wa'); $('app-pt').classList.toggle('hidden', a !== 'pt'); $('app-pt').classList.toggle('flex', a === 'pt');
+  if (a === 'sb' && MID.startsWith('C')) a = 'wa';
+  APP = a; for (const k of ['wa', 'pt', 'sb']) { $('app-' + k).classList.toggle('hidden', a !== k); if (k !== 'wa') $('app-' + k).classList.toggle('flex', a === k); }
   document.querySelectorAll('.dock').forEach(b => b.classList.toggle('text-[#002e6e]', b.id === 'dock-' + a));
   document.querySelectorAll('.dock').forEach(b => b.classList.toggle('text-slate-400', b.id !== 'dock-' + a));
   if (S.profile) renderApp(S);
+}
+function renderSoundbox(p) {
+  $('sb-id').textContent = p.soundbox; put('sb-led', p.soundbox_online ? '<span class="text-emerald-400">● Online</span>' : '<span class="text-red-400">● Offline</span>');
+  put('sb-log', (p.sb_log || []).length ? p.sb_log.map(l => `<div class="flex gap-2 bg-white/5 rounded-lg px-2 py-1.5"><span>${l.kind === 'cash' ? '💵' : '🔊'}</span><span class="flex-1">${esc(l.text)}</span><span class="text-white/40">${new Date(l.ts * 1000).toLocaleTimeString().slice(0, 5)}</span></div>`).join('') : '<div class="text-white/40">Nothing announced yet.</div>');
+}
+function sbSpeak(r) { $('sb-lcd').textContent = r.text; speak({voice: r.voice, text: r.text}); get(sq()).then(renderState); }
+async function sbPay() { try { sbSpeak(await api('/soundbox/' + MID + '/simulate-payment')); } catch (e) { err(e); } }
+async function cashTyped(e) { e.preventDefault(); const v = $('sb-amt').value; if (!v) return; const f = new FormData(); f.append('text', v + ' rupaye cash'); $('sb-amt').value = '';
+  try { sbSpeak(await api('/soundbox/' + MID + '/cash', {body: f})); } catch (x) { err(x); } }
+let crec;
+async function cashMic() {
+  if (crec?.state === 'recording') return crec.stop();
+  let st; try { st = await navigator.mediaDevices.getUserMedia({audio: true}); } catch { return toast('Microphone blocked — allow mic access in the browser address bar.'); }
+  crec = new MediaRecorder(st); const ch = [], t0 = Date.now(); crec.ondataavailable = e => ch.push(e.data);
+  $('sb-mic').textContent = '⏹ Listening… tap to save'; $('sb-mic').classList.add('pulse'); $('sb-lcd').textContent = 'Listening…';
+  crec.onstop = async () => {
+    st.getTracks().forEach(t => t.stop()); $('sb-mic').textContent = '🎤 Cash entry — tap & speak'; $('sb-mic').classList.remove('pulse');
+    if (Date.now() - t0 < 700) return toast('Too short — say the amount, e.g. “150 rupaye cash”.');
+    const f = new FormData(); f.append('file', new Blob(ch, {type: 'audio/webm'}), 'cash.webm'); $('sb-lcd').textContent = 'Saving…';
+    try { sbSpeak(await api('/soundbox/' + MID + '/cash', {body: f})); } catch (e) { $('sb-lcd').textContent = 'Try again'; err(e); }
+  };
+  crec.start();
 }
 function ptTab(t) { PT = t; H['pt-body'] = H['pt-nav'] = null; renderApp(S); }
 const inr = n => '₹' + Number(n || 0).toLocaleString('en-IN');
@@ -343,6 +381,8 @@ function helpList(s) {
     : `<div class="text-center text-slate-400 text-sm py-8">No help requests yet.</div><button onclick="openApp('wa')" class="w-full py-2 rounded-xl bg-[#00baf2] text-white font-semibold">💬 Chat with Saathi</button>`;
 }
 function renderApp(s) {
+  $('dock-sb').classList.toggle('hidden', s.profile.persona === 'customer'); if (APP === 'sb' && s.profile.persona === 'customer') openApp('wa');
+  if (s.profile.persona !== 'customer') renderSoundbox(s.profile);
   const p = s.profile, cust = p.persona === 'customer', first = (cust ? p.name : p.owner).split(' ')[0];
   $('dock-pt-name').textContent = cust ? 'Paytm' : 'Paytm for Business'; $('pt-kind').textContent = cust ? '' : 'for Business'; $('pt-hello').textContent = 'Hi ' + first;
   const tabs = cust ? [['home', 'Home'], ['pass', 'Passbook'], ['loan', 'Loans'], ['help', 'Help']] : [['home', 'Home'], ['ledger', 'Ledger'], ['settle', 'Settlements'], ['help', 'Help']];
@@ -352,7 +392,7 @@ function renderApp(s) {
   if (!cust) {
     const today = p.txns.filter(t => t.status === 'SUCCESS').reduce((a, t) => a + t.amount, 0), hold = p.settlements.filter(x => x.status !== 'SETTLED');
     if (PT === 'home') h = `<div class="bg-white rounded-2xl p-4 shadow-sm"><div class="text-[12px] text-slate-500">Today's collection</div><div class="text-3xl font-bold text-slate-900">${inr(today)}</div>
-        <div class="text-[11px] text-slate-500">${p.txns.length} payment${p.txns.length === 1 ? "" : "s"} · ${esc(p.name)}</div></div>
+        ${(p.cash || []).length ? `<div class="text-[12px] text-slate-600 mt-1">💵 Cash today (not Paytm): <b>${inr(p.cash.reduce((a, c) => a + c.amount, 0))}</b></div>` : ''}<div class="text-[11px] text-slate-500">${p.txns.length} payment${p.txns.length === 1 ? "" : "s"} · ${esc(p.name)}</div></div>
       <div class="grid grid-cols-2 gap-3"><div class="bg-white rounded-2xl p-3 shadow-sm"><div class="text-[11px] text-slate-500">Soundbox ${p.soundbox}</div><div class="font-bold ${p.soundbox_online ? 'text-emerald-600' : 'text-red-600'}">${p.soundbox_online ? '● Online' : '● Offline'}</div></div>
         <div class="bg-white rounded-2xl p-3 shadow-sm"><div class="text-[11px] text-slate-500">Settlement</div><div class="font-bold ${hold.length ? 'text-orange-600' : 'text-emerald-600'}">${hold.length ? inr(hold.reduce((a, x) => a + x.amount, 0)) + ' on hold' : '✓ All settled'}</div></div></div>
       ${hold.length ? `<div class="bg-orange-50 border border-orange-200 rounded-2xl p-3 text-[12px] text-orange-800">⚠ ${hold.map(x => `${x.id} ${inr(x.amount)}`).join(', ')} is held. <button onclick="openApp('wa');say('Mera settlement hold pe hai, kab aayega?')" class="underline font-semibold">Ask Saathi</button></div>` : ''}
@@ -364,6 +404,7 @@ function renderApp(s) {
           : t.status === 'REFUNDED' ? row('↩️', 'Refunded to customer', esc(t.time) + ' · UPI ' + t.id.slice(-4), inr(t.amount), 'text-sky-600')
           : row('⚠️', 'Payment failed · not credited', esc(t.time) + ' · ' + esc(t.payer.replace(/^(.{3}).*@/, '$1…@')), inr(t.amount), 'text-red-600 line-through')),
         ...p.settlements.map(x => row('🏦', 'Settlement to bank ' + p.bank, `${esc(x.date)} · ${x.status === 'SETTLED' ? 'UTR ' + (x.utr || '') : x.status}`, (x.status === 'SETTLED' ? '' : '⏸ ') + inr(x.amount), x.status === 'SETTLED' ? 'text-slate-700' : 'text-orange-600')),
+        ...(p.cash || []).map(c => row('💵', 'Cash received <span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-200 text-slate-600 font-bold">CASH · not Paytm</span>', esc(c.time) + ' · voice entry “' + esc(c.heard).slice(0, 28) + '”', '+' + inr(c.amount), 'text-slate-600')),
         ...(p.orders || []).map(o => row(o.direction === 'DEBIT' ? '🧾' : '💰', esc(o.item), esc(o.mode), (o.direction === 'DEBIT' ? '−' : '+') + inr(o.amount), o.direction === 'DEBIT' ? 'text-red-600' : 'text-emerald-600'))];
       h = `<div class="text-[12px] text-slate-500 px-1">Every rupee in and out of your account</div>` + items.join('');
     }

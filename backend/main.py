@@ -5,6 +5,7 @@ Env: SARVAM_API_KEY (optional), SAATHI_DB_URL=postgresql://... (optional; SQLite
 import os, re, json, time, uuid, sqlite3, hashlib, base64, math, struct, threading, statistics, copy
 from datetime import datetime
 import httpx, asyncio
+from concurrent.futures import ThreadPoolExecutor
 try: import edge_tts
 except ImportError: edge_tts = None
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException, Header, Request
@@ -297,7 +298,7 @@ def tts(text):
     lang, spk = detect_lang(text)
     if SARVAM_KEY:
         try:
-            r = httpx.post(f"{SARVAM}/text-to-speech", headers=_h(), timeout=20, json={"inputs": [text[:500]], "target_language_code": lang, "speaker": spk, "model": "bulbul:v2"})
+            r = httpx.post(f"{SARVAM}/text-to-speech", headers=_h(), timeout=20, json={"inputs": [text[:500]], "target_language_code": lang, "speaker": "priya", "model": "bulbul:v3"})
             return {"audio": r.json()["audios"][0], "mime": "audio/wav", "source": "bulbul", "lang": lang}
         except Exception: pass
     if edge_tts:
@@ -308,7 +309,7 @@ def tts(text):
                 async for c in edge_tts.Communicate(re.sub(r"[^\w\s.,?!₹-]", "", text)[:600], edge_voice).stream():
                     if c["type"] == "audio": b += c["data"]
                 return b
-            audio = asyncio.run(_gen())
+            audio = ThreadPoolExecutor(1).submit(asyncio.run, _gen()).result(timeout=25)  # works inside async endpoints too
             if audio: return {"audio": base64.b64encode(audio).decode(), "mime": "audio/mpeg", "source": "neural", "lang": lang}
         except Exception: pass
     return {"source": "browser", "lang": lang}
@@ -883,6 +884,45 @@ def close_manual(sid: str):
     with LOCK: db.execute("UPDATE tix SET status='CLOSED', auto=0, resolved=COALESCE(resolved, ?) WHERE id=?", (s["resolved"], sid)); db.commit()
     return view(s)
 
+# ---------------- Soundbox app (merchants only): payment announcements + voice cash entry ----------------
+HI_NUM = {"सौ": 100, "sau": 100, "हज़ार": 1000, "हजार": 1000, "hazaar": 1000, "hazar": 1000, "पचास": 50, "pachas": 50, "बीस": 20, "bees": 20, "दस": 10, "das": 10,
+          "डेढ़ सौ": 150, "dedh sau": 150, "ढाई सौ": 250, "dhai sau": 250, "पांच सौ": 500, "पाँच सौ": 500, "paanch sau": 500, "do sau": 200, "दो सौ": 200, "teen sau": 300, "तीन सौ": 300}
+
+def spoken_amount(t):
+    n = ml_engine.extract_amount(t) or ml_engine.extract_amount(re.sub(r"[^\d]", " ", t))
+    if n: return n
+    for w, v in sorted(HI_NUM.items(), key=lambda x: -len(x[0])):
+        if w in t.lower(): return v
+    return None
+
+def sb_say(m, text, kind):
+    m.setdefault("sb_log", []).append({"text": text, "kind": kind, "ts": time.time()}); m["sb_log"] = m["sb_log"][-8:]
+    return {"text": text, "voice": tts(text)}
+
+def sb_audit(mid, event, detail):
+    audit({"id": "SB-" + mid, "trace": [], "opened": time.time(), "tokens": 0, "phase": ""}, "ACT", event, detail)
+
+@app.post("/soundbox/{mid}/cash")
+async def soundbox_cash(mid: str, file: UploadFile | None = File(None), text: str = Form("")):
+    """Merchant taps the Soundbox mic and says the cash amount; logged separately from Paytm money."""
+    if mid not in MERCHANTS: raise HTTPException(404, "Soundbox is for merchants only")
+    heard = text.strip() or (stt(await file.read(), file.filename) if file else "") or ""
+    amt = spoken_amount(heard)
+    if not amt: raise HTTPException(422, f"Amount samajh nahi aaya{' (heard: ' + heard + ')' if heard else ''} — boliye jaise '150 rupaye cash'")
+    m = MERCHANTS[mid]; e = {"id": "CASH-" + uuid.uuid4().hex[:5].upper(), "amount": amt, "time": datetime.now().strftime("Today %H:%M"), "heard": heard}
+    m.setdefault("cash", []).append(e); sb_audit(mid, f"💵 Cash entry ₹{amt:,} by voice (not Paytm money)", e)
+    return {"entry": e, **sb_say(m, f"{amt} rupaye cash entry save ho gayi", "cash")}
+
+@app.post("/soundbox/{mid}/simulate-payment")
+def soundbox_payment(mid: str):
+    if mid not in MERCHANTS: raise HTTPException(404, "merchant")
+    m = MERCHANTS[mid]; d = DEVICES[m["soundbox"]]
+    if not d["online"]: raise HTTPException(409, "Soundbox offline hai — payment aaya par announce nahi hua. Saathi se kahiye 'Soundbox bol nahi raha'.")
+    import random as _r; amt = _r.choice([40, 85, 120, 250, 380, 640]); rrn = "4307" + str(_r.randint(10**7, 10**8 - 1))
+    m["txns"][rrn] = {"amount": amt, "time": datetime.now().strftime("Today %H:%M"), "payer": _r.choice(["neha.v@okhdfc", "rahul.k@okaxis", "cust219@ybl"]), "status": "SUCCESS", "debited": True, "refunded": False}
+    sb_audit(mid, f"🔊 Announced UPI ₹{amt} on {m['soundbox']}", {"rrn": rrn, "amount": amt})
+    return sb_say(m, f"Paytm par {amt} rupaye prapt hue", "upi")
+
 class MLReq(BaseModel):
     text: str; persona: str = "Customer"; amount: int | None = None; disputes: int = 0; bank: str | None = None
 
@@ -1058,7 +1098,7 @@ def profile(mid="M1001"):
             "bank": mask(m["bank"]["acc"]), "offer": e, "city": m.get("city", ""),
             "txns": [{"id": k, **{f: v.get(f) for f in ("time", "payer", "amount", "status", "refunded")}} for k, v in m["txns"].items()],
             "settlements": [{"id": k, "amount": v["amount"], "date": v["date"], "status": v["status"], "utr": v.get("utr")} for k, v in m["settlements"].items()],
-            "orders": m.get("orders", [])}
+            "orders": m.get("orders", []), "cash": m.get("cash", []), "sb_log": m.get("sb_log", [])[::-1]}
 
 @app.get("/state")
 def state(mid: str = "M1001", agent: str = ""):
