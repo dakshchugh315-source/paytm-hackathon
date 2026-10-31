@@ -4,7 +4,8 @@ httpx
 python-multipart
 edge-tts
 psycopg[binary]
-
 scikit-learn
 joblib
 numpy
+sarvamai
+python-dotenv
