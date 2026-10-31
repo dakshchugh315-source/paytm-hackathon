@@ -1,0 +1,23 @@
+# Render Blueprint: New + > Blueprint > pick this repo. Serves the API and the frontend at one URL.
+services:
+  - type: web
+    name: saathi
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /config.js
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: LLM_PROVIDERS
+        value: groq,gemini
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: SARVAM_API_KEY
+        sync: false
+      - key: APPROVER_PIN
+        sync: false

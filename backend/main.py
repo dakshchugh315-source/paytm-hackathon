@@ -1469,5 +1469,8 @@ def reset():
         db.commit(); LAST_HASH = "GENESIS"
     return {"ok": True}
 
+@app.get("/config.js")
+def config_js(): return FileResponse(os.path.join(os.path.dirname(__file__), "..", "frontend", "config.js"), media_type="application/javascript")
+
 @app.get("/")
 def index(): return FileResponse(os.path.join(os.path.dirname(__file__), "..", "frontend", "index.html"))

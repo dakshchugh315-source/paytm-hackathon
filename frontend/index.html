@@ -268,8 +268,10 @@ header{background:#fff;box-shadow:0 1px 0 #e5e9f0}header b.text-white{color:#002
     <input id="dinp" class="flex-1 rounded-full px-4 py-2 bg-white outline-none text-slate-800 text-sm" placeholder="e.g. last 5 tickets, TK-… , pending approvals">
     <button class="w-9 h-9 rounded-full bg-[#00a884] text-white">➤</button></form>
 </div>
+<script src="config.js"></script>
 <script>
-const API = location.protocol.startsWith('http') && location.port === '8000' ? location.origin : 'http://localhost:8000';
+// Backend URL: config.js on Vercel; same origin when the backend serves this page (local :8000, Render)
+const API = window.SAATHI_API || (!location.protocol.startsWith('http') || location.port === '5500' ? 'http://localhost:8000' : location.origin);
 const PH = ['UNDERSTAND','DIAGNOSE','ACT','VERIFY','HUMAN','FOLLOWUP'], LBL = ['01 Understand','02 Diagnose','03 Act','04 Verify','05 Human','06 Follow-up'];
 const BADGE = {NEEDS_INFO:['Waiting for merchant reply','bg-sky-600'],DIAGNOSING:['Diagnosing...','bg-amber-500 pulse'],WAITING_APPROVAL:['Waiting for Human Approval','bg-orange-500 pulse'],EXECUTING:['Executing...','bg-sky-500 pulse'],VERIFIED:['Verified ✓ · follow-up in 24h','bg-emerald-600'],CLOSED:['Closed ✓','bg-emerald-700'],ESCALATED:['With human agent','bg-red-500'],OPEN:['Online','bg-white/10']};
 const COL = {UNDERSTAND:'text-violet-400',DIAGNOSE:'text-amber-400',ACT:'text-sky-400',VERIFY:'text-emerald-400',HUMAN:'text-orange-400',FOLLOWUP:'text-pink-400'};
