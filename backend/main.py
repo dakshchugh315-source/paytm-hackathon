@@ -56,7 +56,7 @@ class DB:
             try:
                 import psycopg; self.c = psycopg.connect(url, autocommit=True); self.pg = True
             except Exception as e: print("Postgres unavailable, falling back to SQLite:", e)
-        if not self.pg: self.c = sqlite3.connect(os.path.join(os.path.dirname(__file__), "saathi.db"), check_same_thread=False)
+        if not self.pg: self.c = sqlite3.connect(os.getenv("SAATHI_SQLITE") or os.path.join(os.path.dirname(__file__), "saathi.db"), check_same_thread=False)
         self.kind = "PostgreSQL" if self.pg else "SQLite"
     def execute(self, sql, p=()): return self.c.execute(sql.replace("?", "%s") if self.pg else sql, p)
     def commit(self): self.pg or self.c.commit()
@@ -392,7 +392,7 @@ def pivot(s):
     o = TOOLS["check_loan_and_soundbox_eligibility"](s["merchant"])
     audit(s, "DIAGNOSE", f"💰 Sales pivot: {o['product']}", o)
     if o["product"] == "Business Loan":
-        reply(s, f"Waise, aapke store ki badhti bikri dekhte hue aap ₹{o['pre_approved']//100000} lakh ke Paytm Business Loan ke liye pre-approved hain, sirf ₹{o['emi_daily']}/din. 1-click mein apply kar doon?",
+        reply(s, f"Waise, aapke store ki badhti bikri dekhte hue aap {inr(o['pre_approved'])} ke Paytm Business Loan ke liye pre-approved hain, sirf ₹{o['emi_daily']}/din. 1-click mein apply kar doon?",
               cta={"label": "✅ Haan, apply karo", "product": o["product"], "amount": o["pre_approved"]}, kind="pitch")
     else:
         reply(s, f"Waise, Soundbox Pro {o['offer']} pe mil raha hai — ₹1 aapke agle settlement se adjust hoga. Upgrade kar doon?", cta={"label": "✅ Haan, ₹1 settlement se kaat ke upgrade karo", "product": o["product"], "amount": 0}, kind="pitch")
@@ -465,7 +465,7 @@ def run_agent(s, text, proactive=False, live=True):
             reply(s, "Maine aapke recent transactions check kiye — koi failed ya atka hua payment nahi mila ✅ Customer se UPI ref number mangwa lijiye, main turant check karunga."); return resolve(s, "No failed txn")
         if not picked and len(cands) > 1:
             s["status"] = "NEEDS_INFO"; audit(s, "DIAGNOSE", f"{len(cands)} failed txns found → asking merchant which one (no refund yet)", cands)
-            reply(s, "Mujhe ye failed payments mile. Kaunsa wala?", options=[f"{t['time'].replace('Today ', '')} wala ₹{t['amount']:,} ({t['payer'][:3]}…) — ref ...{k[-4:]}" for k, t in cands.items()]); return
+            reply(s, "Mujhe ye failed payments mile. Kaunsa wala?", options=[f"{t['time'].replace('Today ', '')} wala ₹{t['amount']:,} ({t['payer'][:3]}…) — ref ...{k[-4:]} refund karo" for k, t in cands.items()]); return
         pending = False
         for tid, t in (picked or cands).items():
             if True:
@@ -822,7 +822,8 @@ def ml_route(s, text, proactive=False):
             if r is None: return speak(s, f"Ledger aur KYC theek hai. ₹{v['amount']:,} instant release ke liye senior approval le raha hoon.", d) or True
             after = MERCHANTS[uid]["settlements"][sid_]; s["diff"] = {"before": {"status": before_status}, "after": {"status": after["status"], "utr": after.get("utr")}}
             audit(s, "VERIFY", f"{sid_}: {before_status} → {after['status']} · UTR {after.get('utr')}", s["diff"])
-            speak(s, f"Ledger match aur KYC green hai, isliye ₹{v['amount']:,} ka settlement abhi instant release kar diya ✅ UTR {after['utr']}. 30 min mein bank mein dikhega.", d, voice=True)
+            hello = f"Namaste {u['owner'].split()[0]} ji, aapke bolne se pehle hi bata doon — " if proactive else ""
+            speak(s, f"{hello}Ledger match aur KYC green hai, isliye ₹{v['amount']:,} ka settlement abhi instant release kar diya ✅ UTR {after['utr']}. 30 min mein bank mein dikhega.", d, voice=True)
         resolve(s, "Instant settlement verified"); return True
     return False
 
