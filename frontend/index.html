@@ -29,19 +29,39 @@ header{background:#fff;box-shadow:0 1px 0 #e5e9f0}header b.text-white{color:#002
   <button onclick="reset()" class="text-xs px-3 py-1.5 rounded border border-slate-300 text-slate-600 hover:bg-slate-50">↺ Reset</button></div>
 </header>
 <main class="flex-1 grid grid-cols-[440px_1fr] gap-4 p-4 min-h-0">
-<!-- CUSTOMER SIDE: exactly what the merchant sees on their phone -->
+<!-- CUSTOMER SIDE: the user's own phone — WhatsApp chat with Saathi + their Paytm app -->
 <section class="flex flex-col min-h-0">
-  <div class="text-[11px] font-bold text-slate-500 mb-2 flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-[#00a884]"></span>MERCHANT'S PHONE · what the customer sees</div>
-  <div class="flex flex-col rounded-[28px] overflow-hidden bg-[#efeae2] flex-1 min-h-0 border-[6px] border-slate-800 shadow-xl">
-    <div class="bg-[#075e54] text-white px-3 py-2 flex items-center gap-2"><div class="w-8 h-8 rounded-full bg-[#00baf2] grid place-items-center font-bold text-[#002e6e]">S</div>
-      <div><div class="font-semibold" id="phonetitle">Saathi · Paytm</div><select id="msel" onchange="switchMerchant(this.value)" class="text-[11px] bg-white/15 text-white rounded px-1 outline-none" title="Which merchant is chatting"></select></div>
-      <span id="badge" class="ml-auto text-[11px] px-2 py-1 rounded-full bg-white/20">Online</span></div>
-    <div id="chat" class="flex-1 overflow-y-auto p-3 space-y-2"></div>
-    <div id="chips" class="px-2 pt-2 flex gap-1 flex-wrap text-[11px]"></div>
-    <form onsubmit="send(event)" class="p-2 flex gap-2">
-      <input id="inp" class="flex-1 rounded-full px-4 py-2 bg-white outline-none text-slate-800" placeholder="Type in English, Hindi, Hinglish, or any regional language...">
-      <button type="button" id="mic" onclick="toggleMic()" class="w-9 h-9 rounded-full bg-[#00a884] text-white">🎤</button>
-      <button class="w-9 h-9 rounded-full bg-[#00a884] text-white">➤</button></form>
+  <div class="flex items-center gap-2 mb-2">
+    <span class="w-2 h-2 rounded-full bg-[#00a884]"></span><span class="text-[11px] font-bold text-slate-500">USER'S PHONE</span>
+    <label class="ml-auto text-[11px] text-slate-500 flex items-center gap-1">Demo user
+      <select id="msel" onchange="switchMerchant(this.value)" class="text-xs border border-slate-300 rounded-lg px-2 py-1 bg-white text-slate-800 outline-none"></select></label>
+  </div>
+  <div class="flex flex-col rounded-[30px] overflow-hidden flex-1 min-h-0 border-[7px] border-slate-800 shadow-xl bg-white">
+    <!-- App 1: WhatsApp -->
+    <div id="app-wa" class="flex flex-col flex-1 min-h-0 bg-[#efeae2]">
+      <div class="bg-[#075e54] text-white px-3 py-2.5 flex items-center gap-2"><div class="w-9 h-9 rounded-full bg-[#00baf2] grid place-items-center font-bold text-[#002e6e]">S</div>
+        <div><div class="font-semibold leading-tight" id="phonetitle">Saathi · Paytm</div><div class="text-[10px] text-white/70">Official business account ✓</div></div>
+        <span id="badge" class="ml-auto text-[11px] px-2 py-1 rounded-full bg-white/20">Online</span></div>
+      <div id="chat" class="flex-1 overflow-y-auto p-3 space-y-2"></div>
+      <div id="chips" class="px-2 pt-2 flex gap-1 flex-wrap text-[11px]"></div>
+      <form onsubmit="send(event)" class="p-2 flex gap-2">
+        <input id="inp" class="flex-1 rounded-full px-4 py-2 bg-white outline-none text-slate-800" placeholder="Message in any language…">
+        <button type="button" id="mic" onclick="toggleMic()" class="w-9 h-9 rounded-full bg-[#00a884] text-white">🎤</button>
+        <button class="w-9 h-9 rounded-full bg-[#00a884] text-white">➤</button></form>
+    </div>
+    <!-- App 2: Paytm (Business for merchants, consumer app for customers) -->
+    <div id="app-pt" class="hidden flex-col flex-1 min-h-0 bg-[#f3f6fb]">
+      <div class="bg-[#002e6e] text-white px-4 pt-3 pb-2">
+        <div class="flex items-center"><b class="text-lg">pay<span class="text-[#00baf2]">tm</span></b><span class="ml-2 text-[11px] text-white/70" id="pt-kind">for Business</span><span class="ml-auto text-sm" id="pt-hello"></span></div>
+        <div class="flex gap-1 mt-2 text-[12px]" id="pt-nav"></div>
+      </div>
+      <div id="pt-body" class="flex-1 overflow-y-auto p-3 space-y-3"></div>
+    </div>
+    <!-- Home dock: switch apps like a real phone -->
+    <div class="flex border-t border-slate-200 bg-white text-[11px] font-semibold">
+      <button onclick="openApp('wa')" id="dock-wa" class="dock flex-1 py-2 flex flex-col items-center"><span class="text-lg">💬</span>WhatsApp</button>
+      <button onclick="openApp('pt')" id="dock-pt" class="dock flex-1 py-2 flex flex-col items-center"><span class="text-lg">₹</span><span id="dock-pt-name">Paytm for Business</span></button>
+    </div>
   </div>
 </section>
 <!-- PAYTM SIDE: internal views, never shown to the merchant -->
@@ -140,7 +160,7 @@ const $ = id => document.getElementById(id), esc = s => String(s ?? '').replace(
 let AQ = Promise.resolve(); speechSynthesis.getVoices();
 let MID = 'M1001', AID = null, SELT = null;
 const sq = () => '/state?mid=' + MID + (AID ? '&agent=' + AID : '');
-async function switchMerchant(id) { MID = id; chips(); $('phonetitle').textContent = id.startsWith('C') ? 'Paytm Help' : 'Saathi · Paytm for Business'; $('msel').value = id; sid = null; traceLen = 0; H.chatKey = null; H.profile = null; const st = await get('/state?mid=' + id); shown = st.messages.length; seen = shown; renderState(st); }
+async function switchMerchant(id) { MID = id; H['pt-body'] = H['pt-nav'] = null; PT = 'home'; chips(); $('phonetitle').textContent = id.startsWith('C') ? 'Paytm Help' : 'Saathi · Paytm for Business'; $('msel').value = id; sid = null; traceLen = 0; H.chatKey = null; H.profile = null; const st = await get('/state?mid=' + id); shown = st.messages.length; seen = shown; renderState(st); }
 let sid = null, busy = false, shown = -1, traceLen = 0, S = {}, seen = 0;
 const H = {}; function put(id, h) { if (H[id] === h) return false; H[id] = h; $(id).innerHTML = h; return true; }
 [['🎙 1 · Settlement','demo1()','bg-[#002e6e] text-white'],['🔊 2 · Soundbox','demo2()','bg-emerald-600 text-white'],
@@ -199,7 +219,7 @@ function renderState(s) {
   $('llm').textContent = (s.live_llm ? `🟢 LIVE agent: ${s.live_llm}` : s.sarvam ? '● Sarvam-M · Saarika · Bulbul LIVE' : '● Scripted fallback (no LLM key)') + ` · 🗄 ${s.db}`;
   put('chain', s.chain_ok ? '<span class="text-emerald-600">🔒 SHA-256 chain verified</span>' : '<span class="text-red-600 font-bold">⚠ CHAIN BROKEN</span>');
   if ($('msel').options.length !== s.merchants.length) $('msel').innerHTML = s.merchants.map(m => `<option class="text-black" value="${m.id}">${m.persona === 'customer' ? '👤 Customer · ' + esc(m.name) : '🏪 Merchant · ' + esc(m.owner) + ' (' + esc(m.name) + ')'}</option>`).join(''); $('msel').value = MID;
-  renderExec(s);
+  renderExec(s); renderApp(s);
   if (s.agent_profile) H.lastAP = s.agent_profile;
   const P = AID && AID !== MID ? (s.agent_profile || H.lastAP || s.profile) : s.profile;
   put('viewing', `${P.persona === 'customer' ? 'CUSTOMER' : 'MERCHANT'} 360 · ${esc(P.name)} ${AID ? `<button onclick="follow()" class="ml-2 text-[10px] font-normal underline text-slate-500">↺ follow phone</button>` : '<span class="font-normal text-slate-400">(following phone)</span>'}`);
@@ -300,6 +320,70 @@ function pick(tid, uid) { SELT = tid; AID = uid; H.tickets = H.manual = H.profil
 function follow() { AID = null; SELT = null; H.manual = H.profile = null; get(sq()).then(renderState); }
 async function overrideT(tid) { const v = $('ovr').value; traceLen = 0; await run(api(`/api/tickets/${tid}/override?issue=${v}`)); }
 async function closeT(tid) { await run(api(`/api/tickets/${tid}/close`)); }
+// ---- Phone: WhatsApp <-> Paytm app (per selected merchant/customer) ----
+let APP = 'wa', PT = 'home';
+function openApp(a) {
+  APP = a; $('app-wa').classList.toggle('hidden', a !== 'wa'); $('app-pt').classList.toggle('hidden', a !== 'pt'); $('app-pt').classList.toggle('flex', a === 'pt');
+  document.querySelectorAll('.dock').forEach(b => b.classList.toggle('text-[#002e6e]', b.id === 'dock-' + a));
+  document.querySelectorAll('.dock').forEach(b => b.classList.toggle('text-slate-400', b.id !== 'dock-' + a));
+  if (S.profile) renderApp(S);
+}
+function ptTab(t) { PT = t; H['pt-body'] = H['pt-nav'] = null; renderApp(S); }
+const inr = n => '₹' + Number(n || 0).toLocaleString('en-IN');
+const FRIENDLY = {VERIFIED: ['Resolved', 'text-emerald-600'], CLOSED: ['Closed', 'text-slate-500'], WAITING_APPROVAL: ['With Paytm team', 'text-orange-600'],
+  NEEDS_INFO: ['Waiting for your reply', 'text-sky-600'], ESCALATED: ['Senior assigned', 'text-red-600'], EXECUTING: ['In progress', 'text-sky-600'],
+  DIAGNOSING: ['In progress', 'text-sky-600'], OPEN: ['Open', 'text-sky-600'], REASSIGNED: ['Updated by agent', 'text-slate-400'], ANSWERED: ['Answered', 'text-slate-500']};
+const row = (icon, title, sub, amt, cls = '') => `<div class="flex items-center gap-3 bg-white rounded-xl px-3 py-2.5 shadow-sm"><div class="w-9 h-9 rounded-full bg-slate-100 grid place-items-center">${icon}</div>
+  <div class="flex-1 min-w-0"><div class="text-[13px] font-semibold text-slate-800 truncate">${title}</div><div class="text-[11px] text-slate-500 truncate">${sub}</div></div><div class="text-[13px] font-bold ${cls}">${amt}</div></div>`;
+function helpList(s) {
+  const mine = (s.tickets || []).filter(t => t.user === MID && t.status !== 'REASSIGNED');
+  return mine.length ? mine.map(t => { const [lab, c] = FRIENDLY[t.status] || [t.status, '']; return row('💬', esc(ISSUES[t.issue] || t.issue || 'Query').replace(/^\S+ /, ''),
+      `${new Date(t.opened * 1000).toLocaleString('en-IN', {hour: '2-digit', minute: '2-digit', day: 'numeric', month: 'short'})} · “${esc(t.query).slice(0, 40)}”`, `<span class="${c} text-[11px]">${lab}</span>`); }).join('')
+    + `<button onclick="openApp('wa')" class="w-full py-2 rounded-xl bg-[#00baf2] text-white font-semibold">💬 Chat with Saathi</button>`
+    : `<div class="text-center text-slate-400 text-sm py-8">No help requests yet.</div><button onclick="openApp('wa')" class="w-full py-2 rounded-xl bg-[#00baf2] text-white font-semibold">💬 Chat with Saathi</button>`;
+}
+function renderApp(s) {
+  const p = s.profile, cust = p.persona === 'customer', first = (cust ? p.name : p.owner).split(' ')[0];
+  $('dock-pt-name').textContent = cust ? 'Paytm' : 'Paytm for Business'; $('pt-kind').textContent = cust ? '' : 'for Business'; $('pt-hello').textContent = 'Hi ' + first;
+  const tabs = cust ? [['home', 'Home'], ['pass', 'Passbook'], ['loan', 'Loans'], ['help', 'Help']] : [['home', 'Home'], ['ledger', 'Ledger'], ['settle', 'Settlements'], ['help', 'Help']];
+  if (!tabs.some(t => t[0] === PT)) PT = 'home';
+  put('pt-nav', tabs.map(([k, l]) => `<button onclick="ptTab('${k}')" class="px-3 py-1 rounded-full ${PT === k ? 'bg-white text-[#002e6e] font-bold' : 'text-white/80'}">${l}</button>`).join(''));
+  let h = '';
+  if (!cust) {
+    const today = p.txns.filter(t => t.status === 'SUCCESS').reduce((a, t) => a + t.amount, 0), hold = p.settlements.filter(x => x.status !== 'SETTLED');
+    if (PT === 'home') h = `<div class="bg-white rounded-2xl p-4 shadow-sm"><div class="text-[12px] text-slate-500">Today's collection</div><div class="text-3xl font-bold text-slate-900">${inr(today)}</div>
+        <div class="text-[11px] text-slate-500">${p.txns.length} payment${p.txns.length === 1 ? "" : "s"} · ${esc(p.name)}</div></div>
+      <div class="grid grid-cols-2 gap-3"><div class="bg-white rounded-2xl p-3 shadow-sm"><div class="text-[11px] text-slate-500">Soundbox ${p.soundbox}</div><div class="font-bold ${p.soundbox_online ? 'text-emerald-600' : 'text-red-600'}">${p.soundbox_online ? '● Online' : '● Offline'}</div></div>
+        <div class="bg-white rounded-2xl p-3 shadow-sm"><div class="text-[11px] text-slate-500">Settlement</div><div class="font-bold ${hold.length ? 'text-orange-600' : 'text-emerald-600'}">${hold.length ? inr(hold.reduce((a, x) => a + x.amount, 0)) + ' on hold' : '✓ All settled'}</div></div></div>
+      ${hold.length ? `<div class="bg-orange-50 border border-orange-200 rounded-2xl p-3 text-[12px] text-orange-800">⚠ ${hold.map(x => `${x.id} ${inr(x.amount)}`).join(', ')} is held. <button onclick="openApp('wa');say('Mera settlement hold pe hai, kab aayega?')" class="underline font-semibold">Ask Saathi</button></div>` : ''}
+      <div class="bg-gradient-to-r from-[#002e6e] to-[#00baf2] text-white rounded-2xl p-4"><div class="text-[11px] opacity-80">For you</div><div class="font-bold">${p.offer.product === 'Business Loan' ? 'Pre-approved loan ' + inr(p.offer.pre_approved) : 'Soundbox Pro · ₹1 activation'}</div>
+        <div class="text-[11px] opacity-80">${p.offer.product === 'Business Loan' ? 'EMI from daily settlement, no paperwork' : '4G, louder speaker, 30 days free'}</div></div>
+      <div class="bg-white rounded-2xl p-3 shadow-sm text-[12px] text-slate-600">Bank account <b>${p.bank}</b> ${p.bank_verified ? '<span class="text-emerald-600">✓ verified</span>' : '<span class="text-orange-600">⚠ verification pending</span>'}</div>`;
+    if (PT === 'ledger') {
+      const items = [...p.txns.map(t => t.status === 'SUCCESS' ? row('⬇️', 'Received from ' + esc(t.payer.replace(/^(.{3}).*@/, '$1…@')), esc(t.time) + ' · UPI ' + t.id.slice(-4), '+' + inr(t.amount), 'text-emerald-600')
+          : t.status === 'REFUNDED' ? row('↩️', 'Refunded to customer', esc(t.time) + ' · UPI ' + t.id.slice(-4), inr(t.amount), 'text-sky-600')
+          : row('⚠️', 'Payment failed · not credited', esc(t.time) + ' · ' + esc(t.payer.replace(/^(.{3}).*@/, '$1…@')), inr(t.amount), 'text-red-600 line-through')),
+        ...p.settlements.map(x => row('🏦', 'Settlement to bank ' + p.bank, `${esc(x.date)} · ${x.status === 'SETTLED' ? 'UTR ' + (x.utr || '') : x.status}`, (x.status === 'SETTLED' ? '' : '⏸ ') + inr(x.amount), x.status === 'SETTLED' ? 'text-slate-700' : 'text-orange-600')),
+        ...(p.orders || []).map(o => row(o.direction === 'DEBIT' ? '🧾' : '💰', esc(o.item), esc(o.mode), (o.direction === 'DEBIT' ? '−' : '+') + inr(o.amount), o.direction === 'DEBIT' ? 'text-red-600' : 'text-emerald-600'))];
+      h = `<div class="text-[12px] text-slate-500 px-1">Every rupee in and out of your account</div>` + items.join('');
+    }
+    if (PT === 'settle') h = p.settlements.map(x => `<div class="bg-white rounded-2xl p-4 shadow-sm"><div class="flex"><b>${inr(x.amount)}</b><span class="ml-auto text-[12px] font-semibold ${x.status === 'SETTLED' ? 'text-emerald-600' : 'text-orange-600'}">${x.status === 'SETTLED' ? '✓ Credited' : x.status.replace('_', ' ')}</span></div>
+        <div class="text-[12px] text-slate-500">${x.id} · ${esc(x.date)} · to ${p.bank}</div>${x.utr ? `<div class="text-[11px] font-mono text-slate-400 mt-1">UTR ${x.utr}</div>` : ''}</div>`).join('');
+  } else {
+    if (PT === 'home') h = `${p.frozen ? `<div class="bg-red-50 border border-red-200 rounded-2xl p-4 text-[13px] text-red-800"><b>🔒 Account protected</b><br>We froze UPI & cards after your fraud report. A fraud expert is on your case.</div>` : ''}
+      <div class="bg-white rounded-2xl p-4 shadow-sm"><div class="text-[12px] text-slate-500">Hi ${esc(first)} 👋</div><div class="font-bold text-slate-900">${p.frozen ? 'Your money is safe' : 'All good with your account'}</div><div class="text-[11px] text-slate-500">${esc(p.city)} · ${p.phone}</div></div>
+      ${p.emi ? `<div class="bg-white rounded-2xl p-4 shadow-sm"><div class="text-[11px] text-slate-500">${esc(p.emi.loan)}</div><div class="flex items-center"><b class="text-lg">${inr(p.emi.emi)}</b><span class="ml-2 text-[12px] text-slate-500">due ${esc(p.emi.due)}</span>
+        <span class="ml-auto text-[12px] font-bold ${p.emi.paid ? 'text-emerald-600' : 'text-orange-600'}">${p.emi.paid ? '✓ Paid' : 'Unpaid'}</span></div>${p.emi.waived ? '<div class="text-[11px] text-emerald-600">Late fee ' + inr(p.emi.late_fee) + ' waived</div>' : ''}</div>` : ''}
+      ${p.txns.slice(-1).map(t => row('↗️', 'Last payment to ' + esc(t.to), esc(t.time), inr(t.amount), '')).join('')}`;
+    if (PT === 'pass') h = `<div class="text-[12px] text-slate-500 px-1">Passbook</div>` + (p.txns.length ? p.txns.map(t => row(t.status === 'REFUNDED' ? '↩️' : '↗️', (t.status === 'REFUNDED' ? 'Refund from ' : 'Paid to ') + esc(t.to),
+        `${esc(t.time)} · ${t.status}${t.rrn ? ' · RRN ' + t.rrn : ''}`, (t.status === 'REFUNDED' ? '+' : '−') + inr(t.amount), t.status === 'REFUNDED' ? 'text-emerald-600' : t.status === 'PENDING' ? 'text-orange-600' : 'text-slate-800')).join('') : '<div class="text-center text-slate-400 py-6">No payments yet.</div>');
+    if (PT === 'loan') h = p.emi ? `<div class="bg-white rounded-2xl p-4 shadow-sm space-y-1 text-[13px]"><b>${esc(p.emi.loan)}</b><div>EMI ${inr(p.emi.emi)} · due ${esc(p.emi.due)}</div><div>Late fee ${inr(p.emi.late_fee)} ${p.emi.waived ? '<span class="text-emerald-600">(waived)</span>' : ''}</div>
+        <div class="font-bold ${p.emi.paid ? 'text-emerald-600' : 'text-orange-600'}">${p.emi.paid ? '✓ Paid — credit score safe' : 'Not paid yet'}</div>${p.emi.paid ? '' : `<button onclick="openApp('wa');say('Meri EMI bounce ho jayegi kya, late fee lagegi?')" class="mt-2 w-full py-2 rounded-xl bg-[#00baf2] text-white font-semibold">Need help? Ask Saathi</button>`}</div>`
+      : '<div class="text-center text-slate-400 py-6">No active loans.</div>';
+  }
+  if (PT === 'help') h = `<div class="text-[12px] text-slate-500 px-1">Your help requests</div>` + helpList(s);
+  put('pt-body', h);
+}
 function renderCustomer(p) {
   put('profile', `<div class="text-slate-900 font-semibold">👤 ${esc(p.name)} <span class="text-[10px] px-2 py-0.5 rounded-full bg-slate-100">CUSTOMER</span></div>
     <div class="text-[11px] text-slate-500">${p.id} · ${esc(p.city)} · prefers ${p.lang} · phone ${p.phone} · past disputes ${p.disputes}</div>
@@ -335,7 +419,7 @@ function renderML(d) {
     <span class="text-slate-500">sentiment ${d.sentiment} · ₹${(d.amount || 0).toLocaleString('en-IN')} · disputes ${d.disputes} · bank ${d.bank_status}</span></div>`);
 }
 function tab(t) { if (t === 'report' && !H.reportLoaded) get('/api/audit-report').then(r => { $('report').innerHTML = marked.parse(r.markdown); H.reportLoaded = 1; }); document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b.dataset.tab === t)); document.querySelectorAll('.panel').forEach(p => p.classList.toggle('hidden', p.dataset.panel !== t)); }
-document.querySelectorAll('.tab').forEach(b => b.onclick = () => tab(b.dataset.tab)); tab('inbox'); chips();
+document.querySelectorAll('.tab').forEach(b => b.onclick = () => tab(b.dataset.tab)); tab('inbox'); chips(); openApp('wa');
 let lastQ = 0;
 setPhase(''); get(sq()).then(renderState).catch(err);
 setInterval(() => !busy && get(sq()).then(renderState).catch(() => {}), 4000);
