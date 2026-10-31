@@ -672,6 +672,7 @@ def send_whatsapp_campaign(mid, offer, count, avg_ticket):
     return {"campaign": cid, "sent": count, "channel": "WhatsApp (opted-in only)", "personalised_langs": True}
 
 SESSIONS_ML = {}
+FRAUD_WORDS = r"fraud|stole|steal|chori|unauthori|without (my )?permission|didn.?t make|did not make|don.?t recogni|nahi kiya|maine nahi|hack|scam|bina bataye|nikaal|नहीं किया|चोरी|பண்ணல|చేయలేదు|করিনি|केले नाही"
 ML_TOOLS = {"verify_utr", "instant_refund", "check_emi", "waive_late_fee", "send_emi_payment_link", "freeze_account", "fraud_case_handoff",
             "check_ledger_and_kyc", "release_instant_settlement", "segment_repeat_buyers", "send_whatsapp_campaign"}
 TOOLS.update({n: globals()[n] for n in ML_TOOLS})
@@ -718,6 +719,12 @@ def ml_route(s, text, proactive=False):
     d = ml_engine.decide(text, "Customer" if cust else "Merchant", disputes=u.get("disputes", 0), bank=BANK_STATUS)
     s["ml"] = d; SESSIONS_ML[uid] = d; ML_LOG.append({**d, "ticket": s["id"], "user": uid, "ts": time.time()})
     audit(s, "UNDERSTAND", f"🤖 ML {d['latency_ms']}ms: {d['issue']} → {d['action']} · risk {d['risk']} ({d['risk_score']}) · {d['lang']} · sentiment {d['sentiment']}", d)
+    if cust and not d["amount"] and u.get("txns"): d["amount"] = list(u["txns"].values())[-1]["amount"]  # amount from account, never ₹0
+    fraud_said = bool(re.search(FRAUD_WORDS, text, re.I))
+    if cust and (d["issue_conf"] < 0.6 or (d["action"] == "FREEZE_AND_HUMAN_HANDOFF" and d["issue"] == "Fraud_Unauthorized_Txn" and not fraud_said)):
+        open_ticket(s, "clarify"); s["status"] = "NEEDS_INFO"
+        audit(s, "DIAGNOSE", f"🛑 Guardrail: not acting on a guess (ML {d['issue']} {d['issue_conf']}, fraud words={fraud_said}) — asking user", d)
+        return speak(s, "Main sahi madad karna chahta hoon. Kya hua hai?", d, options=["Payment fail hua, paise kat gaye — refund chahiye", "Ye payment maine nahi kiya (fraud)", "EMI ke baare mein"]) or True
     if d["issue_conf"] < 0.45: return False
     if (d["persona_expected"] == "Customer") != cust: return False  # e.g. merchant says "customer ka paisa kata" -> merchant flows
     act = d["action"]; s["ctx"] = lambda tool, a: f"{u['name']} ({'customer' if cust else 'merchant'}, {d['lang']}, sentiment {d['sentiment']}): {d['issue']} ₹{d['amount'] or a.get('amount', 0):,}; ML risk {d['risk']} {d['risk_score']}. Asks: {tool}."
@@ -732,7 +739,12 @@ def ml_route(s, text, proactive=False):
     if cust and act == "AUTO_REFUND_INSTANT":
         open_ticket(s, "upi_pending"); c = CUSTOMERS[uid]
         txn = next((k for k, t in c["txns"].items() if t["status"] == "PENDING" and (not d["amount"] or t["amount"] == d["amount"])), None)
-        if not txn: return speak(s, "Aapke account mein koi atka hua payment nahi mila. UPI ref number bhej dijiye, main turant check karta hoon.", d) or True
+        if not txn:
+            last = next(reversed(c["txns"].items()), None); s["status"] = "NEEDS_INFO"
+            if not last: return speak(s, "Aapke account mein koi atka hua payment nahi mila. UPI ref number bhej dijiye, main turant check karta hoon.", d) or True
+            k, t = last; audit(s, "DIAGNOSE", f"No failed/pending txn; latest {k} is {t['status']} → confirming with user", t)
+            return speak(s, f"Maine check kiya — aapka last payment ₹{t['amount']:,} {t['to']} ko ({t['time']}) {t['status']} hua hai, fail nahi. Kya ye payment aapne kiya tha?", d,
+                         options=["Haan, maine kiya tha", "Nahi, ye payment maine nahi kiya (fraud)"]) or True
         t = c["txns"][txn]; v = call(s, "verify_utr", txn_id=txn)
         audit(s, "DIAGNOSE", f"Debited={v['debited']} · merchant credited={v['merchant_credited']} · bank {BANK_STATUS} → refund path", v)
         r = call(s, "instant_refund", txn_id=txn, amount=t["amount"])

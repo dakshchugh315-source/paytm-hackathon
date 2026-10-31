@@ -11,13 +11,15 @@ PERSONA = {"UPI_Pending": "Customer", "EMI_Bounce_Fear": "Customer", "Fraud_Unau
 # {amt} is filled with an amount; several phrasings per (issue, language) so the text model generalises.
 T = {
  "UPI_Pending": {
-  "Hindi": ["मैंने ₹{amt} भेजे, पैसा कट गया पर दुकानदार को नहीं मिला", "₹{amt} का यूपीआई पेमेंट अटका हुआ है, पैसे कटे"],
-  "Hinglish": ["Maine ₹{amt} bheje, paisa kat gaya par dukaan wale ko nahi mila", "UPI payment pending dikha raha hai, ₹{amt} debit ho gaye", "paise kat gaye lekin merchant ko credit nahi hua"],
+  "Hindi": ["मैंने ₹{amt} भेजे, पैसा कट गया पर दुकानदार को नहीं मिला", "₹{amt} का यूपीआई पेमेंट अटका हुआ है, पैसे कटे", "पेमेंट फेल हो गया, रिफंड कर दो"],
+  "Hinglish": ["Maine ₹{amt} bheje, paisa kat gaya par dukaan wale ko nahi mila", "UPI payment pending dikha raha hai, ₹{amt} debit ho gaye", "paise kat gaye lekin merchant ko credit nahi hua",
+               "last payment fail ho gaya, refund kar do", "payment fail hua, paise wapas chahiye", "mera transaction fail hua refund karo please", "₹{amt} ka payment fail, refund kab milega"],
   "Tamil": ["₹{amt} அனுப்பினேன், பணம் போயிடுச்சு ஆனா கடைக்காரருக்கு வரல", "UPI பேமெண்ட் pending ஆகுது, ₹{amt} கழிஞ்சுருச்சு"],
   "Telugu": ["₹{amt} పంపాను, డబ్బు కట్ అయింది కానీ షాప్ వాళ్ళకి రాలేదు", "UPI పేమెంట్ pending లో ఉంది, ₹{amt} కట్ అయింది"],
   "Bengali": ["₹{amt} পাঠিয়েছি, টাকা কেটে গেছে কিন্তু দোকানদার পায়নি", "UPI পেমেন্ট আটকে আছে, ₹{amt} কেটেছে"],
   "Marathi": ["मी ₹{amt} पाठवले, पैसे कापले पण दुकानदाराला मिळाले नाहीत", "UPI पेमेंट अडकले आहे, ₹{amt} कापले गेले"],
-  "English": ["I sent ₹{amt}, money got debited but the shop didn't receive it", "UPI payment stuck in pending, ₹{amt} deducted"]},
+  "English": ["I sent ₹{amt}, money got debited but the shop didn't receive it", "UPI payment stuck in pending, ₹{amt} deducted",
+              "my last transaction failed, please refund it", "payment failed but money deducted, need a refund", "transaction failed, refund my money", "hi my payment of ₹{amt} failed can you refund"]},
  "EMI_Bounce_Fear": {
   "Hindi": ["मेरी ईएमआई बाउंस हो जाएगी, लेट फीस लगेगी क्या?", "₹{amt} की किस्त भरने में डर लग रहा है"],
   "Hinglish": ["Meri EMI bounce ho jayegi kya, late fee lagegi?", "₹{amt} ki kisht bharni hai, darr lag raha hai penalty ka", "loan EMI miss ho gayi, ab kya hoga"],
@@ -49,7 +51,8 @@ T = {
   "Telugu": ["నేను ఈ ₹{amt} పేమెంట్ చేయలేదు, ఎవరో డబ్బు తీసుకున్నారు"],
   "Bengali": ["আমি এই ₹{amt} পেমেন্ট করিনি, কেউ টাকা তুলে নিয়েছে"],
   "Marathi": ["मी हे ₹{amt} पेमेंट केले नाही, कोणीतरी पैसे काढले"],
-  "English": ["I didn't make this ₹{amt} payment, someone stole my money", "Unauthorized transaction of ₹{amt} on my account"]},
+  "English": ["I didn't make this ₹{amt} payment, someone stole my money", "Unauthorized transaction of ₹{amt} on my account",
+              "someone used my account without permission", "I don't recognise this ₹{amt} transaction, it's fraud"]},
  "Soundbox_Sync_Issue": {
   "Hindi": ["साउंडबॉक्स बोल नहीं रहा", "पेमेंट की आवाज़ नहीं आ रही"],
   "Hinglish": ["Soundbox bol nahi raha", "payment ki awaaz nahi aa rahi soundbox se", "soundbox offline dikha raha hai"],
