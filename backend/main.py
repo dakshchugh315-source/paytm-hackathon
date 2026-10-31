@@ -22,10 +22,13 @@ PROVIDERS = {"gemini": ("https://generativelanguage.googleapis.com/v1beta/openai
              "groq": ("https://api.groq.com/openai/v1", "llama-3.3-70b-versatile"),
              "openai": ("https://api.openai.com/v1", "gpt-4o-mini"),
              "sarvam": ("https://api.sarvam.ai/v1", "sarvam-m")}
-LLM_PROVIDER = os.getenv("LLM_PROVIDER", "gemini").lower()
-LLM_KEY = os.getenv("LLM_API_KEY", "")
-LLM_BASE, _default_model = PROVIDERS.get(LLM_PROVIDER, PROVIDERS["gemini"])
-LLM_MODEL = os.getenv("LLM_MODEL", _default_model)
+# Fallback chain: first provider with a key is primary; on rate-limit/quota/outage the next one takes over.
+LLM_CHAIN = []
+for _p in os.getenv("LLM_PROVIDERS", "grok,gemini,groq,openai").lower().split(","):
+    _p = _p.strip(); _k = os.getenv(f"{_p.upper()}_API_KEY", "")
+    if _p in PROVIDERS and _k: LLM_CHAIN.append({"name": _p, "base": PROVIDERS[_p][0], "model": os.getenv(f"{_p.upper()}_MODEL", PROVIDERS[_p][1]), "key": _k, "cool_until": 0})
+LLM_KEY = bool(LLM_CHAIN)
+LLM_PROVIDER, LLM_MODEL = (LLM_CHAIN[0]["name"], LLM_CHAIN[0]["model"]) if LLM_CHAIN else ("none", "none")
 SARVAM = "https://api.sarvam.ai"
 AUTO_LIMIT = 500
 DAILY_AUTO_CAP = 2000     # ₹ auto-refund ceiling per merchant per day
@@ -468,14 +471,27 @@ Retrieved SOP: {json.dumps(sop, ensure_ascii=False) if sop else 'none'}
 {('Verified fix from a past ticket (reuse it, skip re-diagnosis): ' + ' -> '.join(cached['plan'])) if cached else ''}"""
 
 def llm_chat(msgs):
-    r = httpx.post(f"{LLM_BASE}/chat/completions", headers={"Authorization": f"Bearer {LLM_KEY}"}, timeout=40,
-                   json={"model": LLM_MODEL, "messages": msgs, "tools": LLM_TOOLS, "temperature": 0.2})
-    if r.status_code != 200: raise RuntimeError(f"{LLM_PROVIDER} {r.status_code}: {r.text[:200]}")
-    j = r.json(); return j["choices"][0]["message"], j.get("usage", {}).get("total_tokens", 0)
+    """Try providers in order; a 429/quota/5xx/timeout puts that provider on cooldown and falls through to the next."""
+    global LLM_PROVIDER, LLM_MODEL
+    errs = []
+    for p in LLM_CHAIN:
+        if p["cool_until"] > time.time(): continue
+        try:
+            r = httpx.post(f"{p['base']}/chat/completions", headers={"Authorization": f"Bearer {p['key']}"}, timeout=40,
+                           json={"model": p["model"], "messages": msgs, "tools": LLM_TOOLS, "temperature": 0.2})
+            if r.status_code == 200:
+                LLM_PROVIDER, LLM_MODEL = p["name"], p["model"]; j = r.json()
+                return j["choices"][0]["message"], j.get("usage", {}).get("total_tokens", 0), errs
+            errs.append(f"{p['name']} {r.status_code}: {r.text[:120]}")
+            if r.status_code in (401, 402, 403, 429) or r.status_code >= 500: p["cool_until"] = time.time() + 120
+        except Exception as e:
+            errs.append(f"{p['name']}: {e}"); p["cool_until"] = time.time() + 30
+    raise RuntimeError(" | ".join(errs) or "all LLM providers cooling down")
 
 def llm_loop(s, acted=False):
     for _ in range(8):
-        msg, tk = llm_chat(s["llm_msgs"]); s["tokens"] += tk
+        msg, tk, errs = llm_chat(s["llm_msgs"]); s["tokens"] += tk
+        if errs: audit(s, "HUMAN", f"↪ Provider fallback → now on {LLM_PROVIDER}/{LLM_MODEL}", errs)
         calls = msg.get("tool_calls") or []
         s["llm_msgs"].append({"role": "assistant", "content": msg.get("content") or "", **({"tool_calls": calls} if calls else {})})
         if not calls:
@@ -675,7 +691,7 @@ def state():
                         "repeat_s": round(statistics.mean(cache_ttr), 2) if cache_ttr else None, "cache_hits": sum(r[2] for r in rows),
                         "leads": lc[0], "pipeline": lc[1], "csat": round(100 * cs[0]) if cs[1] else None, "csat_n": cs[1]},
             "audit": [dict(zip(["ts", "ticket", "phase", "event", "detail", "hash"], r)) for r in db.execute("SELECT ts, ticket, phase, event, detail, hash FROM audit_chain ORDER BY id DESC LIMIT 60").fetchall()],
-            "sarvam": bool(SARVAM_KEY), "live_llm": f"{LLM_PROVIDER}/{LLM_MODEL}" if LLM_KEY else None, "db": db.kind, "chain_ok": verify_chain(), "followup_after_s": FOLLOWUP_AFTER_S}
+            "sarvam": bool(SARVAM_KEY), "live_llm": f"{LLM_PROVIDER}/{LLM_MODEL} (chain: {' → '.join(p['name'] for p in LLM_CHAIN)})" if LLM_KEY else None, "db": db.kind, "chain_ok": verify_chain(), "followup_after_s": FOLLOWUP_AFTER_S}
 
 @app.post("/reset")
 def reset():
