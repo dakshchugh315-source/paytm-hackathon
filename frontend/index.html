@@ -55,11 +55,13 @@ header{background:#fff;box-shadow:0 1px 0 #e5e9f0}header .text-white{color:#002e
   </div>
   <div data-panel="agent" class="panel grid grid-cols-2 gap-3 flex-1 min-h-0">
     <div class="flex flex-col gap-3 min-h-0">
-      <div class="card p-3"><div class="text-[11px] font-bold text-[#00baf2] mb-2">MERCHANT 360</div><div id="profile"></div></div>
+      <div class="card p-3"><div class="text-[11px] font-bold text-[#00baf2] mb-2"><span id="viewing">MERCHANT 360</span></div><div id="profile"></div><div id="manual"></div></div>
       <div class="card p-3 flex-1 min-h-0 overflow-y-auto"><div class="text-[11px] font-bold text-orange-400 mb-2">ONE-CLICK APPROVALS <input id="pin" type="password" maxlength="4" placeholder="PIN" class="ml-2 w-14 px-1 border rounded text-slate-700 font-normal" title="Approver PIN (demo: 2468)"></div><div id="queue" class="space-y-2"></div></div>
     </div>
-    <div class="card p-3 min-h-0 flex flex-col"><div class="text-[11px] font-bold text-[#00baf2] mb-1">IMMUTABLE AUDIT TRAIL · PII MASKED <span id="chain" class="ml-1"></span></div>
-      <div id="audit" class="flex-1 overflow-y-auto font-mono text-[10px] space-y-1"></div></div>
+    <div class="flex flex-col gap-3 min-h-0">
+    <div class="card p-3 max-h-[45%] overflow-y-auto"><div class="text-[11px] font-bold text-[#00baf2] mb-1">ALL TICKETS · click to inspect & take control</div><div id="tickets" class="text-[11px]"></div></div>
+    <div class="card p-3 min-h-0 flex flex-col flex-1"><div class="text-[11px] font-bold text-[#00baf2] mb-1">IMMUTABLE AUDIT TRAIL · PII MASKED <span id="chain" class="ml-1"></span></div>
+      <div id="audit" class="flex-1 overflow-y-auto font-mono text-[10px] space-y-1"></div></div></div>
   </div>
   <div data-panel="brain" class="panel hidden flex-col gap-3 flex-1 min-h-0">
     <div class="card p-3" id="mlbox"><div class="text-[11px] font-bold text-[#00baf2]">ML DECISION ENGINE (runs before LLM)</div><div class="text-xs text-slate-400">—</div></div>
@@ -97,7 +99,8 @@ const BADGE = {NEEDS_INFO:['Waiting for merchant reply','bg-sky-600'],DIAGNOSING
 const COL = {UNDERSTAND:'text-violet-400',DIAGNOSE:'text-amber-400',ACT:'text-sky-400',VERIFY:'text-emerald-400',HUMAN:'text-orange-400',FOLLOWUP:'text-pink-400'};
 const $ = id => document.getElementById(id), esc = s => String(s ?? '').replace(/[&<>"']/g, c => `&#${c.charCodeAt(0)};`), sleep = ms => new Promise(r => setTimeout(r, ms));
 let AQ = Promise.resolve(); speechSynthesis.getVoices();
-let MID = 'M1001';
+let MID = 'M1001', AID = null, SELT = null;
+const sq = () => '/state?mid=' + MID + (AID ? '&agent=' + AID : '');
 async function switchMerchant(id) { MID = id; chips(); $('phonetitle').textContent = id.startsWith('C') ? 'Paytm Help' : 'Saathi · Paytm for Business'; $('msel').value = id; sid = null; traceLen = 0; H.chatKey = null; H.profile = null; const st = await get('/state?mid=' + id); shown = st.messages.length; seen = shown; renderState(st); }
 let sid = null, busy = false, shown = -1, traceLen = 0, S = {}, seen = 0;
 const H = {}; function put(id, h) { if (H[id] === h) return false; H[id] = h; $(id).innerHTML = h; return true; }
@@ -158,8 +161,12 @@ function renderState(s) {
   put('chain', s.chain_ok ? '<span class="text-emerald-600">🔒 SHA-256 chain verified</span>' : '<span class="text-red-600 font-bold">⚠ CHAIN BROKEN</span>');
   if ($('msel').options.length !== s.merchants.length) $('msel').innerHTML = s.merchants.map(m => `<option class="text-black" value="${m.id}">${m.persona === 'customer' ? '👤 Customer · ' + esc(m.name) : '🏪 Merchant · ' + esc(m.owner) + ' (' + esc(m.name) + ')'}</option>`).join(''); $('msel').value = MID;
   renderExec(s);
-  if (s.profile.persona === 'customer') { renderCustomer(s.profile); } else {
-  const p = s.profile, pill = (ok, a, b) => `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${ok ? 'bg-emerald-500/20 text-emerald-300' : 'bg-red-500/20 text-red-300 pulse'}">${ok ? a : b}</span>`;
+  if (s.agent_profile) H.lastAP = s.agent_profile;
+  const P = AID && AID !== MID ? (s.agent_profile || H.lastAP || s.profile) : s.profile;
+  put('viewing', `${P.persona === 'customer' ? 'CUSTOMER' : 'MERCHANT'} 360 · ${esc(P.name)} ${AID ? `<button onclick="follow()" class="ml-2 text-[10px] font-normal underline text-slate-500">↺ follow phone</button>` : '<span class="font-normal text-slate-400">(following phone)</span>'}`);
+  renderTickets(s);
+  if (P.persona === 'customer') { renderCustomer(P); } else {
+  const p = P, pill = (ok, a, b) => `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${ok ? 'bg-emerald-500/20 text-emerald-300' : 'bg-red-500/20 text-red-300 pulse'}">${ok ? a : b}</span>`;
   put('profile', `<div class="flex items-center"><div><div class="text-white font-semibold">${p.name}</div><div class="text-[11px] text-slate-400">${p.owner} · ${p.id} · GMV ₹${p.gmv.toLocaleString('en-IN')}/mo · Bank ${p.bank}</div></div></div>
     <div class="flex gap-1.5 mt-2 flex-wrap">${pill(p.soundbox_online, '🔊 ' + p.soundbox + ' online', '🔇 ' + p.soundbox + ' offline')}${pill(p.settlement === 'OK', '💸 Settlements OK', '💸 Settlement on HOLD')}
     <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-yellow-500/20 text-yellow-300">🏦 ${p.offer.product}${p.offer.pre_approved ? ' ₹' + p.offer.pre_approved.toLocaleString('en-IN') + ' pre-approved' : ''}</span></div>
@@ -215,11 +222,33 @@ async function autoApprove() {
   await sleep(2200); const a = S.approvals?.find(x => x.ticket === sid); if (!a) return;  // only this demo's own approval
   $('pin').value = '2468'; $('ap-' + a.id)?.classList.add('ring-4', 'ring-emerald-300', 'pulse'); await sleep(1600); await decide(a.id, 'approve');
 }
-async function reset() { await api('/reset'); sid = null; shown = 0; seen = 0; H.chatKey = null; traceLen = 0; $('trace').innerHTML = ''; $('sop').textContent = $('diff').textContent = '—'; $('cachebadge').classList.add('hidden'); setPhase(''); setBadge('OPEN'); renderState(await get('/state?mid=' + MID)); }
+async function reset() { await api('/reset'); sid = null; shown = 0; seen = 0; H.chatKey = null; traceLen = 0; $('trace').innerHTML = ''; $('sop').textContent = $('diff').textContent = '—'; $('cachebadge').classList.add('hidden'); setPhase(''); setBadge('OPEN'); renderState(await get(sq())); }
 async function demo1() { await reset(); await switchMerchant('M1001'); await say('🎤 Kal ka settlement nahi aaya'); await autoApprove(); }
-async function demo2() { await api('/demo/soundbox_offline?merchant_id=' + MID); renderState(await get('/state?mid=' + MID)); await sleep(600); await say('Soundbox bol nahi raha, payment ki awaaz nahi aa rahi'); }
+async function demo2() { await api('/demo/soundbox_offline?merchant_id=' + MID); renderState(await get(sq())); await sleep(600); await say('Soundbox bol nahi raha, payment ki awaaz nahi aa rahi'); }
 async function demo3() { traceLen = 0; await run(api('/webhook/settlement_failed?merchant_id=' + MID)); await autoApprove(); }
 async function ff() { traceLen = 0; await run(api('/followup')); }
+const ISSUES = {UPI_Pending: '💸 Failed payment / refund', EMI_Bounce_Fear: '📅 EMI / late fee', Fraud_Unauthorized_Txn: '🚨 Fraud / unauthorized',
+  Settlement_Hold: '🏦 Settlement hold', Soundbox_Sync_Issue: '🔊 Soundbox', Festival_Promo_Broadcast: '📣 Campaign / offer'};
+function renderTickets(s) {
+  const st = {VERIFIED: 'text-emerald-600', CLOSED: 'text-emerald-700', WAITING_APPROVAL: 'text-orange-600', NEEDS_INFO: 'text-sky-600', ESCALATED: 'text-red-600', REASSIGNED: 'text-slate-400'};
+  const rk = {HIGH: 'bg-red-100 text-red-700', MED: 'bg-amber-100 text-amber-700', LOW: 'bg-emerald-100 text-emerald-700'};
+  put('tickets', s.tickets.length ? `<table class="w-full"><tr class="text-slate-400 text-left"><th>Ticket</th><th>User</th><th>Said</th><th>Issue (ML)</th><th>Risk</th><th>Status</th></tr>
+    ${s.tickets.map(t => `<tr onclick="pick('${t.id}','${t.user}')" class="cursor-pointer border-t border-slate-100 hover:bg-sky-50 ${t.id === SELT ? 'bg-sky-100' : ''}">
+      <td class="font-mono">${t.id}</td><td>${t.persona === 'customer' ? '👤' : '🏪'} ${esc(t.name)}</td><td class="max-w-[140px] truncate" title="${esc(t.query)}">${esc(t.query)}</td>
+      <td>${ISSUES[t.issue] || esc(t.issue || '—')}${t.forced ? ' <b class="text-violet-600">(agent)</b>' : ''}</td>
+      <td>${t.risk ? `<span class="px-1 rounded ${rk[t.risk]}">${t.risk}</span>` : ''}</td><td class="font-semibold ${st[t.status] || ''}">${t.status}</td></tr>`).join('')}</table>`
+    : '<div class="text-slate-400">No tickets yet.</div>');
+  const t = s.tickets.find(x => x.id === SELT);
+  put('manual', t ? `<div class="mt-3 border-t pt-2"><div class="text-[10px] font-bold text-violet-600">MANUAL CONTROL · ${t.id}</div>
+    <div class="text-[11px] text-slate-500 mb-1">ML says: <b>${ISSUES[t.issue] || t.issue || '—'}</b> → ${t.action || '—'}</div>
+    <div class="flex gap-1 flex-wrap"><select id="ovr" class="border rounded text-[11px] px-1">${Object.entries(ISSUES).map(([k, v]) => `<option value="${k}" ${k === t.issue ? 'selected' : ''}>${v}</option>`).join('')}</select>
+    <button onclick="overrideT('${t.id}')" class="bg-violet-600 text-white text-[11px] px-2 py-0.5 rounded">Reclassify & run</button>
+    <button onclick="closeT('${t.id}')" class="border border-slate-300 text-[11px] px-2 py-0.5 rounded">Close manually</button></div></div>` : '<div class="mt-3 text-[10px] text-slate-400">Pick a ticket on the right to correct its issue or close it.</div>');
+}
+function pick(tid, uid) { SELT = tid; AID = uid; H.tickets = H.manual = H.profile = null; get(sq()).then(renderState); }
+function follow() { AID = null; SELT = null; H.manual = H.profile = null; get(sq()).then(renderState); }
+async function overrideT(tid) { const v = $('ovr').value; traceLen = 0; await run(api(`/api/tickets/${tid}/override?issue=${v}`)); }
+async function closeT(tid) { await run(api(`/api/tickets/${tid}/close`)); }
 function renderCustomer(p) {
   put('profile', `<div class="text-slate-900 font-semibold">👤 ${esc(p.name)} <span class="text-[10px] px-2 py-0.5 rounded-full bg-slate-100">CUSTOMER</span></div>
     <div class="text-[11px] text-slate-500">${p.id} · ${esc(p.city)} · prefers ${p.lang} · phone ${p.phone} · past disputes ${p.disputes}</div>
@@ -243,7 +272,7 @@ function renderExec(s) {
   put('camps', e.campaigns.length ? e.campaigns.map(c => `<div class="bg-slate-50 rounded p-2"><b>${c.id}</b> · ${esc(c.offer)} · ${c.merchant}
     <div class="grid grid-cols-4 gap-1 mt-1 text-center">${[['Sent', c.sent], ['Clicked', c.clicked], ['Paid', c.paid], ['GMV', '₹' + c.gmv.toLocaleString('en-IN')]].map(([l, v]) => `<div><div class="text-base font-bold text-[#002e6e]">${v}</div><div class="text-[10px] text-slate-500">${l}</div></div>`).join('')}</div></div>`).join('')
     : '<div class="text-slate-400">No campaigns yet — ask as Gupta Medicals: "Mere regular customers ko Diwali offer bhej do".</div>');
-  put('bankbtns', ['UP', 'DEGRADED', 'DOWN'].map(b => `<button onclick="api('/api/bank-status/${b}').then(() => get('/state?mid=' + MID)).then(renderState)" class="px-2 py-0.5 rounded border ${s.bank_status === b ? 'bg-[#002e6e] text-white' : 'border-slate-300'}">${b}</button>`).join(''));
+  put('bankbtns', ['UP', 'DEGRADED', 'DOWN'].map(b => `<button onclick="api('/api/bank-status/${b}').then(() => get(sq())).then(renderState)" class="px-2 py-0.5 rounded border ${s.bank_status === b ? 'bg-[#002e6e] text-white' : 'border-slate-300'}">${b}</button>`).join(''));
   const r = s.ml_report; put('mlcard', `<b class="text-[#00baf2]">ML MODEL</b> · ${esc(r.models)} · trained on ${r.rows} synthetic Paytm cases · held-out accuracy: issue ${(r.issue_acc * 100).toFixed(1)}%, action ${(r.action_acc * 100).toFixed(1)}% <span class="text-slate-400">(synthetic data — real accuracy will be lower)</span>`);
 }
 function renderML(d) {
@@ -257,6 +286,6 @@ function renderML(d) {
 function tab(t) { if (t === 'report' && !H.reportLoaded) get('/api/audit-report').then(r => { $('report').innerHTML = marked.parse(r.markdown); H.reportLoaded = 1; }); document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b.dataset.tab === t)); document.querySelectorAll('.panel').forEach(p => p.classList.toggle('hidden', p.dataset.panel !== t)); }
 document.querySelectorAll('.tab').forEach(b => b.onclick = () => tab(b.dataset.tab)); tab('brain'); chips();
 let lastQ = 0;
-setPhase(''); get('/state?mid=' + MID).then(renderState).catch(err);
-setInterval(() => !busy && get('/state?mid=' + MID).then(renderState).catch(() => {}), 4000);
+setPhase(''); get(sq()).then(renderState).catch(err);
+setInterval(() => !busy && get(sq()).then(renderState).catch(() => {}), 4000);
 </script></body></html>

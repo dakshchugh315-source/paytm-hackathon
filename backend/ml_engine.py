@@ -7,7 +7,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.pipeline import make_pipeline
 from sklearn.model_selection import train_test_split
-from generate_dataset import generate, ISSUES, PERSONA
+from generate_dataset import generate, policy, ISSUES, PERSONA
 
 MODEL_PATH = os.path.join(os.path.dirname(__file__), "data", "models.joblib")
 BANKS = ["UP", "DEGRADED", "DOWN"]

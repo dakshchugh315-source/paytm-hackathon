@@ -717,10 +717,15 @@ def handoff(s, why, text):
 def ml_route(s, text, proactive=False):
     uid = s["merchant"]; cust = uid in CUSTOMERS; u = user(uid)
     d = ml_engine.decide(text, "Customer" if cust else "Merchant", disputes=u.get("disputes", 0), bank=BANK_STATUS)
+    if s.get("forced_issue"):
+        f = s["forced_issue"]; d.update(issue=f, issue_conf=1.0, persona_expected=ml_engine.PERSONA[f], forced_by=APPROVER,
+                                         action=ml_engine.policy(f, d["amount"] or 0, d["sentiment"], u.get("disputes", 0), BANK_STATUS))
+        if d["action"] == "FREEZE_AND_HUMAN_HANDOFF": d["risk"] = "HIGH"
+        text = text + " (agent: confirmed " + f + ")" if f == "Fraud_Unauthorized_Txn" else text
     s["ml"] = d; SESSIONS_ML[uid] = d; ML_LOG.append({**d, "ticket": s["id"], "user": uid, "ts": time.time()})
     audit(s, "UNDERSTAND", f"🤖 ML {d['latency_ms']}ms: {d['issue']} → {d['action']} · risk {d['risk']} ({d['risk_score']}) · {d['lang']} · sentiment {d['sentiment']}", d)
     if cust and not d["amount"] and u.get("txns"): d["amount"] = list(u["txns"].values())[-1]["amount"]  # amount from account, never ₹0
-    fraud_said = bool(re.search(FRAUD_WORDS, text, re.I))
+    fraud_said = bool(re.search(FRAUD_WORDS, text, re.I)) or s.get("forced_issue") == "Fraud_Unauthorized_Txn"
     if cust and (d["issue_conf"] < 0.6 or (d["action"] == "FREEZE_AND_HUMAN_HANDOFF" and d["issue"] == "Fraud_Unauthorized_Txn" and not fraud_said)):
         open_ticket(s, "clarify"); s["status"] = "NEEDS_INFO"
         audit(s, "DIAGNOSE", f"🛑 Guardrail: not acting on a guess (ML {d['issue']} {d['issue_conf']}, fraud words={fraud_said}) — asking user", d)
@@ -817,6 +822,35 @@ def exec_metrics(rows):
             "queue": queue, "campaigns": camp, "campaign_gmv": sum(c["gmv"] for c in camp), "campaign_paid": sum(c["paid"] for c in camp),
             "lang_mix": {l: sum(x["lang"] == l for x in ML_LOG) for l in {x["lang"] for x in ML_LOG}}}
 
+CANON = {"UPI_Pending": "payment fail hua, paise kat gaye, refund chahiye", "EMI_Bounce_Fear": "EMI bounce aur late fee ki chinta hai",
+         "Fraud_Unauthorized_Txn": "ye payment maine nahi kiya, fraud hai", "Settlement_Hold": "settlement nahi aaya",
+         "Soundbox_Sync_Issue": "soundbox bol nahi raha", "Festival_Promo_Broadcast": "regular customers ko Diwali offer bhej do"}
+
+def ticket_row(x):
+    d = x.get("ml") or {}; u = user(x["merchant"])
+    return {"id": x["id"], "user": x["merchant"], "name": u.get("owner", u["name"]), "persona": "customer" if x["merchant"] in CUSTOMERS else "merchant",
+            "query": x.get("query") or "(proactive / agent)", "issue": d.get("issue") or x.get("intent"), "action": d.get("action"), "risk": d.get("risk"),
+            "forced": bool(d.get("forced_by")), "status": x["status"], "opened": x["opened"]}
+
+@app.post("/api/tickets/{sid}/override")
+def override(sid: str, issue: str):
+    """Agent reclassifies a ticket; Saathi re-runs the loop for the corrected issue."""
+    if sid not in SESSIONS or issue not in CANON: raise HTTPException(400, "unknown ticket or issue")
+    old = SESSIONS[sid]
+    if old["status"] not in ("VERIFIED", "CLOSED"): old["status"] = "REASSIGNED"
+    s = session(None, old["merchant"]); s["forced_issue"] = issue; s["query"] = f"[agent] {issue} (was {sid})"
+    audit(s, "HUMAN", f"👤 {APPROVER} reclassified {sid}: {(old.get('ml') or {}).get('issue') or old.get('intent')} → {issue}", {"from_ticket": sid, "issue": issue})
+    run_agent(s, CANON[issue]); return view(s)
+
+@app.post("/api/tickets/{sid}/close")
+def close_manual(sid: str):
+    s = SESSIONS.get(sid)
+    if not s: raise HTTPException(404, "ticket")
+    s["status"] = "CLOSED"; audit(s, "HUMAN", f"👤 {APPROVER} closed {sid} manually", {})
+    s["resolved"] = s["resolved"] or time.time()
+    with LOCK: db.execute("UPDATE tix SET status='CLOSED', auto=0, resolved=COALESCE(resolved, ?) WHERE id=?", (s["resolved"], sid)); db.commit()
+    return view(s)
+
 class MLReq(BaseModel):
     text: str; persona: str = "Customer"; amount: int | None = None; disputes: int = 0; bank: str | None = None
 
@@ -853,6 +887,7 @@ def session(sid, merchant):
     return SESSIONS[sid]
 
 def handle(s, text, voice_in=False):
+    s["query"] = text
     MSGS.append({"from": "merchant", "text": ("🎤 " if voice_in else "") + text, "ts": time.time(), "merchant": s["merchant"]}); run_agent(s, text); return view(s)
 
 @app.post("/chat")
@@ -979,10 +1014,10 @@ def profile(mid="M1001"):
             "settlements": [{"id": k, "amount": v["amount"], "date": v["date"], "status": v["status"], "utr": v.get("utr")} for k, v in m["settlements"].items()]}
 
 @app.get("/state")
-def state(mid: str = "M1001"):
+def state(mid: str = "M1001", agent: str = ""):
     mid = mid if mid in MERCHANTS or mid in CUSTOMERS else "M1001"
     rows = db.execute("SELECT status, auto, cache, cost, opened, resolved FROM tix").fetchall()
-    res = [r for r in rows if r[0] in ("VERIFIED", "CLOSED")]
+    res = [r for r in rows if r[0] in ("VERIFIED", "CLOSED") and r[5]]
     ttr = [r[5] - r[4] for r in res]; cache_ttr = [r[5] - r[4] for r in res if r[2]]
     avg_cost = round(sum(r[3] for r in res) / len(res), 2) if res else 0
     cs = db.execute("SELECT AVG(score), COUNT(*) FROM csat").fetchone()
@@ -990,7 +1025,8 @@ def state(mid: str = "M1001"):
     return {"messages": [x for x in MSGS if x.get("merchant", "M1001") == mid], "profile": profile(mid),
             "merchants": [{"id": k, "name": v["name"], "owner": v["owner"], "persona": "merchant"} for k, v in MERCHANTS.items()]
                          + [{"id": k, "name": v["name"], "owner": v["name"], "persona": "customer"} for k, v in CUSTOMERS.items()], "cache": CACHE,
-            "exec": exec_metrics(rows), "ml_report": ml_engine.load()["report"], "bank_status": BANK_STATUS,
+            "exec": exec_metrics(rows), "tickets": [ticket_row(x) for x in sorted(SESSIONS.values(), key=lambda x: -x["opened"])][:40],
+            "agent_profile": profile(agent) if agent in MERCHANTS or agent in CUSTOMERS else None, "ml_report": ml_engine.load()["report"], "bank_status": BANK_STATUS,
             "approvals": [{k: v for k, v in a.items()} for a in APPROVALS.values() if a["status"] == "PENDING"],
             "metrics": {"tickets": len(rows), "resolved": len(res), "closed": sum(r[0] == "CLOSED" for r in rows),
                         "median_ttr_s": round(statistics.median(ttr), 1) if ttr else 0,
