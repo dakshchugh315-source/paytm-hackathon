@@ -24,6 +24,7 @@ header{background:#fff;box-shadow:0 1px 0 #e5e9f0}header .text-white{color:#002e
   <b class="text-lg text-white">Saathi <span class="text-[#00baf2] font-normal">Command Center</span></b>
   <span id="llm" class="text-xs px-2 py-0.5 rounded bg-slate-100 text-slate-600"></span>
   <span id="cachebadge" class="hidden text-xs px-2 py-1 rounded-full bg-yellow-400 text-black font-bold pop">⚡ Verified Fix Cache Hit</span>
+  <span class="text-xs px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 font-medium">🌐 Multilingual: English + Indic</span>
   <div class="ml-auto flex items-center gap-2"><span class="text-[11px] font-bold text-slate-400">🎬 DEMO</span><div class="flex gap-1.5 text-xs font-semibold" id="demos"></div>
   <button onclick="reset()" class="text-xs px-3 py-1.5 rounded border border-slate-300 text-slate-600 hover:bg-slate-50">↺ Reset</button></div>
 </header>
@@ -38,7 +39,7 @@ header{background:#fff;box-shadow:0 1px 0 #e5e9f0}header .text-white{color:#002e
     <div id="chat" class="flex-1 overflow-y-auto p-3 space-y-2"></div>
     <div id="chips" class="px-2 pt-2 flex gap-1 flex-wrap text-[11px]"></div>
     <form onsubmit="send(event)" class="p-2 flex gap-2">
-      <input id="inp" class="flex-1 rounded-full px-4 py-2 bg-white outline-none text-slate-800" placeholder="Hindi / Hinglish mein likhiye...">
+      <input id="inp" class="flex-1 rounded-full px-4 py-2 bg-white outline-none text-slate-800" placeholder="Type in English, Hindi, Hinglish, or any regional language...">
       <button type="button" id="mic" onclick="mic()" class="w-9 h-9 rounded-full bg-[#00a884] text-white">🎤</button>
       <button class="w-9 h-9 rounded-full bg-[#00a884] text-white">➤</button></form>
   </div>
@@ -108,8 +109,8 @@ const H = {}; function put(id, h) { if (H[id] === h) return false; H[id] = h; $(
  ['📡 3 · Proactive','demo3()','bg-violet-600 text-white'],['⏩ +24h','ff()','bg-pink-500 text-white']]
  .forEach(([l, f, c]) => $('demos').insertAdjacentHTML('beforeend', `<button onclick="${f}" class="${c} rounded-lg px-3 py-1.5 shadow-sm hover:brightness-110 hover:-translate-y-0.5 transition">${l}</button>`));
 const SCEN = {
-  M1001: ['Kal ka settlement nahi aaya', 'Soundbox bol nahi raha', 'Customer ka paisa kat gaya, payment fail', 'Mujhe bank account badalna hai'],
-  M1002: ['Subah se ₹8,500 ka settlement hold pe hai', 'Mere regular customers ko Diwali offer bhej do', 'Mujhe loan chahiye'],
+  M1001: ['Kal ka settlement nahi aaya', 'Yesterday settlement not credited', 'Soundbox bol nahi raha', 'Soundbox is silent / no audio', 'Customer ka paisa kat gaya, payment fail', 'Customer money debited, payment failed', 'Mujhe bank account badalna hai'],
+  M1002: ['Subah se ₹8,500 ka settlement hold pe hai', 'Mere regular customers ko Diwali offer bhej do', 'Mujhe loan chahiye', 'I want a business loan'],
   M1003: ['Soundbox bol nahi raha', 'Mere regular customers ko Diwali offer bhej do'],
   C2001: ['Maine ₹420 bheje the, paisa kat gaya par dukaan wale ko nahi mila 😟'],
   C2002: ['என் EMI கட்ட பயமா இருக்கு, late fee வருமா?', 'Meri EMI bounce ho jayegi kya, late fee lagegi?'],
@@ -125,7 +126,7 @@ function renderChat(msgs) {
   const key = JSON.stringify([msgs.map(m => [m.ts, m.text, m.cta_done]), (S.exec?.campaigns || []).map(c => c.paid + c.clicked)]); if (H.chatKey === key) return; H.chatKey = key;
   $('chat').innerHTML = msgs.map((m, i) => `<div class="flex ${m.from === 'merchant' ? 'justify-end' : ''} ${i >= seen ? 'pop' : ''}"><div class="max-w-[82%] rounded-lg px-3 py-2 ${m.from === 'merchant' ? 'bg-[#d9fdd3] text-slate-800' : m.kind === 'pitch' ? 'bg-gradient-to-br from-white to-amber-50 border border-amber-300 text-slate-800' : 'bg-white text-slate-800 shadow-sm'}">
     ${m.kind === 'pitch' ? '<div class="text-[10px] text-amber-600 font-bold mb-1">💰 SUPPORT → SALES PIVOT</div>' : ''}${esc(m.text)}
-    ${m.voice ? `<button onclick="speak(_m[${i}])" class="mt-2 flex items-center gap-2 bg-slate-100 rounded-full px-3 py-1 text-[11px] w-full">▶ <span class="flex-1 h-1 bg-[#00a884] rounded"></span> Hindi voice · ${({bulbul: 'Sarvam Bulbul', neural: 'Neural'})[m.voice.source] || 'TTS'}</button>` : ''}
+    ${m.voice ? `<button onclick="speak(_m[${i}])" class="mt-2 flex items-center gap-2 bg-slate-100 rounded-full px-3 py-1 text-[11px] w-full">▶ <span class="flex-1 h-1 bg-[#00a884] rounded"></span> ${(m.voice.lang && m.voice.lang.startsWith('en')) ? 'English voice' : 'Voice (' + (m.voice.lang || 'hi-IN') + ')'} · ${({bulbul: 'Sarvam Bulbul', neural: 'Neural'})[m.voice.source] || 'TTS'}</button>` : ''}
     ${m.cta && !m.cta_done ? `<div class="mt-2 flex gap-2"><button onclick="lead('${m.ticket}','${m.cta.product}',${m.cta.amount})" class="flex-1 bg-yellow-400 text-black font-bold rounded py-1">${m.cta.label}</button><button onclick="lead('${m.ticket}','decline',0)" class="px-3 border border-slate-300 rounded text-slate-600">Abhi nahi</button></div>` : m.cta ? '<div class="mt-1 text-[10px] text-slate-400">✓ Response recorded</div>' : ''}
     ${m.campaign ? (c => c ? `<div class="mt-2 grid grid-cols-4 gap-1 text-center bg-emerald-50 rounded p-1">${[['Sent', c.sent], ['Clicked', c.clicked], ['Paid', c.paid], ['GMV', '₹' + c.gmv.toLocaleString('en-IN')]].map(([l, v]) => `<div><b>${v}</b><div class="text-[9px] text-slate-500">${l}</div></div>`).join('')}</div>` : '')((S.exec?.campaigns || []).find(x => x.id === m.campaign)) : ''}
     ${m.options && i === msgs.length - 1 ? `<div class="mt-2 flex flex-col gap-1">${m.options.map(o => `<button onclick="say(this.textContent)" class="text-left text-xs border border-[#00a884] text-[#007a63] rounded-full px-3 py-1 hover:bg-emerald-50">${esc(o)}</button>`).join('')}</div>` : ''}

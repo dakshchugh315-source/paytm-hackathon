@@ -14,19 +14,21 @@ from pydantic import BaseModel
 import sys; sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import ml_engine
 
-_env = os.path.join(os.path.dirname(__file__), ".env")
-if os.path.exists(_env):
-    for _l in open(_env, encoding="utf-8"):
-        if "=" in _l and not _l.lstrip().startswith("#"): os.environ.setdefault(*[x.strip().strip('"') for x in _l.split("=", 1)])
+for _e in (os.path.join(os.path.dirname(__file__), "..", ".env"), os.path.join(os.path.dirname(__file__), ".env")):
+    if os.path.exists(_e):
+        for _l in open(_e, encoding="utf-8"):
+            if "=" in _l and not _l.lstrip().startswith("#"):
+                _parts = _l.split("=", 1)
+                os.environ.setdefault(_parts[0].strip(), _parts[1].strip().strip('"').strip("'"))
 SARVAM_KEY = os.getenv("SARVAM_API_KEY", "")
-PROVIDERS = {"gemini": ("https://generativelanguage.googleapis.com/v1beta/openai", "gemini-2.5-flash"),
+PROVIDERS = {"sarvam": ("https://api.sarvam.ai/v1", "sarvam-105b-conversations"),
+             "gemini": ("https://generativelanguage.googleapis.com/v1beta/openai", "gemini-2.5-flash"),
              "grok": ("https://api.x.ai/v1", "grok-3-mini"),
              "groq": ("https://api.groq.com/openai/v1", "openai/gpt-oss-120b"),
-             "openai": ("https://api.openai.com/v1", "gpt-4o-mini"),
-             "sarvam": ("https://api.sarvam.ai/v1", "sarvam-m")}
+             "openai": ("https://api.openai.com/v1", "gpt-4o-mini")}
 # Fallback chain: first provider with a key is primary; on rate-limit/quota/outage the next one takes over.
 LLM_CHAIN = []
-for _p in os.getenv("LLM_PROVIDERS", "grok,gemini,groq,openai").lower().split(","):
+for _p in os.getenv("LLM_PROVIDERS", "sarvam,grok,gemini,groq,openai").lower().split(","):
     _p = _p.strip(); _k = os.getenv(f"{_p.upper()}_API_KEY", "")
     if _p in PROVIDERS and _k: LLM_CHAIN.append({"name": _p, "base": PROVIDERS[_p][0], "model": os.getenv(f"{_p.upper()}_MODEL", PROVIDERS[_p][1]), "key": _k, "cool_until": 0})
 LLM_KEY = bool(LLM_CHAIN)
@@ -267,7 +269,7 @@ def sarvam_llm(system, user):
     if not SARVAM_KEY: return None, 0
     try:
         r = httpx.post(f"{SARVAM}/v1/chat/completions", headers={**_h(), "Authorization": f"Bearer {SARVAM_KEY}"}, timeout=12,
-                       json={"model": "sarvam-m", "temperature": 0.2, "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}]}).json()
+                       json={"model": "sarvam-105b-conversations", "temperature": 0.2, "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}]}).json()
         return re.sub(r"<think>.*?</think>", "", r["choices"][0]["message"]["content"], flags=re.S).strip(), r.get("usage", {}).get("total_tokens", 0)
     except Exception: return None, 0
 
@@ -278,29 +280,45 @@ def stt(audio: bytes, fname="note.webm"):
                           data={"model": "saarika:v2.5", "language_code": "unknown"}).json().get("transcript")
     except Exception: return None
 
+def detect_lang(text):
+    if re.search(r'[ऀ-ॿ]', text): return "hi-IN", "anushka"
+    if re.search(r'[஀-௿]', text): return "ta-IN", "saranya"
+    if re.search(r'[ఀ-౿]', text): return "te-IN", "amartya"
+    if re.search(r'[ঀ-৿]', text): return "bn-IN", "priti"
+    if re.search(r'[઀-૿]', text): return "gu-IN", "anushka"
+    if re.search(r'[ಀ-೿]', text): return "kn-IN", "arvind"
+    if re.search(r'[ഀ-ൿ]', text): return "ml-IN", "arvind"
+    words = set(re.findall(r'[a-zA-Z]+', text.lower()))
+    hi_cues = {"aapka", "aap", "nahi", "aaya", "karo", "hai", "hain", "ke", "liye", "mein", "gaya", "ho", "kar", "bheja", "tha", "se", "raha"}
+    if words & hi_cues: return "hi-IN", "anushka"
+    return "en-IN", "meera"
+
 def tts(text):
+    lang, spk = detect_lang(text)
     if SARVAM_KEY:
         try:
-            r = httpx.post(f"{SARVAM}/text-to-speech", headers=_h(), timeout=20, json={"inputs": [text[:500]], "target_language_code": "hi-IN", "speaker": "anushka", "model": "bulbul:v2"})
-            return {"audio": r.json()["audios"][0], "mime": "audio/wav", "source": "bulbul"}
+            r = httpx.post(f"{SARVAM}/text-to-speech", headers=_h(), timeout=20, json={"inputs": [text[:500]], "target_language_code": lang, "speaker": spk, "model": "bulbul:v2"})
+            return {"audio": r.json()["audios"][0], "mime": "audio/wav", "source": "bulbul", "lang": lang}
         except Exception: pass
-    if edge_tts:  # free neural Hindi voice, no key
+    if edge_tts:
         try:
+            edge_voice = "hi-IN-SwaraNeural" if lang == "hi-IN" else "en-IN-NeerjaNeural"
             async def _gen():
                 b = b""
-                async for c in edge_tts.Communicate(re.sub(r"[^\w\s.,?!₹-]", "", text)[:600], "hi-IN-SwaraNeural").stream():
+                async for c in edge_tts.Communicate(re.sub(r"[^\w\s.,?!₹-]", "", text)[:600], edge_voice).stream():
                     if c["type"] == "audio": b += c["data"]
                 return b
             audio = asyncio.run(_gen())
-            if audio: return {"audio": base64.b64encode(audio).decode(), "mime": "audio/mpeg", "source": "neural"}
+            if audio: return {"audio": base64.b64encode(audio).decode(), "mime": "audio/mpeg", "source": "neural", "lang": lang}
         except Exception: pass
-    return {"source": "browser"}  # last resort: Web Speech
+    return {"source": "browser", "lang": lang}
 
 # ---------------- Understand / phrase ----------------
-INTENTS = {"kyc_bank": r"kyc|bank.{0,15}(badal|change|update)|ifsc|बैंक", "settlement": r"settle|payout|paisa nahi aaya|credit nahi|पैसा|सेटलमेंट",
-           "soundbox": r"sound ?box|bol nahi|silent|awaaz|आवाज़|साउंडबॉक्स|speaker",
-           "failed_payment": r"fail|kat gaya|kata|debit|refund|nahi mila|account mein nahi|कट गया|रिफंड",
-           "sales": r"loan|karza|offer|naya soundbox|लोन"}
+INTENTS = {"kyc_bank": r"kyc|bank.{0,15}(badal|change|update)|ifsc|account change|बैंक",
+           "settlement": r"settle|payout|paisa nahi aaya|credit nahi|settlement delay|not credited|money not received|पैसा|सेटलमेंट",
+           "soundbox": r"sound ?box|bol nahi|silent|awaaz|not speaking|no sound|speaker|offline|device silent|mute|आवाज़|साउंडबॉक्स",
+           "failed_payment": r"fail|kat gaya|kata|debit|refund|nahi mila|account mein nahi|failed payment|money deducted|deducted but failed|कट गया|रिफंड",
+           "sales": r"loan|karza|offer|naya soundbox|new soundbox|business loan|लोन|finance"}
 def understand(text):
     out, tk = sarvam_llm("Classify the Paytm merchant query into one of: settlement, soundbox, failed_payment, kyc_bank, sales, other. One word only.", text)
     w = (out or "").split()[0].strip(".").lower() if out else ""
@@ -310,7 +328,7 @@ def understand(text):
     return "other", "unclear", 180
 
 def phrase(s, draft, facts):
-    out, tk = sarvam_llm("You are Saathi, Paytm's merchant teammate. Rewrite as warm natural Hinglish (Roman script), under 35 words. Keep every number/ID exact. No preamble.",
+    out, tk = sarvam_llm("You are Saathi, Paytm's merchant teammate. Rewrite in the same language as the merchant (English, Hinglish, or Hindi/regional), under 35 words. Keep every number/ID exact. No preamble.",
                          f"Facts: {json.dumps(facts, ensure_ascii=False)}\nDraft: {draft}")
     s["tokens"] += tk or 90
     return out if out and len(out) < 400 else draft
@@ -523,7 +541,7 @@ Rules:
 - A message starting with EVENT is a Paytm backend alert: message the merchant first, proactively, by name.
 - Do not pitch loans/offers unless the merchant asks.
 - Address the merchant by first name + "ji" only in the first reply of a conversation, not every message.
-- Reply in warm natural Hinglish in ROMAN script only (no Devanagari), under 40 words, stating exactly what you did and verified. Mask account/phone numbers as XXXX-1234.
+- Multi-language support: Reply in the SAME language and script as the merchant's query. If English is used, reply in concise natural English. If Hinglish (Roman script) is used, reply in warm Hinglish. If pure Hindi (Devanagari) or another Indic language is used, reply in that language. Under 40 words, stating exactly what you did and verified. Mask account/phone numbers as XXXX-1234.
 Merchant: {m['name']} (owner {m['owner']}, {m.get('city', '')}), id {s['merchant']}, Soundbox {m['soundbox']}, GMV Rs {m['monthly_volume']}/month.
 Account context (live): recent payments {json.dumps([{"ref": k, "time": v["time"], "amount": v["amount"], "payer": v["payer"][:3] + "…", "status": v["status"], "refunded": v["refunded"]} for k, v in m["txns"].items()], ensure_ascii=False)};
 settlements {json.dumps({k: {"amount": v["amount"], "status": v["status"]} for k, v in m["settlements"].items()})}; Soundbox online={DEVICES[m["soundbox"]]["online"]}.
@@ -538,7 +556,7 @@ def llm_chat(msgs, tools=True):
     for p in LLM_CHAIN + LLM_CHAIN:  # second pass = one retry per provider (transient 400/503)
         if p["cool_until"] > time.time(): continue
         try:
-            r = httpx.post(f"{p['base']}/chat/completions", headers={"Authorization": f"Bearer {p['key']}"}, timeout=40,
+            r = httpx.post(f"{p['base']}/chat/completions", headers={"Authorization": f"Bearer {p['key']}", **({"api-subscription-key": p["key"]} if p["name"] == "sarvam" else {})}, timeout=40,
                            json={"model": p["model"], "messages": msgs, **({"tools": LLM_TOOLS} if tools else {}), "temperature": 0.2})
             if r.status_code == 200:
                 LLM_PROVIDER, LLM_MODEL = p["name"], p["model"]; j = r.json()
