@@ -293,6 +293,12 @@ def test_ticket_issue_reflects_what_was_acted_on(c):
     row = next(t for t in c.get("/state").json()["tickets"] if t["id"] == r["session_id"])
     assert row["issue"] != "EMI_Bounce_Fear"
 
+@pytest.mark.parametrize("off", ["ping off", "stop pings", "pings band karo", "don't ping me", "notifications off"])
+def test_staff_ping_off_variants(c, off):
+    staff(c, "9811000001", "ping me")
+    assert "pings band" in staff(c, "9811000001", off)[-1]["text"]
+    assert not c.get("/staff/state").json()["chats"]["9811000001"]["subscribed"]
+
 def test_staff_without_rights_cannot_approve(c):
     r = chat(c, "Kal ka settlement nahi aaya"); aid = r["approvals"][0]["id"]
     assert "access nahi" in staff(c, "9811000003", f"approve {aid} {main.APPROVER_PIN}")[-1]["text"]

@@ -1053,7 +1053,7 @@ def staff_reply(phone, text):
         r = decide(aid, "approve" if verb == "approve" else "override", APPROVER_PIN)
         last = next((x["text"] for x in reversed(MSGS) if x.get("ticket") == ap["ticket"] and x["from"] == "saathi"), "")
         return staff_say(phone, f"{'✅ Approved' if verb == 'approve' else '🛑 Taken over'} {aid} ({ap['tool']}). Ticket {ap['ticket']} ab {r['status']}.\nMerchant ko gaya: “{last[:140]}”")
-    if re.search(r"\b(stop|unsubscribe|mute)\b", low):
+    if re.search(r"\b(stop|unsubscribe|mute|off|band|disable|bas karo)\b|\b(don'?t|do not|mat)\b.*\b(ping|notify|alert|batana)", low):
         ch["subscribed"] = False; staff_audit(emp, f"🔕 {emp['name']} stopped pings")
         return staff_say(phone, "Theek hai, pings band. Wapas chahiye toh *ping me* likhiye.")
     if re.search(r"\b(ping|notify|alert|batana|bata dena)\b", low):
