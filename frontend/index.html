@@ -5,7 +5,7 @@
 body{background:#f4f6fb;color:#1e293b;font-family:Inter,system-ui,sans-serif}
 header{background:#fff;box-shadow:0 1px 0 #e5e9f0}header b.text-white{color:#002e6e}header .text-slate-400{color:#64748b}
 .card{background:#fff;border:1px solid #e6eaf1;border-radius:16px;box-shadow:0 1px 2px #0f172a0a,0 4px 16px #0f172a08}
-.card .text-white,.card b.text-white{color:#0f172a}.card .text-slate-400,.card .text-slate-500{color:#64748b}.card .text-slate-300{color:#334155}
+.card .text-white:not(button),.card b.text-white{color:#0f172a}.card .text-slate-400,.card .text-slate-500{color:#64748b}.card .text-slate-300{color:#334155}
 .card .bg-black\/20{background:#f6f8fb;border:1px solid #eef1f6}.card pre{color:#475569}
 .text-\[\#00baf2\]{color:#0086c9}.card .text-emerald-400{color:#059669}.card .text-orange-300,.card .text-orange-400{color:#c2410c}
 .text-emerald-300{color:#047857}.text-red-300,.text-red-400{color:#b91c1c}.text-yellow-300{color:#a16207}
@@ -207,7 +207,10 @@ header{background:#fff;box-shadow:0 1px 0 #e5e9f0}header b.text-white{color:#002
           <label class="flex flex-col gap-1 text-slate-600">Pays to<select id="lp-merch" class="border border-slate-300 rounded-lg px-2 py-2 text-slate-800"></select></label>
         </div>
         <div class="mt-4 flex items-center gap-2"><span class="text-3xl font-bold text-slate-400">₹</span>
-          <input id="lp-amt" type="number" min="1" value="1100" class="flex-1 text-3xl font-bold text-slate-900 border-b-2 border-[#00baf2] outline-none py-1"></div>
+          <input id="lp-amt" type="number" min="1" value="1100" oninput="lpPreview()" class="flex-1 text-3xl font-bold text-slate-900 border-b-2 border-[#00baf2] outline-none py-1"></div>
+        <label class="mt-4 flex items-center gap-2 text-sm text-slate-600">🏷 Coupon
+          <select id="lp-coupon" onchange="lpPreview()" class="flex-1 border border-slate-300 rounded-lg px-2 py-2 text-slate-800"><option value="">No coupon</option></select></label>
+        <div id="lp-preview" class="mt-1 text-sm"></div>
         <div class="mt-4 flex gap-2" id="lp-methods"></div>
         <div class="mt-1 text-[11px] text-slate-400" id="lp-mdr"></div>
         <label class="mt-4 flex items-center gap-2 text-sm text-slate-600"><input id="lp-stuck" type="checkbox" class="w-4 h-4"> Simulate bank delay (money debited, merchant not credited)</label>
@@ -350,7 +353,12 @@ function renderState(s) {
     ${p.txns.map(t => `<tr class="border-t border-slate-100"><td>${esc(t.time)}</td><td class="font-mono">${t.id}</td><td>${esc(t.payer.replace(/^(.{3}).*@/, '$1…@'))}</td><td class="text-right">${t.amount.toLocaleString('en-IN')}</td><td class="text-right font-semibold ${t.status === 'SUCCESS' ? 'text-emerald-600' : t.status === 'REFUNDED' ? 'text-sky-600' : 'text-red-600'}">${t.status}</td></tr>`).join('')}</table>
     <div class="mt-3 text-[10px] font-bold text-slate-500">SETTLEMENTS</div>
     <table class="w-full text-[11px] mt-1">${p.settlements.map(t => `<tr class="border-t border-slate-100"><td class="font-mono">${t.id}</td><td>${esc(t.date)}</td><td class="text-right">₹${t.amount.toLocaleString('en-IN')}</td><td class="text-right font-semibold ${t.status === 'SETTLED' ? 'text-emerald-600' : 'text-red-600'}">${t.status}</td><td class="text-right font-mono text-slate-400">${t.utr || ''}</td></tr>`).join('')}</table>
-    ${(p.orders || []).length ? `<div class="mt-3 text-[10px] font-bold text-slate-500">ORDERS & DEDUCTIONS</div><table class="w-full text-[11px] mt-1">${p.orders.map(o => `<tr class="border-t border-slate-100 align-top"><td class="font-mono">${o.id}</td><td>${esc(o.item)}<div class="text-[10px] text-slate-400">${esc(o.mode)} · ${esc(o.recurring)}</div></td><td class="text-right font-semibold ${o.direction === 'DEBIT' ? 'text-red-600' : 'text-emerald-600'}">${o.direction === 'DEBIT' ? '−' : '+'}₹${o.amount.toLocaleString('en-IN')}</td><td class="text-right text-slate-500">${esc(o.status)}</td></tr>`).join('')}</table>` : ''}`);
+    ${(p.orders || []).length ? `<div class="mt-3 text-[10px] font-bold text-slate-500">ORDERS & DEDUCTIONS</div><table class="w-full text-[11px] mt-1">${p.orders.map(o => `<tr class="border-t border-slate-100 align-top"><td class="font-mono">${o.id}</td><td>${esc(o.item)}<div class="text-[10px] text-slate-400">${esc(o.mode)} · ${esc(o.recurring)}</div></td><td class="text-right font-semibold ${o.direction === 'DEBIT' ? 'text-red-600' : 'text-emerald-600'}">${o.direction === 'DEBIT' ? '−' : '+'}₹${o.amount.toLocaleString('en-IN')}</td><td class="text-right text-slate-500">${esc(o.status)}</td></tr>`).join('')}</table>` : ''}
+    ${(p.coupons || []).length ? `<div class="mt-3 text-[10px] font-bold text-slate-500">COUPONS · staff view (merchant sees counts only)</div>${p.coupons.map(cp => `<div class="mt-1 border border-slate-100 rounded-lg p-2">
+      <div class="flex items-center gap-2 text-[12px]"><b class="font-mono">${esc(cp.code)}</b><span>${cp.percent}% off${cp.max_discount ? ' · max ' + inr(cp.max_discount) : ''}</span><span class="text-slate-500">till ${cp.valid_to}</span>
+      <span class="ml-auto px-2 rounded-full text-[10px] font-bold ${cp.status === 'ACTIVE' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600'}">${cp.status}</span></div>
+      <div class="text-[11px] text-slate-600">${cp.uses} redemptions by ${cp.used_by} customers · discount given <b>${inr(cp.discount_given)}</b> · created by ${esc(cp.created_by)}</div>
+      ${cp.redemptions.length ? `<table class="w-full text-[11px] mt-1">${cp.redemptions.map(x => `<tr class="border-t border-slate-100"><td>${esc(x.time)}</td><td>${esc(x.customer)}</td><td class="text-right">bill ${inr(x.bill)}</td><td class="text-right text-red-600">−${inr(x.discount)}</td><td class="text-right font-semibold">${inr(x.paid)}</td></tr>`).join('')}</table>` : ''}</div>`).join('')}` : ''}`);
   }
   const m = s.metrics, tile = (v, k, tgt, ok) => `<div class="bg-black/20 rounded-lg p-2"><div class="text-xl font-bold ${ok ? 'text-emerald-400' : 'text-white'}">${v}</div><div class="text-[10px] text-slate-400">${k}</div><div class="text-[9px] text-slate-500">${tgt}</div></div>`;
   put('metrics', tile(m.median_ttr_s + 's', 'Median resolution', 'target < 10 min', m.resolved && m.median_ttr_s < 600)
@@ -486,6 +494,11 @@ async function cashMic() {
   };
   crec.start();
 }
+async function cpCreate() {
+  const body = {code: $('cp-code').value, percent: Number($('cp-pct').value || 10), valid_to: $('cp-to').value, max_discount: Number($('cp-max').value || 0)};
+  try { await api('/coupons/' + MID, {body: JSON.stringify(body)}); H.cpform = false; toast(`Coupon ${body.code.toUpperCase()} is live`, false); H['pt-body'] = null; renderState(await get(sq())); } catch (e) { err(e); }
+}
+async function cpToggle(code, status) { try { await api(`/coupons/${MID}/${code}/${status}`); H['pt-body'] = null; renderState(await get(sq())); } catch (e) { err(e); } }
 function ptTab(t) { PT = t; H['pt-body'] = H['pt-nav'] = null; renderApp(S); }
 const inr = n => '₹' + Number(n || 0).toLocaleString('en-IN');
 const FRIENDLY = {VERIFIED: ['Resolved', 'text-emerald-600'], CLOSED: ['Closed', 'text-slate-500'], WAITING_APPROVAL: ['With Paytm team', 'text-orange-600'],
@@ -505,7 +518,7 @@ function renderApp(s) {
   if (s.profile.persona !== 'customer') renderSoundbox(s.profile);
   const p = s.profile, cust = p.persona === 'customer', first = (cust ? p.name : p.owner).split(' ')[0];
   $('dock-pt-name').textContent = cust ? 'Paytm' : 'Paytm for Business'; $('pt-kind').textContent = cust ? '' : 'for Business'; $('pt-hello').textContent = 'Hi ' + first;
-  const tabs = cust ? [['home', 'Home'], ['pass', 'Passbook'], ['loan', 'Loans'], ['help', 'Help']] : [['home', 'Home'], ['ledger', 'Ledger'], ['settle', 'Settlements'], ['help', 'Help']];
+  const tabs = cust ? [['home', 'Home'], ['pass', 'Passbook'], ['loan', 'Loans'], ['help', 'Help']] : [['home', 'Home'], ['ledger', 'Ledger'], ['settle', 'Settlements'], ['offers', 'Offers'], ['help', 'Help']];
   if (!tabs.some(t => t[0] === PT)) PT = 'home';
   put('pt-nav', tabs.map(([k, l]) => `<button onclick="ptTab('${k}')" class="px-3 py-1 rounded-full ${PT === k ? 'bg-white text-[#002e6e] font-bold' : 'text-white/80'}">${l}</button>`).join(''));
   let h = '';
@@ -528,6 +541,16 @@ function renderApp(s) {
         ...(p.orders || []).map(o => row(o.direction === 'DEBIT' ? '🧾' : '💰', esc(o.item), esc(o.mode), (o.direction === 'DEBIT' ? '−' : '+') + inr(o.amount), o.direction === 'DEBIT' ? 'text-red-600' : 'text-emerald-600'))];
       h = `<div class="text-[12px] text-slate-500 px-1">Every rupee in and out of your account</div>` + items.join('');
     }
+    if (PT === 'offers') h = `<div class="flex items-center px-1"><span class="text-[12px] text-slate-500">Your coupons</span><button onclick="H.cpform = !H.cpform; H['pt-body'] = null; renderApp(S)" class="ml-auto text-[12px] font-semibold text-[#0086c9]">+ New coupon</button></div>
+      ${H.cpform ? `<div class="bg-white rounded-2xl p-3 shadow-sm space-y-2 text-[12px]"><input id="cp-code" placeholder="Code, e.g. DIWALI10" class="w-full border rounded-lg px-2 py-1.5 uppercase">
+        <div class="flex gap-2"><input id="cp-pct" type="number" min="1" max="50" placeholder="% off" class="w-1/3 border rounded-lg px-2 py-1.5"><input id="cp-max" type="number" min="0" placeholder="Max ₹ (optional)" class="w-1/3 border rounded-lg px-2 py-1.5"><input id="cp-to" type="date" class="w-1/3 border rounded-lg px-1 py-1.5"></div>
+        <button onclick="cpCreate()" class="w-full py-2 rounded-xl bg-[#002e6e] text-white font-semibold">Create coupon</button></div>` : ''}
+      ${(p.coupons || []).length ? p.coupons.map(cp => `<div class="bg-white rounded-2xl p-4 shadow-sm ${cp.status === 'ACTIVE' ? '' : 'opacity-70'}"><div class="flex items-center"><b class="font-mono text-lg text-[#002e6e]">${esc(cp.code)}</b>
+        <span class="ml-auto px-2 py-0.5 rounded-full text-[11px] font-bold ${cp.status === 'ACTIVE' ? 'bg-emerald-100 text-emerald-700' : cp.status === 'PAUSED' ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-500'}">${cp.status === 'ACTIVE' ? '● Active' : cp.status === 'PAUSED' ? '⏸ Paused' : 'Expired'}</span></div>
+        <div class="text-[13px] text-slate-700 mt-1">${cp.percent}% off${cp.max_discount ? ` (max ${inr(cp.max_discount)})` : ''} · valid till ${new Date(cp.valid_to).toLocaleDateString('en-IN', {day: 'numeric', month: 'short'})}</div>
+        <div class="flex items-center mt-2"><span class="text-[13px] font-semibold text-slate-800">👥 Used by ${cp.used_by} customer${cp.used_by === 1 ? '' : 's'}</span>
+        ${cp.status === 'EXPIRED' ? '' : `<button onclick="cpToggle('${cp.code}','${cp.status === 'ACTIVE' ? 'pause' : 'active'}')" class="ml-auto text-[12px] font-semibold text-[#0086c9]">${cp.status === 'ACTIVE' ? 'Pause' : 'Activate'}</button>`}</div></div>`).join('')
+        : '<div class="text-center text-slate-400 py-6 text-sm">No coupons yet. Create one, or just ask Saathi on WhatsApp.</div>'}`;
     if (PT === 'settle') h = p.settlements.map(x => `<div class="bg-white rounded-2xl p-4 shadow-sm"><div class="flex"><b>${inr(x.amount)}</b><span class="ml-auto text-[12px] font-semibold ${x.status === 'SETTLED' ? 'text-emerald-600' : 'text-orange-600'}">${x.status === 'SETTLED' ? '✓ Credited' : x.status.replace('_', ' ')}</span></div>
         <div class="text-[12px] text-slate-500">${x.id} · ${esc(x.date)} · to ${p.bank}</div>${x.utr ? `<div class="text-[11px] font-mono text-slate-400 mt-1">UTR ${x.utr}</div>` : ''}</div>`).join('');
   } else {
@@ -592,7 +615,13 @@ function renderDrawer(st) {
 }
 // ---- Live payment (customer -> Paytm -> merchant -> settlement) ----
 const LP_MDR = {UPI: 0, WALLET: 1.99, CARD: 2.0};
-let LP_METHOD = 'UPI', LP_LAST = null;
+let LP_METHOD = 'UPI', LP_LAST = null, LP_COUPONS = [];
+function lpPreview() {
+  const cp = LP_COUPONS.find(x => x.code === $('lp-coupon').value), amt = parseInt($('lp-amt').value, 10) || 0;
+  if (!cp || !amt) { $('lp-preview').innerHTML = LP_COUPONS.length ? `<span class="text-slate-400">${LP_COUPONS.length} active coupon${LP_COUPONS.length === 1 ? '' : 's'} at this shop</span>` : ''; return; }
+  const off = Math.round(Math.min(amt * cp.percent / 100, cp.max_discount || Infinity) * 100) / 100;
+  $('lp-preview').innerHTML = `<span class="text-emerald-700 font-semibold">Discount −${inr(off)} · customer pays ${inr(amt - off)}</span>`;
+}
 function lpInit(s) {
   if ($('lp-cust').options.length) return;
   $('lp-cust').innerHTML = s.merchants.filter(u => u.persona === 'customer').map(u => `<option value="${u.id}">${esc(u.name)}</option>`).join('');
@@ -607,12 +636,12 @@ function lpMethods() {
 const lpStep = (ok, label) => `<div class="flex items-start gap-3 pop"><div class="w-7 h-7 shrink-0 rounded-full grid place-items-center text-white text-sm font-bold ${ok === true ? 'bg-emerald-500' : ok === false ? 'bg-red-500' : 'bg-amber-400'}">${ok === true ? '✓' : ok === false ? '!' : '⏳'}</div><div class="text-sm text-slate-700 pt-1">${esc(label)}</div></div>`;
 async function livePay() {
   const amt = parseInt($('lp-amt').value, 10); if (!amt || amt < 1) return toast('Enter an amount');
-  const body = {customer_id: $('lp-cust').value, merchant_id: $('lp-merch').value, amount: amt, method: LP_METHOD, outcome: $('lp-stuck').checked ? 'stuck' : 'success'};
+  const body = {customer_id: $('lp-cust').value, merchant_id: $('lp-merch').value, amount: amt, method: LP_METHOD, outcome: $('lp-stuck').checked ? 'stuck' : 'success', coupon: $('lp-coupon').value};
   $('lp-paybtn').disabled = true; $('lp-paybtn').textContent = 'Paying…'; $('lp-steps').innerHTML = ''; $('lp-result').innerHTML = '';
   try {
     const r = await api('/pay', {body: JSON.stringify(body)}); LP_LAST = r;
     $('lp-result').innerHTML = r.ok
-      ? `<div class="text-center pop"><div class="mx-auto w-20 h-20 rounded-full bg-emerald-500 grid place-items-center text-white text-5xl">✓</div><div class="mt-2 text-lg font-bold text-slate-900">Paid ${inr(r.amount)} to ${esc(r.merchant)}</div><div class="text-[12px] text-slate-500">via ${r.method} · ref ...${r.rrn.slice(-4)}</div></div>`
+      ? `<div class="text-center pop"><div class="mx-auto w-20 h-20 rounded-full bg-emerald-500 grid place-items-center text-white text-5xl">✓</div><div class="mt-2 text-lg font-bold text-slate-900">Paid ${inr(r.amount)} to ${esc(r.merchant)}</div>${r.coupon ? `<div class="text-sm text-emerald-700 font-semibold">🏷 ${esc(r.coupon)} saved you ${inr(r.discount)} on a ${inr(r.bill)} bill</div>` : ''}<div class="text-[12px] text-slate-500">via ${r.method} · ref ...${r.rrn.slice(-4)}</div></div>`
       : `<div class="text-center pop"><div class="mx-auto w-20 h-20 rounded-full bg-amber-400 grid place-items-center text-white text-4xl">⏳</div><div class="mt-2 text-lg font-bold text-slate-900">${inr(r.amount)} debited, payment pending</div>
          <button onclick="lpComplain()" class="mt-3 px-4 py-2 rounded-lg bg-[#00a884] text-white font-semibold">💬 Customer complains to Saathi on WhatsApp</button></div>`;
     for (const st of r.steps) { $('lp-steps').insertAdjacentHTML('beforeend', lpStep(st.ok, st.label)); await sleep(650); }
@@ -642,6 +671,10 @@ function renderLive(s) {
   const mid = $('lp-merch').value, row = (s.exec?.merchant_rows || []).find(r => r.id === mid), name = row?.name || '';
   $('lp-mname').textContent = name ? '· ' + name : '';
   get('/state?mid=' + mid).then(st => {
+    const live = (st.profile.coupons || []).filter(cp => cp.status === 'ACTIVE'), sel = $('lp-coupon'), keep = sel.value;
+    LP_COUPONS = live;
+    put('lp-coupon', '<option value="">No coupon</option>' + live.map(cp => `<option value="${cp.code}">${esc(cp.code)} · ${cp.percent}% off${cp.max_discount ? ' (max ' + inr(cp.max_discount) + ')' : ''} · used by ${cp.used_by}</option>`).join(''));
+    sel.value = live.some(cp => cp.code === keep) ? keep : ''; lpPreview();
     const un = st.profile.unsettled || [];
     put('lp-unsettled', un.length ? `<div class="text-slate-600">${un.length} payment${un.length === 1 ? '' : 's'} waiting for the next batch: <b>${inr(un.reduce((a, x) => a + x.gross, 0))}</b> gross → <b>${inr(un.reduce((a, x) => a + x.net, 0))}</b> to bank after fees</div>`
       : '<div class="text-slate-400">No payments waiting — everything is settled.</div>');

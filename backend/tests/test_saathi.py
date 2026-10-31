@@ -232,6 +232,17 @@ def test_stuck_payment_becomes_a_refund_ticket(c):
     approve(c, t)
     assert any(e["kind"] == "CREDIT" and e["amount"] == 1100 for e in c.get("/state?mid=C2001").json()["profile"]["passbook"])
 
+def test_coupons_create_apply_pause_and_staff_detail(c):
+    assert main.create_coupon("M1003", "diwali10", 10, "2099-11-01")["code"] == "DIWALI10"  # the tool Saathi calls
+    r = c.post("/pay", json={"customer_id": "C2001", "merchant_id": "M1003", "amount": 1100, "coupon": "DIWALI10"}).json()
+    assert (r["bill"], r["discount"], r["amount"]) == (1100, 110.0, 990) and "990 rupaye" in r["soundbox"]["text"]
+    cp = next(x for x in c.get("/state?mid=M1003").json()["profile"]["coupons"] if x["code"] == "DIWALI10")
+    assert cp["status"] == "ACTIVE" and cp["used_by"] == 1 and cp["discount_given"] == 110 and cp["redemptions"][0]["customer"] == "Ankit Verma"
+    assert c.post("/coupons/M1003", json={"code": "chai20", "percent": 20, "valid_to": "2099-12-31", "max_discount": 30}).json()["max_discount"] == 30
+    c.post("/coupons/M1003/DIWALI10/pause")
+    assert c.post("/pay", json={"amount": 100, "coupon": "DIWALI10"}).status_code == 422
+    assert c.post("/pay", json={"amount": 100, "merchant_id": "M1002", "coupon": "CHAI5"}).status_code == 422  # other merchant's coupon
+
 # ---------------- Staff WhatsApp (internal teammate) ----------------
 def staff(c, phone, text):
     return c.post("/staff/chat", json={"phone": phone, "text": text}).json()["chats"][phone]["msgs"]

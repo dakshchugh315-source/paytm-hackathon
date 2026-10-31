@@ -104,7 +104,11 @@ SEED = {
     "M1003": {"name": "Raju Chai Stall", "owner": "Raju", "city": "Lucknow", "phone": "9900112233", "monthly_volume": 45000, "has_loan": False, "soundbox": "SB-9102",
               "bank": {"acc": "12340098765432", "ifsc": "PUNB0123400", "changed_days_ago": 400, "verified": True},
               "settlements": {"ST-9203": {"amount": 1520, "date": "yesterday", "status": "SETTLED", "reason": "", "utr": "UTR7710CD12"}},
-              "txns": {"430733401120": {"amount": 20, "time": "Today 08:02", "payer": "student21@ybl", "status": "FAILED", "debited": True, "refunded": False}}},
+              "txns": {"430733401120": {"amount": 20, "time": "Today 08:02", "payer": "student21@ybl", "status": "FAILED", "debited": True, "refunded": False}},
+              "coupons": {"CHAI5": {"code": "CHAI5", "percent": 5.0, "max_discount": 20.0, "valid_from": "2026-10-01", "valid_to": "2026-12-31", "status": "ACTIVE", "created_by": "merchant (app)",
+                                    "redemptions": [{"customer": "Neha V", "bill": 120, "discount": 6.0, "paid": 114.0, "time": "Yesterday 17:40"},
+                                                    {"customer": "Amit S", "bill": 60, "discount": 3.0, "paid": 57.0, "time": "Yesterday 18:05"},
+                                                    {"customer": "Neha V", "bill": 80, "discount": 4.0, "paid": 76.0, "time": "Today 08:30"}]}}},
 }
 
 CUSTOMER_SEED = {
@@ -546,6 +550,7 @@ Rules:
 - Never guess. If the merchant's problem is unclear, ask ONE short clarifying question and call no tools.
 - "Customer left without paying / paisa diye bina chala gaya / didn't pay me" is NOT a refund case: the merchant lost money, the customer was not charged. Check recent payments around that time, say whether any attempt came in, and offer a Paytm payment link the merchant can share. Never refund a customer who did not pay. But FAILED + customer_debited=true means the customer WAS charged and is owed a refund — that is a refund case.
 - If the merchant says all/both/saare/dono, act on all matching payments without asking again.
+- If a tool can do it (create_coupon, refunds, links…), do it yourself and confirm — never tell the merchant to do it in the app.
 - NEVER ask the merchant for data you can fetch. Merchants don't know txn IDs: call lookup_transaction first, then identify the payment by amount/time/payer (e.g. "10:32 wala ₹349, rahul.k@… se?").
 - If the merchant gives an ID/number that doesn't match, say it wasn't found and list the matching recent payments (time, amount, masked payer, last 4 of ref).
 - If several transactions could match, ask which one; act only on the one the merchant means.
@@ -1127,35 +1132,38 @@ MDR = {"UPI": 0.0, "WALLET": 0.0199, "CARD": 0.02}
 GST_ON_FEE = 0.18
 
 class PayReq(BaseModel):
-    customer_id: str = "C2001"; merchant_id: str = "M1003"; amount: int = 1100; method: str = "UPI"; outcome: str = "success"; note: str = ""
+    customer_id: str = "C2001"; merchant_id: str = "M1003"; amount: int = 1100; method: str = "UPI"; outcome: str = "success"; note: str = ""; coupon: str = ""
 
 @app.post("/pay")
 def live_pay(r: PayReq):
     if r.customer_id not in CUSTOMERS or r.merchant_id not in MERCHANTS: raise HTTPException(404, "customer or merchant")
     if r.amount <= 0 or r.amount > 200000: raise HTTPException(422, "amount must be between ₹1 and ₹2,00,000")
     method = r.method.upper() if r.method.upper() in MDR else "UPI"
+    cp, disc = apply_coupon(r.merchant_id, r.coupon, r.amount) if r.coupon.strip() else (None, 0)
+    amt = round(r.amount - disc, 2); amt = int(amt) if float(amt).is_integer() else amt  # what the customer actually pays
     c, m = CUSTOMERS[r.customer_id], MERCHANTS[r.merchant_id]; now = datetime.now().strftime("Today %H:%M")
     rrn = "4307" + uuid.uuid4().hex[:8].upper(); ok = r.outcome != "stuck"
-    c["txns"]["UPI-" + rrn[-5:]] = {"amount": r.amount, "to": m["name"], "time": now, "status": "SUCCESS" if ok else "PENDING", "debited": True, "credited": ok, "refunded": False, "rrn_ref": rrn}
-    fee = round(r.amount * MDR[method], 2); gst = round(fee * GST_ON_FEE, 2); net = round(r.amount - fee - gst, 2)
-    steps = [{"key": "debited", "label": f"₹{r.amount:,} debited from {c['name']}", "ok": True}]
+    c["txns"]["UPI-" + rrn[-5:]] = {"amount": amt, "to": m["name"], "time": now, "status": "SUCCESS" if ok else "PENDING", "debited": True, "credited": ok, "refunded": False, "rrn_ref": rrn}
+    fee = round(amt * MDR[method], 2); gst = round(fee * GST_ON_FEE, 2); net = round(amt - fee - gst, 2)
+    if cp and ok: cp["redemptions"].append({"customer": c["name"], "bill": r.amount, "discount": disc, "paid": amt, "time": now})
+    steps = ([{"key": "coupon", "label": f"Coupon {cp['code']} applied: bill ₹{r.amount:,} − ₹{disc:,g} = ₹{amt:,g}", "ok": True}] if cp else []) + [{"key": "debited", "label": f"₹{amt:,} debited from {c['name']}", "ok": True}]
     sb = None
     if ok:
-        m["txns"][rrn] = {"amount": r.amount, "time": now, "payer": c["name"].split()[0].lower() + "@paytm", "status": "SUCCESS", "debited": True, "refunded": False, "method": method}
-        m.setdefault("unsettled", []).append({"rrn": rrn, "gross": r.amount, "fee": fee, "gst": gst, "net": net, "method": method, "time": now})
-        steps.append({"key": "paytm", "label": f"Paytm received ₹{r.amount:,} ({method}, ref ...{rrn[-4:]})", "ok": True})
+        m["txns"][rrn] = {"amount": amt, "time": now, "payer": c["name"].split()[0].lower() + "@paytm", "status": "SUCCESS", "debited": True, "refunded": False, "method": method}
+        m.setdefault("unsettled", []).append({"rrn": rrn, "gross": amt, "fee": fee, "gst": gst, "net": net, "method": method, "time": now})
+        steps.append({"key": "paytm", "label": f"Paytm received ₹{amt:,} ({method}, ref ...{rrn[-4:]})", "ok": True})
         if DEVICES[m["soundbox"]]["online"]:
-            sb = sb_say(m, f"Paytm par {r.amount} rupaye prapt hue", "upi"); steps.append({"key": "soundbox", "label": f"Soundbox {m['soundbox']}: “{sb['text']}”", "ok": True})
+            sb = sb_say(m, f"Paytm par {amt} rupaye prapt hue", "upi"); steps.append({"key": "soundbox", "label": f"Soundbox {m['soundbox']}: “{sb['text']}”", "ok": True})
         else:
             steps.append({"key": "soundbox", "label": f"Soundbox {m['soundbox']} is offline — payment received but not announced", "ok": False})
-        steps.append({"key": "ledger", "label": f"{m['name']} ledger +₹{r.amount:,}", "ok": True})
-        steps.append({"key": "settle", "label": f"Next settlement (T+1): gross ₹{r.amount:,} − fee ₹{fee:,} − GST ₹{gst:,} = ₹{net:,}", "ok": None})
+        steps.append({"key": "ledger", "label": f"{m['name']} ledger +₹{amt:,}", "ok": True})
+        steps.append({"key": "settle", "label": f"Next settlement (T+1): gross ₹{amt:,} − fee ₹{fee:,} − GST ₹{gst:,} = ₹{net:,}", "ok": None})
     else:
         steps.append({"key": "paytm", "label": "Bank didn't confirm — money debited but not credited to the merchant", "ok": False})
     audit({"id": "PAY-" + rrn[-6:], "trace": [], "opened": time.time(), "tokens": 0, "phase": ""}, "ACT",
-          f"💸 Live payment {c['name']} → {m['name']} ₹{r.amount:,} via {method}: {'SUCCESS' if ok else 'STUCK (debited, not credited)'}", {"rrn": rrn, "fee": fee, "gst": gst, "net": net})
-    return {"ok": ok, "rrn": rrn, "method": method, "amount": r.amount, "fee": fee, "gst": gst, "net": net, "steps": steps, "soundbox": sb,
-            "customer": c["name"], "merchant": m["name"], "complaint": None if ok else f"Maine {m['name']} ko ₹{r.amount:,} bheje, paisa kat gaya par unhe mila nahi"}
+          f"💸 Live payment {c['name']} → {m['name']} ₹{amt:,} via {method}: {'SUCCESS' if ok else 'STUCK (debited, not credited)'}", {"rrn": rrn, "fee": fee, "gst": gst, "net": net})
+    return {"bill": r.amount, "discount": disc, "coupon": cp["code"] if cp else None, "ok": ok, "rrn": rrn, "method": method, "amount": amt, "fee": fee, "gst": gst, "net": net, "steps": steps, "soundbox": sb,
+            "customer": c["name"], "merchant": m["name"], "complaint": None if ok else f"Maine {m['name']} ko ₹{amt:,} bheje, paisa kat gaya par unhe mila nahi"}
 
 @app.post("/settle/{mid}")
 def run_settlement(mid: str):
@@ -1169,6 +1177,72 @@ def run_settlement(mid: str):
     m["unsettled"] = []
     audit({"id": sid, "trace": [], "opened": time.time(), "tokens": 0, "phase": ""}, "ACT", f"🏦 Settlement {sid} to {mask(m['bank']['acc'])}: ₹{g:,} − fee ₹{f:,} − GST ₹{t:,} = ₹{n:,}", {"utr": utr, "payments": len(batch)})
     return {"settlement": sid, "utr": utr, "gross": g, "fee": f, "gst": t, "net": n, "count": len(batch), "bank": mask(m["bank"]["acc"]), "merchant": m["name"]}
+
+# ---------------- Merchant coupons: created by the merchant (or by Saathi on request), redeemed in payments ----------------
+def _coupon_state(cp):
+    if cp["status"] == "PAUSED": return "PAUSED"
+    return "EXPIRED" if datetime.now().date().isoformat() > cp["valid_to"] else "ACTIVE"
+
+def coupon_view(cp, detail=False):
+    """Merchants see the count; Paytm staff (detail=True) also see who redeemed and the discount given."""
+    v = {"code": cp["code"], "percent": cp["percent"], "max_discount": cp["max_discount"], "valid_from": cp["valid_from"], "valid_to": cp["valid_to"],
+         "status": _coupon_state(cp), "used_by": len({r["customer"] for r in cp["redemptions"]}), "uses": len(cp["redemptions"]), "created_by": cp.get("created_by", "merchant")}
+    if detail: v |= {"discount_given": round(sum(r["discount"] for r in cp["redemptions"]), 2), "redemptions": cp["redemptions"][-10:][::-1]}
+    return v
+
+def create_coupon(merchant_id, code, percent, valid_to, max_discount=0, created_by="Saathi"):
+    code = re.sub(r"[^A-Z0-9]", "", str(code).upper())[:15]
+    if not code: return {"ok": False, "error": "coupon code needed, e.g. DIWALI10"}
+    if not 1 <= float(percent) <= 50: return {"ok": False, "error": "discount must be 1–50%"}
+    try: to = datetime.fromisoformat(str(valid_to)[:10]).date().isoformat()
+    except ValueError: return {"ok": False, "error": "valid_to must be a date like 2026-11-01"}
+    cps = MERCHANTS[merchant_id].setdefault("coupons", {})
+    if code in cps and _coupon_state(cps[code]) == "ACTIVE": return {"ok": False, "error": f"{code} already exists and is active"}
+    cps[code] = {"code": code, "percent": float(percent), "max_discount": float(max_discount), "valid_from": datetime.now().date().isoformat(), "valid_to": to,
+                 "status": "ACTIVE", "created_by": created_by, "redemptions": []}
+    return {"ok": True, **coupon_view(cps[code])}
+
+def list_coupons(merchant_id):
+    return {"coupons": [coupon_view(c) for c in MERCHANTS[merchant_id].get("coupons", {}).values()]}
+
+def set_coupon_status(merchant_id, code, status):
+    cp = MERCHANTS[merchant_id].get("coupons", {}).get(str(code).upper())
+    if not cp: return {"ok": False, "error": "no such coupon"}
+    cp["status"] = "PAUSED" if str(status).upper().startswith("PAUS") else "ACTIVE"; return {"ok": True, **coupon_view(cp)}
+
+def apply_coupon(mid, code, amount):
+    cp = MERCHANTS[mid].get("coupons", {}).get(str(code).upper())
+    if not cp: raise HTTPException(422, f"Coupon {code} doesn't exist for this merchant")
+    if _coupon_state(cp) != "ACTIVE": raise HTTPException(422, f"Coupon {cp['code']} is {_coupon_state(cp).lower()}")
+    off = amount * cp["percent"] / 100
+    return cp, round(min(off, cp["max_discount"]) if cp["max_discount"] > 0 else off, 2)
+
+TOOLS.update({f.__name__: f for f in (create_coupon, list_coupons, set_coupon_status)})
+TOOL_SPECS.update({
+    "create_coupon": ("Create a discount coupon customers can use when paying this merchant. Ask only for what is missing.", {"code": "string", "percent": "number", "valid_to": "string", "max_discount": "number"}, ["code", "percent", "valid_to"]),  # max_discount omitted = no cap
+    "list_coupons": ("List the merchant's coupons with status and how many customers used each.", {}, []),
+    "set_coupon_status": ("Pause or re-activate a coupon.", {"code": "string", "status": "string"}, ["code", "status"]),
+})
+LLM_TOOLS[:] = [{"type": "function", "function": {"name": n, "description": d, "parameters": {"type": "object", "properties": {k: {"type": t} for k, t in ps.items()}, "required": req}}}
+                for n, (d, ps, req) in TOOL_SPECS.items()]
+READ_ONLY.add("list_coupons")
+
+class CouponReq(BaseModel):
+    code: str; percent: float = 10; valid_to: str = ""; max_discount: float = 0  # 0 = no cap
+
+@app.post("/coupons/{mid}")
+def coupon_create_api(mid: str, r: CouponReq):
+    if mid not in MERCHANTS: raise HTTPException(404, "merchant")
+    res = create_coupon(mid, r.code, r.percent, r.valid_to or datetime.now().date().isoformat(), r.max_discount, created_by="merchant (app)")
+    if not res["ok"]: raise HTTPException(422, res["error"])
+    sb_audit(mid, f"🏷 Coupon {res['code']} created in app: {res['percent']:g}% off till {res['valid_to']}", res); return res
+
+@app.post("/coupons/{mid}/{code}/{status}")
+def coupon_status_api(mid: str, code: str, status: str):
+    if mid not in MERCHANTS: raise HTTPException(404, "merchant")
+    res = set_coupon_status(mid, code, status)
+    if not res["ok"]: raise HTTPException(404, res["error"])
+    sb_audit(mid, f"🏷 Coupon {res['code']} → {res['status']}", res); return res
 
 class MLReq(BaseModel):
     text: str; persona: str = "Customer"; amount: int | None = None; disputes: int = 0; bank: str | None = None
@@ -1349,7 +1423,7 @@ def profile(mid="M1001"):
             "bank": mask(m["bank"]["acc"]), "offer": e, "city": m.get("city", ""),
             "txns": [{"id": k, **{f: v.get(f) for f in ("time", "payer", "amount", "status", "refunded")}} for k, v in m["txns"].items()],
             "settlements": [{"id": k, "amount": v["amount"], "date": v["date"], "status": v["status"], "utr": v.get("utr"), **{f: v[f] for f in ("gross", "fee", "gst", "count") if f in v}} for k, v in m["settlements"].items()],
-            "unsettled": m.get("unsettled", []),
+            "unsettled": m.get("unsettled", []), "coupons": [coupon_view(c, detail=True) for c in m.get("coupons", {}).values()],
             "orders": m.get("orders", []), "cash": m.get("cash", []), "sb_log": m.get("sb_log", [])[::-1]}
 
 @app.get("/state")
