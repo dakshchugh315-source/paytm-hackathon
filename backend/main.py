@@ -535,6 +535,8 @@ def llm_system(s, sop, cached):
 Loop: UNDERSTAND the query -> DIAGNOSE with the SOP -> ACT with tools -> VERIFY by re-querying state after any change -> then reply.
 Rules:
 - Never guess. If the merchant's problem is unclear, ask ONE short clarifying question and call no tools.
+- "Customer left without paying / paisa diye bina chala gaya / didn't pay me" is NOT a refund case: the merchant lost money, the customer was not charged. Check recent payments around that time, say whether any attempt came in, and offer a Paytm payment link the merchant can share. Never refund a customer who did not pay. But FAILED + customer_debited=true means the customer WAS charged and is owed a refund — that is a refund case.
+- If the merchant says all/both/saare/dono, act on all matching payments without asking again.
 - NEVER ask the merchant for data you can fetch. Merchants don't know txn IDs: call lookup_transaction first, then identify the payment by amount/time/payer (e.g. "10:32 wala ₹349, rahul.k@… se?").
 - If the merchant gives an ID/number that doesn't match, say it wasn't found and list the matching recent payments (time, amount, masked payer, last 4 of ref).
 - If several transactions could match, ask which one; act only on the one the merchant means.
@@ -544,7 +546,7 @@ Rules:
 - Address the merchant by first name + "ji" only in the first reply of a conversation, not every message.
 - Multi-language support: judge the language ONLY from the merchant's LATEST message (ignore earlier turns). Reply in the SAME language and script as that message's query. If English is used, reply in concise natural English. If Hinglish (Roman script) is used, reply in warm Hinglish. If pure Hindi (Devanagari) or another Indic language is used, reply in that language. Under 40 words, stating exactly what you did and verified. Mask account/phone numbers as XXXX-1234.
 Merchant: {m['name']} (owner {m['owner']}, {m.get('city', '')}), id {s['merchant']}, Soundbox {m['soundbox']}, GMV Rs {m['monthly_volume']}/month.
-Account context (live): recent payments {json.dumps([{"ref": k, "time": v["time"], "amount": v["amount"], "payer": v["payer"][:3] + "…", "status": v["status"], "refunded": v["refunded"]} for k, v in m["txns"].items()], ensure_ascii=False)};
+Account context (live): recent payments {json.dumps([{"ref": k, "time": v["time"], "amount": v["amount"], "payer": v["payer"][:3] + "…", "status": v["status"], "customer_debited": v["debited"], "refunded": v["refunded"]} for k, v in m["txns"].items()], ensure_ascii=False)};
 settlements {json.dumps({k: {"amount": v["amount"], "status": v["status"]} for k, v in m["settlements"].items()})}; Soundbox online={DEVICES[m["soundbox"]]["online"]}.
 Mention refs to the merchant only as last 4 digits. Use this context to propose the likely payment right away (e.g. "10:32 wala ₹349?") instead of asking open questions; still call tools to act and to verify.
 Retrieved SOP: {json.dumps(sop, ensure_ascii=False) if sop else 'none'}
@@ -612,6 +614,7 @@ def merchant_picked(s, ref):
     cands = [x for x, t in MERCHANTS[mid]["txns"].items() if t["debited"] and t["status"] == "FAILED" and not t["refunded"]]
     if not k or len(cands) <= 1: return True
     t = MERCHANTS[mid]["txns"][k]; said = " ".join(x["text"] for x in MSGS if x.get("merchant") == mid and x["from"] == "merchant")[-400:].replace(",", "")
+    if re.search(r"\b(saare|sare|sab|sabhi|dono|all|both)\b", said[-120:], re.I): return True  # merchant chose all of them
     return str(t["amount"]) in said or t["time"].split()[-1] in said or k[-4:] in said or k[-3:] in said
 
 def healthy(s):
@@ -637,7 +640,12 @@ def llm_agent(s, text, proactive=False):
         db.execute("INSERT INTO tix VALUES(?,?,?,?,?,?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET intent=excluded.intent, cache=excluded.cache",
                    (s["id"], s["merchant"], s["intent"], "OPEN", 1, int(s["cache_hit"]), 0, 0, s["opened"], None)); db.commit()
     hist = [{"role": "user" if x["from"] == "merchant" else "assistant", "content": x["text"].replace("🎤 ", "")} for x in [y for y in MSGS if y.get("merchant") == s["merchant"]][-9:-1] if x.get("text")]
-    s["llm_msgs"] = [{"role": "system", "content": llm_system(s, s["sop"], cached)}, *hist, {"role": "user", "content": text}]
+    ask = text
+    owed = [(k, t) for k, t in m["txns"].items() if t["debited"] and t["status"] == "FAILED" and not t["refunded"]]
+    if len(owed) > 1 and re.search(r"\b(saare|sare|sab|sabhi|dono|all|both)\b", text, re.I):  # merchant picked all of them
+        ask += "\n[SYSTEM] The merchant means ALL of these failed, customer-debited payments. Call process_refund for each now: " + ", ".join(f"txn_id={k} amount={t['amount']}" for k, t in owed)
+        audit(s, "DIAGNOSE", f"Merchant chose ALL {len(owed)} failed payments", [k[-4:] for k, _ in owed])
+    s["llm_msgs"] = [{"role": "system", "content": llm_system(s, s["sop"], cached)}, *hist, {"role": "user", "content": ask}]
     s["ctx"] = lambda tool, a: f"{m['name']}: live agent requests {tool}({', '.join(f'{k}={v}' for k, v in a.items())}). Query: '{text}'"
     try: llm_loop(s)
     except Exception as e:
@@ -922,6 +930,11 @@ def soundbox_payment(mid: str):
     m["txns"][rrn] = {"amount": amt, "time": datetime.now().strftime("Today %H:%M"), "payer": _r.choice(["neha.v@okhdfc", "rahul.k@okaxis", "cust219@ybl"]), "status": "SUCCESS", "debited": True, "refunded": False}
     sb_audit(mid, f"🔊 Announced UPI ₹{amt} on {m['soundbox']}", {"rrn": rrn, "amount": amt})
     return sb_say(m, f"Paytm par {amt} rupaye prapt hue", "upi")
+
+@app.post("/api/pin-check")
+def pin_check(x_approver_pin: str = Header("")):
+    if x_approver_pin != APPROVER_PIN: raise HTTPException(401, "bad approver PIN")
+    return {"ok": True, "approver": APPROVER}
 
 class MLReq(BaseModel):
     text: str; persona: str = "Customer"; amount: int | None = None; disputes: int = 0; bank: str | None = None

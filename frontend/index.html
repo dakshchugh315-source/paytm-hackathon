@@ -99,8 +99,11 @@ header{background:#fff;box-shadow:0 1px 0 #e5e9f0}header b.text-white{color:#002
       <div class="flex items-center gap-4 mb-1">
         <div><div class="text-lg font-bold text-slate-900">Actions waiting for you</div>
           <div class="text-sm text-slate-500">Saathi paused these because they move money or carry risk. Read the summary, then approve or take over.</div></div>
-        <label class="ml-auto text-sm text-slate-600 flex items-center gap-2 whitespace-nowrap">Approver PIN
-          <input id="pin" type="password" maxlength="4" placeholder="••••" class="w-20 px-2 py-1.5 border border-slate-300 rounded-lg text-center" title="Demo PIN: 2468"></label>
+        <div class="ml-auto flex items-center gap-2 whitespace-nowrap" id="pinbox">
+          <span class="text-sm text-slate-600">Approver PIN</span>
+          <input id="pin" type="password" maxlength="4" inputmode="numeric" placeholder="••••" onkeydown="if(event.key==='Enter')unlock()" class="w-20 px-2 py-1.5 border border-slate-300 rounded-lg text-center" title="Demo PIN: 2468">
+          <button onclick="unlock()" class="px-3 py-1.5 rounded-lg bg-[#002e6e] text-white text-sm font-semibold">🔓 Unlock</button></div>
+        <div id="pinok" class="ml-auto hidden items-center gap-2 text-sm"><span class="px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 font-semibold">🔓 Signed in as <span id="pinwho"></span></span><button onclick="lockPin()" class="text-slate-500 underline">Lock</button></div>
       </div>
       <div id="queue" class="space-y-4 mt-5"></div>
     </div>
@@ -271,6 +274,12 @@ function renderState(s) {
   put('audit', s.audit.map(a => `<div><span class="text-slate-500">${a.ts.slice(11)}</span> <span class="text-slate-500">${a.ticket}</span> <b class="${COL[a.phase]}">${a.phase}</b> ${esc(a.event)} <span class="text-slate-500">${esc(a.detail).slice(0, 110)}</span></div>`).join(''));
 }
 async function run(promise) { busy = true; tab('brain'); setBadge('DIAGNOSING'); try { await apply(await promise); } catch (e) { err(e); } busy = false; }
+async function unlock() {
+  const v = $('pin').value; if (!/^\d{4}$/.test(v)) return toast('Enter the 4-digit approver PIN (demo: 2468)');
+  try { const r = await api('/api/pin-check', {headers: {'x-approver-pin': v}}); $('pinwho').textContent = r.approver; $('pinbox').classList.add('hidden'); $('pinok').classList.remove('hidden'); $('pinok').classList.add('flex'); toast('Unlocked — you can approve now', false); }
+  catch { $('pin').value = ''; $('pin').classList.add('ring-2', 'ring-red-500'); toast('Wrong approver PIN.'); }
+}
+function lockPin() { $('pin').value = ''; $('pinbox').classList.remove('hidden'); $('pinok').classList.add('hidden'); $('pinok').classList.remove('flex'); }
 function toast(msg, bad = true) {
   let t = $('toast'); if (!t) { t = document.createElement('div'); t.id = 'toast'; document.body.appendChild(t); }
   t.className = `fixed top-16 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-lg shadow-lg text-sm font-semibold ${bad ? 'bg-red-600 text-white' : 'bg-emerald-600 text-white'}`;
@@ -285,7 +294,7 @@ async function say(text) {
   await run(api('/chat', {body: JSON.stringify({text, session_id: sid, merchant_id: MID})}));
 }
 const send = e => { e.preventDefault(); say($('inp').value); };
-const decide = (id, d) => !$('pin').value ? (tab('inbox'), $('pin').focus(), $('pin').classList.add('ring-2', 'ring-red-500'), toast('Enter the approver PIN first (demo PIN: 2468)')) : run(api(`/approvals/${id}/${d}`, {headers: {'Content-Type': 'application/json', 'x-approver-pin': $('pin').value}}));
+const decide = (id, d) => $('pinok').classList.contains('hidden') ? (tab('inbox'), $('pin').focus(), $('pin').classList.add('ring-2', 'ring-red-500'), toast('Unlock with your approver PIN first (demo PIN: 2468), then approve')) : run(api(`/approvals/${id}/${d}`, {headers: {'Content-Type': 'application/json', 'x-approver-pin': $('pin').value}}));
 const csat = (t, v) => run(api(`/csat/${t}/${v}`));
 const lead = (t, p, a) => run(api(`/lead/${t}?product=${encodeURIComponent(p)}&amount=${a}`));
 let rec, chunks;
@@ -305,7 +314,7 @@ async function toggleMic() {  // not "mic": inside a <form>, onclick="mic()" res
 }
 async function autoApprove() {
   await sleep(2200); const a = S.approvals?.find(x => x.ticket === sid); if (!a) return;  // only this demo's own approval
-  $('pin').value = '2468'; $('ap-' + a.id)?.classList.add('ring-4', 'ring-emerald-300', 'pulse'); await sleep(1600); await decide(a.id, 'approve');
+  $('pin').value = '2468'; await unlock(); $('ap-' + a.id)?.classList.add('ring-4', 'ring-emerald-300', 'pulse'); await sleep(1600); await decide(a.id, 'approve');
 }
 async function reset() { await api('/reset'); sid = null; shown = 0; seen = 0; H.chatKey = null; traceLen = 0; $('trace').innerHTML = ''; $('sop').textContent = $('diff').textContent = '—'; $('cachebadge').classList.add('hidden'); setPhase(''); setBadge('OPEN'); renderState(await get(sq())); }
 async function demo1() { await reset(); await switchMerchant('M1001'); await say('🎤 Kal ka settlement nahi aaya'); await autoApprove(); }
