@@ -12,7 +12,20 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 
+_env = os.path.join(os.path.dirname(__file__), ".env")
+if os.path.exists(_env):
+    for _l in open(_env, encoding="utf-8"):
+        if "=" in _l and not _l.lstrip().startswith("#"): os.environ.setdefault(*[x.strip().strip('"') for x in _l.split("=", 1)])
 SARVAM_KEY = os.getenv("SARVAM_API_KEY", "")
+PROVIDERS = {"gemini": ("https://generativelanguage.googleapis.com/v1beta/openai", "gemini-2.5-flash"),
+             "grok": ("https://api.x.ai/v1", "grok-3-mini"),
+             "groq": ("https://api.groq.com/openai/v1", "llama-3.3-70b-versatile"),
+             "openai": ("https://api.openai.com/v1", "gpt-4o-mini"),
+             "sarvam": ("https://api.sarvam.ai/v1", "sarvam-m")}
+LLM_PROVIDER = os.getenv("LLM_PROVIDER", "gemini").lower()
+LLM_KEY = os.getenv("LLM_API_KEY", "")
+LLM_BASE, _default_model = PROVIDERS.get(LLM_PROVIDER, PROVIDERS["gemini"])
+LLM_MODEL = os.getenv("LLM_MODEL", _default_model)
 SARVAM = "https://api.sarvam.ai"
 AUTO_LIMIT = 500
 DAILY_AUTO_CAP = 2000     # ₹ auto-refund ceiling per merchant per day
@@ -307,7 +320,8 @@ def pivot(s):
 
 def signature(intent, ctx): return f"{intent}:{ctx}"
 
-def run_agent(s, text, proactive=False):
+def run_agent(s, text, proactive=False, live=True):
+    if live and LLM_KEY: return llm_agent(s, text, proactive)
     m = MERCHANTS[s["merchant"]]; s["status"] = "DIAGNOSING"
     pre = next((k for k, p in INTENTS.items() if re.search(p, text, re.I)), None)
     hint = {"settlement": "BANK_CHANGE_HOLD" if check_settlement_status(s["merchant"])["bank_recently_changed"] else "OTHER",
@@ -403,6 +417,7 @@ def resume(ap):
     audit(s, "HUMAN", f"👤 Approved by {APPROVER} · PIN ✓ · risk {ap['score'][0]}/100 → executing {tool}", a)
     res = TOOLS[tool](s["merchant"], **a); s["tools"] += 1; audit(s, "ACT", f"✔ {tool}", {"tool": tool, "args": a, "result": res})
     s["diff"] = {"before": ap["before"], "after": snapshot(s["merchant"])}
+    if s.get("llm"): return llm_resume(s, ap, res)
     if tool == "trigger_resettlement":
         v = check_settlement_status(s["merchant"])["settlements"][a["settlement_id"]]
         audit(s, "VERIFY", f"Re-query {a['settlement_id']}: FAILED → {v['status']}", s["diff"])
@@ -419,6 +434,98 @@ def resume(ap):
         reply(s, f"{res['assigned']} aapko {res['eta_min']} min mein call karenge. Asuvidha ke liye maafi 🙏"); s["status"] = "ESCALATED"
     elif tool == "book_technician":
         reply(s, f"Technician visit book ho gaya ✅ {res['slot']}, ID {res['visit_id']}.", res, voice=True); resolve(s, res["visit_id"])
+
+# ---------------- Live LLM agent (real tool-calling; guardrails still enforced by call()) ----------------
+TOOL_SPECS = {
+    "lookup_transaction": ("Look up the merchant's recent transactions (optionally one txn_id).", {"txn_id": "string"}, []),
+    "check_settlement_status": ("Get settlements and whether a recent bank change is holding payouts.", {}, []),
+    "send_bank_update_link": ("Send the merchant a secure bank-verification link.", {}, []),
+    "trigger_resettlement": ("Re-send a failed settlement. Needs human approval.", {"settlement_id": "string", "amount": "integer"}, ["settlement_id", "amount"]),
+    "process_refund": ("Refund a debited-but-failed txn. >=500 needs human approval.", {"txn_id": "string", "amount": "integer"}, ["txn_id", "amount"]),
+    "ping_soundbox": ("Check if a Soundbox device is online.", {"device_id": "string"}, ["device_id"]),
+    "restart_soundbox_iot": ("Remotely reboot a Soundbox.", {"device_id": "string"}, ["device_id"]),
+    "book_technician": ("Book a field technician visit. Needs human approval.", {"slot": "string"}, []),
+    "check_loan_and_soundbox_eligibility": ("Check pre-approved loan / Soundbox offer eligibility.", {}, []),
+    "update_bank_account": ("Change the payout bank account. Needs human approval.", {"new_acc": "string", "ifsc": "string"}, ["new_acc", "ifsc"]),
+}
+LLM_TOOLS = [{"type": "function", "function": {"name": n, "description": d, "parameters": {"type": "object", "properties": {k: {"type": t} for k, t in ps.items()}, "required": req}}}
+             for n, (d, ps, req) in TOOL_SPECS.items()]
+READ_ONLY = {"lookup_transaction", "check_settlement_status", "ping_soundbox", "check_loan_and_soundbox_eligibility"}
+
+def llm_system(s, sop, cached):
+    m = MERCHANTS[s["merchant"]]
+    return f"""You are Saathi, Paytm's autonomous support & sales teammate for merchants. Close tickets with verified tool actions, not FAQ answers.
+Loop: UNDERSTAND the query -> DIAGNOSE with the SOP -> ACT with tools -> VERIFY by re-querying state after any change -> then reply.
+Rules:
+- Never guess. If the merchant's problem is unclear, ask ONE short clarifying question and call no tools.
+- If several transactions could match, ask which one; act only on the one the merchant means.
+- Some tools need human approval; if a tool returns PENDING_HUMAN_APPROVAL, tell the merchant it is with a senior for approval. Never claim it is done.
+- A message starting with EVENT is a Paytm backend alert: message the merchant first, proactively, by name.
+- Do not pitch loans/offers unless the merchant asks.
+- Reply in warm natural Hinglish (Roman script) matching the merchant, under 40 words, stating exactly what you did and verified. Mask account/phone numbers as XXXX-1234.
+Merchant: {m['name']} ({m['owner']}), id {s['merchant']}, Soundbox {m['soundbox']}, GMV Rs {m['monthly_volume']}/month.
+Retrieved SOP: {json.dumps(sop, ensure_ascii=False) if sop else 'none'}
+{('Verified fix from a past ticket (reuse it, skip re-diagnosis): ' + ' -> '.join(cached['plan'])) if cached else ''}"""
+
+def llm_chat(msgs):
+    r = httpx.post(f"{LLM_BASE}/chat/completions", headers={"Authorization": f"Bearer {LLM_KEY}"}, timeout=40,
+                   json={"model": LLM_MODEL, "messages": msgs, "tools": LLM_TOOLS, "temperature": 0.2})
+    if r.status_code != 200: raise RuntimeError(f"{LLM_PROVIDER} {r.status_code}: {r.text[:200]}")
+    j = r.json(); return j["choices"][0]["message"], j.get("usage", {}).get("total_tokens", 0)
+
+def llm_loop(s, acted=False):
+    for _ in range(8):
+        msg, tk = llm_chat(s["llm_msgs"]); s["tokens"] += tk
+        calls = msg.get("tool_calls") or []
+        s["llm_msgs"].append({"role": "assistant", "content": msg.get("content") or "", **({"tool_calls": calls} if calls else {})})
+        if not calls:
+            text = (msg.get("content") or "").strip() or "Ek minute, main check kar raha hoon 🙏"
+            reply(s, re.sub(r"<think>.*?</think>", "", text, flags=re.S).strip())
+            break
+        audit(s, "DIAGNOSE", f"🧠 {LLM_MODEL} chose: " + ", ".join(c["function"]["name"] for c in calls), [c["function"] for c in calls], tokens=tk)
+        for c in calls:
+            name = c["function"]["name"]
+            try:
+                args = json.loads(c["function"].get("arguments") or "{}")
+                if name not in TOOLS: raise ValueError("unknown tool")
+                if acted and name in READ_ONLY: audit(s, "VERIFY", f"🔎 Re-checking state via {name}", args)
+                res = call(s, name, **args)
+                out = {"status": "PENDING_HUMAN_APPROVAL"} if res is None else res
+                if res is not None and name not in READ_ONLY: acted = True
+            except Exception as e:
+                out = {"error": str(e)}; audit(s, "ACT", f"⚠ {name} failed: {e}", c["function"])
+            s["llm_msgs"].append({"role": "tool", "tool_call_id": c.get("id", name), "content": json.dumps(out, ensure_ascii=False, default=str)})
+    pending = any(a["ticket"] == s["id"] and a["status"] == "PENDING" for a in APPROVALS.values())
+    if pending: s["status"] = "WAITING_APPROVAL"
+    elif acted: resolve(s, "Verified by live agent")
+    else: s["status"] = "NEEDS_INFO"
+
+def llm_agent(s, text, proactive=False):
+    m = MERCHANTS[s["merchant"]]; s["status"] = "DIAGNOSING"; s["llm"] = True
+    pre = next((k for k, p in INTENTS.items() if re.search(p, text, re.I)), None)
+    hint = {"settlement": "BANK_CHANGE_HOLD" if check_settlement_status(s["merchant"])["bank_recently_changed"] else "OTHER",
+            "soundbox": DEVICES[m["soundbox"]].get("fault") or "OK"}.get(pre, "")
+    cached = CACHE.get(signature(pre, hint)); s["intent"] = pre or "other"
+    if cached: s["cache_hit"] = True; cached["hits"] += 1
+    s["sop"] = rag(text)
+    audit(s, "UNDERSTAND", f"{'⚡ CACHE_HIT — ' if cached else ''}Live agent: {LLM_PROVIDER}/{LLM_MODEL}", {"query": text, "proactive": proactive})
+    if s["sop"]: audit(s, "DIAGNOSE", f"SOP retrieved: {s['sop']['id']}", s["sop"])
+    with LOCK:
+        db.execute("INSERT INTO tix VALUES(?,?,?,?,?,?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET intent=excluded.intent, cache=excluded.cache",
+                   (s["id"], s["merchant"], s["intent"], "OPEN", 1, int(s["cache_hit"]), 0, 0, s["opened"], None)); db.commit()
+    hist = [{"role": "user" if x["from"] == "merchant" else "assistant", "content": x["text"].replace("🎤 ", "")} for x in MSGS[-9:-1] if x.get("text")]
+    s["llm_msgs"] = [{"role": "system", "content": llm_system(s, s["sop"], cached)}, *hist, {"role": "user", "content": text}]
+    s["ctx"] = lambda tool, a: f"{m['name']}: live agent requests {tool}({', '.join(f'{k}={v}' for k, v in a.items())}). Query: '{text}'"
+    try: llm_loop(s)
+    except Exception as e:
+        audit(s, "HUMAN", f"⚠ LLM unavailable ({e}) → stage-safe fallback", str(e)); s["llm"] = False
+        return run_agent(s, text, proactive, live=False)
+
+def llm_resume(s, ap, res):
+    s["llm_msgs"].append({"role": "user", "content": f"[SYSTEM] A human approved {ap['tool']}. Result: {json.dumps(res, ensure_ascii=False, default=str)}. Verify the new state with a read tool, then confirm to the merchant."})
+    s["status"] = "EXECUTING"
+    try: llm_loop(s, acted=True)
+    except Exception as e: reply(s, f"{ap['tool']} ho gaya ✅"); audit(s, "HUMAN", f"⚠ LLM unavailable on resume ({e})", str(e)); resolve(s, "Approved")
 
 # ---------------- API ----------------
 class Msg(BaseModel):
@@ -568,7 +675,7 @@ def state():
                         "repeat_s": round(statistics.mean(cache_ttr), 2) if cache_ttr else None, "cache_hits": sum(r[2] for r in rows),
                         "leads": lc[0], "pipeline": lc[1], "csat": round(100 * cs[0]) if cs[1] else None, "csat_n": cs[1]},
             "audit": [dict(zip(["ts", "ticket", "phase", "event", "detail", "hash"], r)) for r in db.execute("SELECT ts, ticket, phase, event, detail, hash FROM audit_chain ORDER BY id DESC LIMIT 60").fetchall()],
-            "sarvam": bool(SARVAM_KEY), "db": db.kind, "chain_ok": verify_chain(), "followup_after_s": FOLLOWUP_AFTER_S}
+            "sarvam": bool(SARVAM_KEY), "live_llm": f"{LLM_PROVIDER}/{LLM_MODEL}" if LLM_KEY else None, "db": db.kind, "chain_ok": verify_chain(), "followup_after_s": FOLLOWUP_AFTER_S}
 
 @app.post("/reset")
 def reset():

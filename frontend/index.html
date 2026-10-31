@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Saathi Command Center — Paytm × Sarvam AI</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -129,7 +129,7 @@ async function apply(r) {
 }
 function renderState(s) {
   S = s; renderChat(s.messages);
-  $('llm').textContent = (s.sarvam ? '● Sarvam-M · Saarika · Bulbul LIVE' : '● Stage-safe local fallback') + ` · 🗄 ${s.db}`;
+  $('llm').textContent = (s.live_llm ? `🟢 LIVE agent: ${s.live_llm}` : s.sarvam ? '● Sarvam-M · Saarika · Bulbul LIVE' : '● Scripted fallback (no LLM key)') + ` · 🗄 ${s.db}`;
   put('chain', s.chain_ok ? '<span class="text-emerald-600">🔒 SHA-256 chain verified</span>' : '<span class="text-red-600 font-bold">⚠ CHAIN BROKEN</span>');
   const p = s.profile, pill = (ok, a, b) => `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${ok ? 'bg-emerald-500/20 text-emerald-300' : 'bg-red-500/20 text-red-300 pulse'}">${ok ? a : b}</span>`;
   put('profile', `<div class="flex items-center"><div><div class="text-white font-semibold">${p.name}</div><div class="text-[11px] text-slate-400">${p.owner} · ${p.id} · GMV ₹${p.gmv.toLocaleString('en-IN')}/mo · Bank ${p.bank}</div></div></div>
