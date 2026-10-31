@@ -5,3 +5,6 @@ python-multipart
 edge-tts
 psycopg[binary]
 
+scikit-learn
+joblib
+numpy

@@ -11,6 +11,8 @@ from fastapi import FastAPI, UploadFile, File, Form, HTTPException, Header, Requ
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
+import sys; sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import ml_engine
 
 _env = os.path.join(os.path.dirname(__file__), ".env")
 if os.path.exists(_env):
@@ -92,7 +94,8 @@ SEED = {
                        "430711225498": {"amount": 560, "time": "Today 09:15", "payer": "amit.s@paytm", "status": "SUCCESS", "debited": True, "refunded": False}}},
     "M1002": {"name": "Gupta Medicals", "owner": "Sunita Gupta", "city": "Jaipur", "phone": "9812345670", "monthly_volume": 480000, "has_loan": False, "soundbox": "SB-8820",
               "bank": {"acc": "33090011223344", "ifsc": "SBIN0004321", "changed_days_ago": 90, "verified": True},
-              "settlements": {"ST-9102": {"amount": 42300, "date": "yesterday", "status": "SETTLED", "reason": "", "utr": "UTR8821AB09"}},
+              "settlements": {"ST-9102": {"amount": 42300, "date": "yesterday", "status": "SETTLED", "reason": "", "utr": "UTR8821AB09"},
+                              "ST-9105": {"amount": 8500, "date": "today 09:00", "status": "ON_HOLD", "reason": "Auto risk-review (velocity spike)"}},
               "txns": {"430722310045": {"amount": 2450, "time": "Today 11:05", "payer": "dr.mehta@icici", "status": "FAILED", "debited": True, "refunded": False},
                        "430722310031": {"amount": 180, "time": "Today 10:20", "payer": "neha.v@okhdfc", "status": "SUCCESS", "debited": True, "refunded": False}}},
     "M1003": {"name": "Raju Chai Stall", "owner": "Raju", "city": "Lucknow", "phone": "9900112233", "monthly_volume": 45000, "has_loan": False, "soundbox": "SB-9102",
@@ -101,12 +104,32 @@ SEED = {
               "txns": {"430733401120": {"amount": 20, "time": "Today 08:02", "payer": "student21@ybl", "status": "FAILED", "debited": True, "refunded": False}}},
 }
 
+CUSTOMER_SEED = {
+    "C2001": {"name": "Ankit Verma", "lang": "Hinglish", "city": "Delhi", "phone": "9811122233", "disputes": 0, "frozen": False,
+              "txns": {"UPI-48821": {"amount": 420, "to": "Sharma General Store", "time": "Today 11:12", "status": "PENDING", "debited": True, "credited": False, "refunded": False}}},
+    "C2002": {"name": "Lakshmi R", "lang": "Tamil", "city": "Chennai", "phone": "9840011223", "disputes": 1, "frozen": False, "txns": {},
+              "emi": {"loan": "Paytm Personal Loan", "emi": 2150, "due": "Tomorrow", "late_fee": 250, "paid": False, "waived": False}},
+    "C2003": {"name": "Rohan Mehta", "lang": "English", "city": "Pune", "phone": "9822334455", "disputes": 0, "frozen": False,
+              "txns": {"UPI-99310": {"amount": 12000, "to": "quickpay8812@ybl", "time": "Today 02:14 AM", "status": "SUCCESS", "debited": True, "credited": True, "refunded": False}}},
+}
+BUYER_LANGS = ["Hinglish", "Hindi", "Tamil", "Marathi", "Bengali", "English"]
+
+def buyers(mid, n=60):
+    """Synthetic 90-day buyer book for a merchant (deterministic per merchant)."""
+    import random as _r; rng = _r.Random(mid)
+    return [{"vpa": f"cust{i:03d}@{rng.choice(['ybl', 'okaxis', 'paytm', 'okhdfc'])}", "lang": rng.choice(BUYER_LANGS),
+             "visits_90d": rng.choice([1, 1, 2, 3, 4, 6, 9]), "last_visit_days": rng.randint(1, 120), "avg_ticket": rng.choice([120, 250, 400, 650, 900])} for i in range(n)]
+
 def reset_world():
     global MERCHANTS, DEVICES, SESSIONS, APPROVALS, CACHE, MSGS
     MERCHANTS = copy.deepcopy(SEED); DEVICES = {"SB-7781": {"online": False, "fault": "network", "last_ping": "14 min ago"}, "SB-8820": {"online": True, "fault": None, "last_ping": "just now"},
                "SB-9102": {"online": False, "fault": "network", "last_ping": "2 h ago"}}
     SESSIONS, APPROVALS, CACHE, MSGS = {}, {}, {}, []
+    global CUSTOMERS, CAMPAIGNS, ML_LOG, BANK_STATUS, HANDOFFS
+    CUSTOMERS, CAMPAIGNS, ML_LOG, BANK_STATUS, HANDOFFS = copy.deepcopy(CUSTOMER_SEED), {}, [], "DEGRADED", []
 reset_world()
+
+def user(uid): return CUSTOMERS.get(uid) or MERCHANTS[uid]
 
 def save_world():
     msgs = [{**{k: v for k, v in m.items() if k != "voice"}, **({"voice": {"source": "browser"}} if m.get("voice") else {})} for m in MSGS]
@@ -194,6 +217,7 @@ TOOLS = {f.__name__: f for f in [lookup_transaction, check_settlement_status, se
 
 # ---------------- Guardrails ----------------
 def risk_score(mid, tool, args):
+    if mid in CUSTOMERS: return (SESSIONS_ML.get(mid, {}).get("risk_score", 80), ["ML fraud model", "customer funds at risk"])
     m = MERCHANTS[mid]; r, why = 10, []
     if m["bank"]["changed_days_ago"] <= 1: r += 35; why.append("bank changed <24h")
     if args.get("amount", 0) >= 10000: r += 20; why.append("high value")
@@ -297,13 +321,17 @@ def call(s, tool, **args):
         aid = "AP-" + uuid.uuid4().hex[:5].upper()
         before = snapshot(s["merchant"])
         APPROVALS[aid] = {"id": aid, "ticket": s["id"], "tool": tool, "args": args, "status": "PENDING", "risk": why, "before": before, "score": risk_score(s["merchant"], tool, args),
-                          "summary": s["ctx"](tool, args), "created": time.time()}
+                          "summary": s["ctx"](tool, args), "created": time.time(), "ml": s.get("ml"),
+                          "actions": [t["event"] for t in s["trace"] if t["phase"] == "ACT"][-4:]}
         s["status"] = "WAITING_APPROVAL"; s["auto"] = False
         audit(s, "HUMAN", f"⏸ {tool} → NEEDS_APPROVAL ({aid})", {"tool": tool, "args": args, "tier": t, "reason": why}); return None
     res = TOOLS[tool](s["merchant"], **args); s["tools"] += 1
     audit(s, "ACT", f"✔ {tool} [AUTO]", {"tool": tool, "args": args, "tier": t, "result": res}); return res
 
 def snapshot(mid):
+    if mid in CUSTOMERS:
+        c = CUSTOMERS[mid]
+        return {"frozen": c["frozen"], "txns": {k: v["status"] for k, v in c["txns"].items()}, **({"emi_paid": c["emi"]["paid"], "late_fee_waived": c["emi"]["waived"]} if c.get("emi") else {})}
     m = MERCHANTS[mid]
     return {"settlements": {k: v["status"] for k, v in m["settlements"].items()}, "bank_verified": m["bank"]["verified"],
             "soundbox_online": DEVICES[m["soundbox"]]["online"], "txns": {k: v["status"] for k, v in m["txns"].items()}}
@@ -325,7 +353,7 @@ def resolve(s, note, cache_key=None, plan=None):
     with LOCK:
         db.execute("UPDATE tix SET status='VERIFIED', auto=?, cache=?, tokens=?, cost=?, resolved=? WHERE id=?",
                    (int(s["auto"]), int(s["cache_hit"]), s["tokens"], cost, s["resolved"], s["id"])); db.commit()
-    if s["intent"] != "sales" and not MERCHANTS[s["merchant"]].get("pitched") and calm(s): MERCHANTS[s["merchant"]]["pitched"] = True; pivot(s)
+    if s["merchant"] in MERCHANTS and s["intent"] != "sales" and not MERCHANTS[s["merchant"]].get("pitched") and calm(s): MERCHANTS[s["merchant"]]["pitched"] = True; pivot(s)
 
 def calm(s):
     """Pitch only at a quiet moment: no other open ticket, pending approval or unanswered question for this merchant."""
@@ -345,6 +373,8 @@ def pivot(s):
 def signature(intent, ctx): return f"{intent}:{ctx}"
 
 def run_agent(s, text, proactive=False, live=True):
+    if "ml" not in s and ml_route(s, text, proactive): return
+    if s["merchant"] in CUSTOMERS: return handoff(s, "Unclassified customer query", text)
     if live and LLM_KEY: return llm_agent(s, text, proactive)
     m = MERCHANTS[s["merchant"]]; s["status"] = "DIAGNOSING"
     pre = next((k for k, p in INTENTS.items() if re.search(p, text, re.I)), None)
@@ -438,6 +468,7 @@ def run_agent(s, text, proactive=False, live=True):
 
 def resume(ap):
     s = SESSIONS[ap["ticket"]]; tool, a = ap["tool"], ap["args"]
+    if tool in ML_TOOLS: return ml_resume(s, ap)
     audit(s, "HUMAN", f"👤 Approved by {APPROVER} · PIN ✓ · risk {ap['score'][0]}/100 → executing {tool}", a)
     res = TOOLS[tool](s["merchant"], **a); s["tools"] += 1; audit(s, "ACT", f"✔ {tool}", {"tool": tool, "args": a, "result": res})
     s["diff"] = {"before": ap["before"], "after": snapshot(s["merchant"])}
@@ -497,7 +528,7 @@ Mention refs to the merchant only as last 4 digits. Use this context to propose 
 Retrieved SOP: {json.dumps(sop, ensure_ascii=False) if sop else 'none'}
 {('Verified fix from a past ticket (reuse it, skip re-diagnosis): ' + ' -> '.join(cached['plan'])) if cached else ''}"""
 
-def llm_chat(msgs):
+def llm_chat(msgs, tools=True):
     """Try providers in order; a 429/quota/5xx/timeout puts that provider on cooldown and falls through to the next."""
     global LLM_PROVIDER, LLM_MODEL
     errs = []
@@ -505,7 +536,7 @@ def llm_chat(msgs):
         if p["cool_until"] > time.time(): continue
         try:
             r = httpx.post(f"{p['base']}/chat/completions", headers={"Authorization": f"Bearer {p['key']}"}, timeout=40,
-                           json={"model": p["model"], "messages": msgs, "tools": LLM_TOOLS, "temperature": 0.2})
+                           json={"model": p["model"], "messages": msgs, **({"tools": LLM_TOOLS} if tools else {}), "temperature": 0.2})
             if r.status_code == 200:
                 LLM_PROVIDER, LLM_MODEL = p["name"], p["model"]; j = r.json()
                 return j["choices"][0]["message"], j.get("usage", {}).get("total_tokens", 0), errs
@@ -597,6 +628,205 @@ def llm_resume(s, ap, res):
     try: llm_loop(s, acted=True)
     except Exception as e: reply(s, f"{ap['tool']} ho gaya ✅"); audit(s, "HUMAN", f"⚠ LLM unavailable on resume ({e})", str(e)); resolve(s, "Approved")
 
+# ---------------- ML-first router: model decides, code executes, LLM only speaks the user's language ----------------
+def verify_utr(uid, txn_id):
+    t = CUSTOMERS[uid]["txns"][txn_id]
+    return {"txn": txn_id, "debited": t["debited"], "merchant_credited": t["credited"], "npci_status": "DEEMED" if BANK_STATUS != "UP" else "PENDING", "bank": BANK_STATUS}
+
+def instant_refund(uid, txn_id, amount):
+    t = CUSTOMERS[uid]["txns"][txn_id]
+    if t["refunded"]: return {"ok": False, "error": "IDEMPOTENT_BLOCK: already refunded"}
+    t.update(refunded=True, status="REFUNDED", rrn="RF" + uuid.uuid4().hex[:8].upper()); return {"ok": True, "txn": txn_id, "amount": amount, "rrn": t["rrn"]}
+
+def check_emi(uid): return dict(CUSTOMERS[uid]["emi"])
+
+def waive_late_fee(uid):
+    e = CUSTOMERS[uid]["emi"]; e["waived"] = True; return {"waived": e["late_fee"], "reason": "first delay, good history"}
+
+def send_emi_payment_link(uid):
+    return {"link": f"https://paytm.me/emi/{uuid.uuid4().hex[:6]}", "amount": CUSTOMERS[uid]["emi"]["emi"]}
+
+def freeze_account(uid):
+    CUSTOMERS[uid]["frozen"] = True; return {"frozen": True, "upi_blocked": True, "cards_blocked": True}
+
+def fraud_case_handoff(uid, txn_id, amount):
+    return {"case": "FRD-" + uuid.uuid4().hex[:5].upper(), "owner": "risk-02 (Meera)", "provisional_credit": amount, "chargeback": "RAISED"}
+
+def check_ledger_and_kyc(mid, settlement_id):
+    st = MERCHANTS[mid]["settlements"][settlement_id]
+    return {"ledger_match": True, "kyc": "GREEN" if MERCHANTS[mid]["bank"]["verified"] else "PENDING", "hold_reason": st.get("reason"), "bank": BANK_STATUS}
+
+def release_instant_settlement(mid, settlement_id, amount, ml_risk="LOW"):
+    st = MERCHANTS[mid]["settlements"][settlement_id]
+    if st["status"] == "SETTLED": return {"ok": False, "error": "IDEMPOTENT_BLOCK: already settled"}
+    st.update(status="SETTLED", utr="UTR" + uuid.uuid4().hex[:10].upper()); return {"ok": True, "utr": st["utr"], "amount": amount}
+
+def segment_repeat_buyers(mid, days=90):
+    seg = [b for b in buyers(mid) if b["visits_90d"] >= 3 and b["last_visit_days"] <= days]
+    return {"count": len(seg), "by_lang": {l: sum(b["lang"] == l for b in seg) for l in BUYER_LANGS if any(b["lang"] == l for b in seg)},
+            "avg_ticket": round(sum(b["avg_ticket"] for b in seg) / max(1, len(seg)))}
+
+def send_whatsapp_campaign(mid, offer, count, avg_ticket):
+    cid = "CMP-" + uuid.uuid4().hex[:4].upper()
+    CAMPAIGNS[cid] = {"id": cid, "merchant": mid, "offer": offer, "sent": count, "avg_ticket": avg_ticket, "start": time.time()}
+    return {"campaign": cid, "sent": count, "channel": "WhatsApp (opted-in only)", "personalised_langs": True}
+
+SESSIONS_ML = {}
+ML_TOOLS = {"verify_utr", "instant_refund", "check_emi", "waive_late_fee", "send_emi_payment_link", "freeze_account", "fraud_case_handoff",
+            "check_ledger_and_kyc", "release_instant_settlement", "segment_repeat_buyers", "send_whatsapp_campaign"}
+TOOLS.update({n: globals()[n] for n in ML_TOOLS})
+_tier_base = tier
+def tier(tool, args, mid="M1001"):
+    if tool == "instant_refund": return ("NEEDS_APPROVAL", f"Refund ≥ ₹{AUTO_LIMIT}") if args.get("amount", 0) >= AUTO_LIMIT else ("AUTO", "Small refund, bank degraded, no disputes")
+    if tool == "release_instant_settlement": return ("AUTO", "KYC green + ML risk LOW") if args.get("ml_risk") == "LOW" else ("NEEDS_APPROVAL", "ML risk not LOW")
+    if tool == "fraud_case_handoff": return "NEEDS_APPROVAL", "Fraud — human teammate must own the case"
+    if tool in ("freeze_account", "waive_late_fee", "send_emi_payment_link", "send_whatsapp_campaign") or tool in ML_TOOLS: return "AUTO", "Protective / reversible / informational"
+    return _tier_base(tool, args, mid)
+
+def campaign_live(c):
+    el = time.time() - c["start"]; sent = c["sent"]
+    paid = min(int(sent * 0.22), int(el / 4)); clicked = min(int(sent * 0.55), int(el / 1.5) + paid)
+    return {**c, "delivered": sent, "clicked": clicked, "paid": paid, "gmv": paid * c["avg_ticket"], "conv_pct": round(100 * paid / max(1, sent), 1)}
+
+LANG_HINT = {"Tamil": "Tamil script", "Telugu": "Telugu script", "Bengali": "Bengali script", "Marathi": "Marathi in Devanagari", "Hindi": "Hindi in Devanagari",
+             "Hinglish": "Hinglish in Roman script", "English": "simple English"}
+
+def speak(s, draft, d, **kw):
+    """LLM only localises the already-decided action; falls back to the draft if no LLM."""
+    text = draft
+    if LLM_KEY:
+        try:
+            msg, tk, _ = llm_chat([{"role": "system", "content": f"You are Paytm's support teammate. Rewrite the message for a Paytm {d['persona']} in {LANG_HINT.get(d['lang'], 'Hinglish')}. "
+                                   f"{'First sentence must calm their fear. ' if d['sentiment'] >= 0.5 else ''}Max 45 words. Keep every number, ID and link exact. Output only the message."},
+                                  {"role": "user", "content": draft}], tools=False)
+            text = (msg.get("content") or "").strip() or draft; s["tokens"] += tk
+        except Exception as e: audit(s, "HUMAN", f"⚠ LLM phrasing unavailable ({str(e)[:60]}) — sent draft", "")
+    return reply(s, text, **kw)
+
+def open_ticket(s, intent):
+    s["intent"] = intent
+    with LOCK:
+        db.execute("INSERT INTO tix VALUES(?,?,?,?,?,?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET intent=excluded.intent", (s["id"], s["merchant"], intent, "OPEN", 1, 0, 0, 0, s["opened"], None)); db.commit()
+
+def handoff(s, why, text):
+    s["status"] = "WAITING_APPROVAL"; s["auto"] = False
+    audit(s, "HUMAN", f"🙋 Handoff: {why}", text)
+    return reply(s, "Main aapka case abhi ek senior teammate ko de raha hoon, poori jaankari ke saath — aapko dobara kuch batana nahi padega 🙏")
+
+def ml_route(s, text, proactive=False):
+    uid = s["merchant"]; cust = uid in CUSTOMERS; u = user(uid)
+    d = ml_engine.decide(text, "Customer" if cust else "Merchant", disputes=u.get("disputes", 0), bank=BANK_STATUS)
+    s["ml"] = d; SESSIONS_ML[uid] = d; ML_LOG.append({**d, "ticket": s["id"], "user": uid, "ts": time.time()})
+    audit(s, "UNDERSTAND", f"🤖 ML {d['latency_ms']}ms: {d['issue']} → {d['action']} · risk {d['risk']} ({d['risk_score']}) · {d['lang']} · sentiment {d['sentiment']}", d)
+    if d["issue_conf"] < 0.45: return False
+    if (d["persona_expected"] == "Customer") != cust: return False  # e.g. merchant says "customer ka paisa kata" -> merchant flows
+    act = d["action"]; s["ctx"] = lambda tool, a: f"{u['name']} ({'customer' if cust else 'merchant'}, {d['lang']}, sentiment {d['sentiment']}): {d['issue']} ₹{d['amount'] or a.get('amount', 0):,}; ML risk {d['risk']} {d['risk_score']}. Asks: {tool}."
+    if act == "FREEZE_AND_HUMAN_HANDOFF":
+        open_ticket(s, "fraud" if cust else d["issue"])
+        if cust: call(s, "freeze_account")
+        txn = next(iter(u.get("txns", {})), "N/A"); amt = d["amount"] or (u["txns"][txn]["amount"] if txn in u.get("txns", {}) else 0)
+        call(s, "fraud_case_handoff", txn_id=txn, amount=amt)
+        HANDOFFS.append({"ticket": s["id"], "risk": d["risk"], "latency_ms": int((time.time() - s["opened"]) * 1000)})
+        return speak(s, f"Aapka paisa surakshit hai. Maine aapka account turant freeze kar diya hai taaki aur paisa na kate. ₹{amt:,} ka case ek senior fraud expert ko de diya hai, woh 10 minute mein call karenge." if cust
+                     else "Is case ko main senior risk teammate ko de raha hoon, poori summary ke saath.", d) or True
+    if cust and act == "AUTO_REFUND_INSTANT":
+        open_ticket(s, "upi_pending"); c = CUSTOMERS[uid]
+        txn = next((k for k, t in c["txns"].items() if t["status"] == "PENDING" and (not d["amount"] or t["amount"] == d["amount"])), None)
+        if not txn: return speak(s, "Aapke account mein koi atka hua payment nahi mila. UPI ref number bhej dijiye, main turant check karta hoon.", d) or True
+        t = c["txns"][txn]; v = call(s, "verify_utr", txn_id=txn)
+        audit(s, "DIAGNOSE", f"Debited={v['debited']} · merchant credited={v['merchant_credited']} · bank {BANK_STATUS} → refund path", v)
+        r = call(s, "instant_refund", txn_id=txn, amount=t["amount"])
+        if r is None: return speak(s, f"Ghabraiye mat, aapka ₹{t['amount']:,} surakshit hai. Refund senior ki approval ke baad turant ho jayega.", d) or True
+        chk = CUSTOMERS[uid]["txns"][txn]; s["diff"] = {"before": {"status": "PENDING"}, "after": {"status": chk["status"], "rrn": chk.get("rrn")}}
+        audit(s, "VERIFY", f"{txn}: PENDING → {chk['status']} (RRN {chk.get('rrn')})", s["diff"])
+        speak(s, f"Ghabraiye mat, aapka paisa surakshit hai. Bank server slow tha, isliye ₹{t['amount']:,} {t['to']} tak nahi pahuncha. Maine abhi refund kar diya, RRN {chk['rrn']}. 2 ghante mein account mein dikhega.", d, voice=True)
+        resolve(s, "Instant refund verified"); return True
+    if cust and act == "SEND_EMI_LINK_WITH_REASSURANCE":
+        open_ticket(s, "emi"); e = call(s, "check_emi")
+        w = call(s, "waive_late_fee") if CUSTOMERS[uid]["disputes"] <= 1 else None
+        link = call(s, "send_emi_payment_link")
+        speak(s, f"Chinta mat kijiye, aapki EMI abhi bounce nahi hui hai. ₹{e['late_fee']} late fee maaf kar di hai. Neeche button se ₹{e['emi']:,} abhi bhar dijiye, bas ek click.", d,
+              cta={"label": f"💳 Pay ₹{e['emi']:,} now", "product": "EMI", "amount": e["emi"]})
+        s["status"] = "NEEDS_INFO"; return True
+    if not cust and act == "TRIGGER_WHATSAPP_CAMPAIGN":
+        open_ticket(s, "campaign"); seg = call(s, "segment_repeat_buyers", days=90)
+        audit(s, "DIAGNOSE", f"Segment: {seg['count']} repeat buyers (≥3 visits, last 90d) across {len(seg['by_lang'])} languages", seg)
+        cmp_ = call(s, "send_whatsapp_campaign", offer="Diwali: 10% off + Paytm cashback", count=seg["count"], avg_ticket=seg["avg_ticket"])
+        speak(s, f"Ho gaya! Pichhle 90 din ke {seg['count']} regular customers ko unki bhasha mein Diwali offer aur payment link bhej diya. Live conversions neeche dekhiye 👇", d, kind="campaign", cta=None)
+        MSGS[-1]["campaign"] = cmp_["campaign"]; resolve(s, f"Campaign {cmp_['campaign']} live"); return True
+    if not cust and act == "RELEASE_INSTANT_SETTLEMENT":
+        st = check_settlement_status(uid)
+        if st["bank_recently_changed"]: s.pop("ml_handled", None); return False  # bank-change hold -> existing approval flow
+        held = {k: v for k, v in MERCHANTS[uid]["settlements"].items() if v["status"] != "SETTLED"}
+        if not held: return False
+        open_ticket(s, "settlement")
+        for sid_, v in held.items():
+            k = call(s, "check_ledger_and_kyc", settlement_id=sid_)
+            if k["kyc"] != "GREEN" or BANK_STATUS == "DOWN":
+                speak(s, f"₹{v['amount']:,} ka settlement {k['hold_reason'] or 'review'} ki wajah se ruka hai. Bank server {BANK_STATUS} hai — aaj 4 PM ke batch mein pakka aa jayega, main khud confirm karunga.", d); s["status"] = "NEEDS_INFO"; return True
+            r = call(s, "release_instant_settlement", settlement_id=sid_, amount=v["amount"], ml_risk=d["risk"])
+            if r is None: return speak(s, f"Ledger aur KYC theek hai. ₹{v['amount']:,} instant release ke liye senior approval le raha hoon.", d) or True
+            after = MERCHANTS[uid]["settlements"][sid_]; s["diff"] = {"before": {"status": v["status"]}, "after": {"status": after["status"], "utr": after.get("utr")}}
+            audit(s, "VERIFY", f"{sid_}: {v['status']} → {after['status']} · UTR {after.get('utr')}", s["diff"])
+            speak(s, f"Ledger match aur KYC green hai, isliye ₹{v['amount']:,} ka settlement abhi instant release kar diya ✅ UTR {after['utr']}. 30 min mein bank mein dikhega.", d, voice=True)
+        resolve(s, "Instant settlement verified"); return True
+    return False
+
+def ml_resume(s, ap):
+    tool, a = ap["tool"], ap["args"]
+    res = TOOLS[tool](s["merchant"], **a); s["tools"] += 1; audit(s, "ACT", f"✔ {tool} (human-approved)", {"tool": tool, "args": a, "result": res})
+    d = s.get("ml") or {"persona": "Customer", "lang": "Hinglish", "sentiment": 0}
+    if tool == "fraud_case_handoff":
+        audit(s, "VERIFY", f"Case {res['case']} owned by {res['owner']} · provisional credit ₹{res['provisional_credit']:,}", res)
+        speak(s, f"{res['owner'].split('(')[-1].rstrip(')')} ji ne aapka case {res['case']} le liya hai. ₹{res['provisional_credit']:,} ka provisional credit 24 ghante mein milega. Account surakshit hai.", d, voice=True)
+        s["status"] = "ESCALATED"; return
+    if tool in ("instant_refund", "release_instant_settlement"):
+        audit(s, "VERIFY", f"{tool} verified", res); speak(s, f"Approval mil gaya, ₹{a['amount']:,} process ho gaya ✅", d, voice=True); resolve(s, "Approved & verified")
+
+def pay_emi(s):
+    c = CUSTOMERS[s["merchant"]]; e = c["emi"]
+    for x in MSGS:
+        if x.get("cta") and x.get("merchant") == s["merchant"]: x["cta_done"] = True
+    e["paid"] = True; audit(s, "ACT", f"💳 EMI ₹{e['emi']:,} paid via link", e)
+    audit(s, "VERIFY", f"Loan ledger: EMI {e['due']} → PAID · late fee waived={e['waived']}", e)
+    speak(s, f"Payment mil gaya ✅ ₹{e['emi']:,} ki EMI bhar di gayi, koi late fee nahi lagegi. Aapka credit score safe hai.", s.get("ml") or {"persona": "Customer", "lang": c["lang"], "sentiment": 0})
+    resolve(s, "EMI paid in same turn"); return view(s)
+
+def exec_metrics(rows):
+    res = [r for r in rows if r[0] in ("VERIFIED", "CLOSED")]
+    high = [x for x in ML_LOG if x["risk"] == "HIGH"]
+    camp = [campaign_live(c) for c in CAMPAIGNS.values()]
+    queue = [{"id": a["id"], "ticket": a["ticket"], "tool": a["tool"], "waiting_s": int(time.time() - a["created"]),
+              "sentiment": (a.get("ml") or {}).get("sentiment"), "ml_risk": (a.get("ml") or {}).get("risk"), "risk_score": (a.get("ml") or {}).get("risk_score"),
+              "lang": (a.get("ml") or {}).get("lang"), "actions": a.get("actions", []), "summary": a["summary"]} for a in APPROVALS.values() if a["status"] == "PENDING"]
+    return {"loop_closure_pct": round(100 * sum(r[1] for r in res) / len(rows)) if rows else 0, "tickets": len(rows), "closed_autonomously": sum(r[1] for r in res),
+            "ml_decisions": len(ML_LOG), "ml_avg_ms": round(statistics.mean(x["latency_ms"] for x in ML_LOG), 1) if ML_LOG else None,
+            "high_risk_caught": len(high), "handoffs": len(HANDOFFS), "handoff_ms": round(statistics.mean(h["latency_ms"] for h in HANDOFFS)) if HANDOFFS else None,
+            "queue": queue, "campaigns": camp, "campaign_gmv": sum(c["gmv"] for c in camp), "campaign_paid": sum(c["paid"] for c in camp),
+            "lang_mix": {l: sum(x["lang"] == l for x in ML_LOG) for l in {x["lang"] for x in ML_LOG}}}
+
+class MLReq(BaseModel):
+    text: str; persona: str = "Customer"; amount: int | None = None; disputes: int = 0; bank: str | None = None
+
+@app.post("/api/ml-decide")
+def ml_decide(r: MLReq):
+    return ml_engine.decide(r.text, r.persona, r.amount, r.disputes, r.bank or BANK_STATUS)
+
+@app.post("/api/bank-status/{st}")
+def bank_status(st: str):
+    global BANK_STATUS
+    if st not in ("UP", "DEGRADED", "DOWN"): raise HTTPException(400, "UP|DEGRADED|DOWN")
+    BANK_STATUS = st; return {"bank_status": st}
+
+@app.post("/api/retrain")
+def retrain(rows: int = 1500):
+    ml_engine._M.clear(); rep_ = ml_engine.train(rows); ml_engine.load(); return rep_
+
+@app.get("/api/audit-report")
+def audit_report():
+    f = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "EFFECTIVENESS_AUDIT.md")
+    return {"markdown": open(f, encoding="utf-8").read() if os.path.exists(f) else "# Audit report missing"}
+
 # ---------------- API ----------------
 class Msg(BaseModel):
     text: str; merchant_id: str = "M1001"; session_id: str | None = None
@@ -615,7 +845,7 @@ def handle(s, text, voice_in=False):
 
 @app.post("/chat")
 def chat(m: Msg):
-    if m.merchant_id not in MERCHANTS: raise HTTPException(404, "merchant")
+    if m.merchant_id not in MERCHANTS and m.merchant_id not in CUSTOMERS: raise HTTPException(404, "user")
     return handle(session(m.session_id, m.merchant_id), m.text.replace("🎤", "").strip(), m.text.startswith("🎤"))
 
 @app.post("/voice")
@@ -686,7 +916,7 @@ def scheduler():
 
 @app.on_event("startup")
 def _start():
-    load_world(); threading.Thread(target=scheduler, daemon=True).start()
+    load_world(); ml_engine.decide("warm up", "Customer"); threading.Thread(target=scheduler, daemon=True).start()
 
 @app.middleware("http")
 async def persist(request: Request, call_next):
@@ -710,6 +940,7 @@ def lead(sid: str, product: str = "Business Loan", amount: int = 0):
     s = SESSIONS[sid]
     for x in MSGS:
         if x.get("cta"): x["cta_done"] = True
+    if product == "EMI": return pay_emi(s)
     MERCHANTS[s["merchant"]]["pitched"] = True
     if product == "decline":
         audit(s, "ACT", "🙅 Offer declined — will not pitch again", {})
@@ -721,9 +952,13 @@ def lead(sid: str, product: str = "Business Loan", amount: int = 0):
 
 def view(s):
     return {"session_id": s["id"], "status": s["status"], "phase": s["phase"], "trace": s["trace"], "sop": s["sop"], "diff": s["diff"],
-            "cache_hit": s["cache_hit"], "intent": s.get("intent"), **state(s["merchant"])}
+            "cache_hit": s["cache_hit"], "intent": s.get("intent"), "ml": s.get("ml"), **state(s["merchant"])}
 
 def profile(mid="M1001"):
+    if mid in CUSTOMERS:
+        c = CUSTOMERS[mid]
+        return {"persona": "customer", "id": mid, "name": c["name"], "lang": c["lang"], "city": c["city"], "frozen": c["frozen"], "disputes": c["disputes"],
+                "phone": mask(c["phone"]), "emi": c.get("emi"), "txns": [{"id": k, **v} for k, v in c["txns"].items()]}
     m = MERCHANTS[mid]; d = DEVICES[m["soundbox"]]; e = check_loan_and_soundbox_eligibility(mid)
     return {"id": mid, "name": m["name"], "owner": m["owner"], "gmv": m["monthly_volume"], "soundbox": m["soundbox"], "soundbox_online": d["online"],
             "settlement": "HOLD" if any(v["status"] != "SETTLED" for v in m["settlements"].values()) else "OK", "bank_verified": m["bank"]["verified"],
@@ -733,7 +968,7 @@ def profile(mid="M1001"):
 
 @app.get("/state")
 def state(mid: str = "M1001"):
-    mid = mid if mid in MERCHANTS else "M1001"
+    mid = mid if mid in MERCHANTS or mid in CUSTOMERS else "M1001"
     rows = db.execute("SELECT status, auto, cache, cost, opened, resolved FROM tix").fetchall()
     res = [r for r in rows if r[0] in ("VERIFIED", "CLOSED")]
     ttr = [r[5] - r[4] for r in res]; cache_ttr = [r[5] - r[4] for r in res if r[2]]
@@ -741,7 +976,9 @@ def state(mid: str = "M1001"):
     cs = db.execute("SELECT AVG(score), COUNT(*) FROM csat").fetchone()
     lc = db.execute("SELECT COUNT(*), COALESCE(SUM(amount),0) FROM leads").fetchone()
     return {"messages": [x for x in MSGS if x.get("merchant", "M1001") == mid], "profile": profile(mid),
-            "merchants": [{"id": k, "name": v["name"], "owner": v["owner"]} for k, v in MERCHANTS.items()], "cache": CACHE,
+            "merchants": [{"id": k, "name": v["name"], "owner": v["owner"], "persona": "merchant"} for k, v in MERCHANTS.items()]
+                         + [{"id": k, "name": v["name"], "owner": v["name"], "persona": "customer"} for k, v in CUSTOMERS.items()], "cache": CACHE,
+            "exec": exec_metrics(rows), "ml_report": ml_engine.load()["report"], "bank_status": BANK_STATUS,
             "approvals": [{k: v for k, v in a.items()} for a in APPROVALS.values() if a["status"] == "PENDING"],
             "metrics": {"tickets": len(rows), "resolved": len(res), "closed": sum(r[0] == "CLOSED" for r in rows),
                         "median_ttr_s": round(statistics.median(ttr), 1) if ttr else 0,

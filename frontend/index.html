@@ -13,7 +13,8 @@ header{background:#fff;box-shadow:0 1px 0 #e5e9f0}header .text-white{color:#002e
 .ph{background:#f1f5f9;color:#94a3b8}.ph.on{background:#002e6e;color:#fff;box-shadow:0 0 0 4px #00baf233;transform:scale(1.04)}.ph.done{background:#dcfce7;color:#15803d}
 ::-webkit-scrollbar-thumb{background:#cbd5e1}
 .tab{padding:6px 14px;border-radius:10px;font-weight:600;color:#64748b;background:#fff;border:1px solid #e6eaf1}.tab.active{background:#002e6e;color:#fff;border-color:#002e6e}.panel.flex-col:not(.hidden){display:flex}
-</style><script src="https://cdn.tailwindcss.com"></script>
+</style><script src="https://cdn.tailwindcss.com"></script><script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<style>.md h1{font-size:20px;font-weight:700;margin:8px 0}.md h2{font-size:16px;font-weight:700;margin:14px 0 6px;color:#002e6e}.md h3{font-weight:700;margin:10px 0 4px}.md table{width:100%;font-size:12px;border-collapse:collapse;margin:6px 0}.md td,.md th{border:1px solid #e2e8f0;padding:4px 6px;text-align:left;vertical-align:top}.md th{background:#f1f5f9}.md ul{list-style:disc;padding-left:18px}.md code{background:#f1f5f9;padding:0 3px;border-radius:3px}</style>
 <style>.ph{transition:.3s}
 @keyframes p{50%{opacity:.45}}.pulse{animation:p 1s infinite}@keyframes pop{0%{transform:scale(.6);opacity:0}100%{transform:scale(1);opacity:1}}.pop{animation:pop .35s ease-out}
 ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-thumb{background:#12384f;border-radius:3px}pre{white-space:pre-wrap;word-break:break-all}
@@ -32,7 +33,7 @@ header{background:#fff;box-shadow:0 1px 0 #e5e9f0}header .text-white{color:#002e
   <div class="text-[11px] font-bold text-slate-500 mb-2 flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-[#00a884]"></span>MERCHANT'S PHONE · what the customer sees</div>
   <div class="flex flex-col rounded-[28px] overflow-hidden bg-[#efeae2] flex-1 min-h-0 border-[6px] border-slate-800 shadow-xl">
     <div class="bg-[#075e54] text-white px-3 py-2 flex items-center gap-2"><div class="w-8 h-8 rounded-full bg-[#00baf2] grid place-items-center font-bold text-[#002e6e]">S</div>
-      <div><div class="font-semibold">Saathi · Paytm</div><select id="msel" onchange="switchMerchant(this.value)" class="text-[11px] bg-white/15 text-white rounded px-1 outline-none" title="Which merchant is chatting"></select></div>
+      <div><div class="font-semibold" id="phonetitle">Saathi · Paytm</div><select id="msel" onchange="switchMerchant(this.value)" class="text-[11px] bg-white/15 text-white rounded px-1 outline-none" title="Which merchant is chatting"></select></div>
       <span id="badge" class="ml-auto text-[11px] px-2 py-1 rounded-full bg-white/20">Online</span></div>
     <div id="chat" class="flex-1 overflow-y-auto p-3 space-y-2"></div>
     <div id="chips" class="px-2 pt-2 flex gap-1 flex-wrap text-[11px]"></div>
@@ -49,6 +50,8 @@ header{background:#fff;box-shadow:0 1px 0 #e5e9f0}header .text-white{color:#002e
     <button data-tab="agent" class="tab">🧑‍💼 Agent Console <span id="qcount" class="hidden ml-1 px-1.5 rounded-full bg-orange-500 text-white text-[10px] pulse"></span></button>
     <button data-tab="brain" class="tab">🧠 Saathi Brain (X-Ray)</button>
     <button data-tab="impact" class="tab">📊 Pilot Impact</button>
+    <button data-tab="exec" class="tab">🏢 Paytm Executive</button>
+    <button data-tab="report" class="tab">📋 Effectiveness Audit</button>
   </div>
   <div data-panel="agent" class="panel grid grid-cols-2 gap-3 flex-1 min-h-0">
     <div class="flex flex-col gap-3 min-h-0">
@@ -59,6 +62,7 @@ header{background:#fff;box-shadow:0 1px 0 #e5e9f0}header .text-white{color:#002e
       <div id="audit" class="flex-1 overflow-y-auto font-mono text-[10px] space-y-1"></div></div>
   </div>
   <div data-panel="brain" class="panel hidden flex-col gap-3 flex-1 min-h-0">
+    <div class="card p-3" id="mlbox"><div class="text-[11px] font-bold text-[#00baf2]">ML DECISION ENGINE (runs before LLM)</div><div class="text-xs text-slate-400">—</div></div>
     <div class="card p-3"><div class="text-[11px] font-bold text-[#00baf2] mb-2">6-STEP AUTONOMOUS LOOP</div>
       <div class="grid grid-cols-6 gap-1.5 text-center text-[11px] font-semibold" id="phases"></div></div>
     <div class="card p-3"><div class="text-[11px] font-bold text-[#00baf2] mb-1">SOP MATCH</div><div id="sop" class="text-xs text-slate-400">—</div></div>
@@ -69,6 +73,17 @@ header{background:#fff;box-shadow:0 1px 0 #e5e9f0}header .text-white{color:#002e
         <div id="diff" class="grid grid-cols-2 gap-2 font-mono text-[10px] text-slate-400">—</div></div>
     </div>
   </div>
+  <div data-panel="exec" class="panel hidden flex-col gap-3 flex-1 min-h-0 overflow-y-auto">
+    <div class="card p-3 flex items-center gap-3"><div class="text-[11px] font-bold text-[#00baf2]">PAYTM OPS & ROI · LIVE</div>
+      <div class="ml-auto text-xs flex items-center gap-1">Bank switch: <span id="bankbtns" class="flex gap-1"></span></div></div>
+    <div class="grid grid-cols-4 gap-3" id="execkpi"></div>
+    <div class="grid grid-cols-2 gap-3">
+      <div class="card p-3"><div class="text-[11px] font-bold text-orange-500 mb-2">LIVE HANDOFF QUEUE · read 1 line, act</div><div id="handq" class="space-y-2 text-xs"></div></div>
+      <div class="card p-3"><div class="text-[11px] font-bold text-[#00baf2] mb-2">MARKETING & SALES LIFT</div><div id="camps" class="text-xs space-y-2"></div></div>
+    </div>
+    <div class="card p-3 text-xs" id="mlcard"></div>
+  </div>
+  <div data-panel="report" class="panel hidden flex-col flex-1 min-h-0"><div class="card p-5 overflow-y-auto md flex-1" id="report">Loading…</div></div>
   <div data-panel="impact" class="panel hidden flex-col gap-3 flex-1 min-h-0">
     <div class="card p-4"><div class="text-[11px] font-bold text-[#00baf2] mb-3">LIVE PILOT IMPACT <span class="font-normal text-slate-400">· computed from this session's tickets · targets from pilot design</span></div>
       <div class="grid grid-cols-3 gap-3" id="metrics"></div></div>
@@ -83,14 +98,20 @@ const COL = {UNDERSTAND:'text-violet-400',DIAGNOSE:'text-amber-400',ACT:'text-sk
 const $ = id => document.getElementById(id), esc = s => String(s ?? '').replace(/[&<>"']/g, c => `&#${c.charCodeAt(0)};`), sleep = ms => new Promise(r => setTimeout(r, ms));
 let AQ = Promise.resolve(); speechSynthesis.getVoices();
 let MID = 'M1001';
-async function switchMerchant(id) { MID = id; $('msel').value = id; sid = null; traceLen = 0; H.chatKey = null; H.profile = null; const st = await get('/state?mid=' + id); shown = st.messages.length; seen = shown; renderState(st); }
+async function switchMerchant(id) { MID = id; chips(); $('phonetitle').textContent = id.startsWith('C') ? 'Paytm Help' : 'Saathi · Paytm for Business'; $('msel').value = id; sid = null; traceLen = 0; H.chatKey = null; H.profile = null; const st = await get('/state?mid=' + id); shown = st.messages.length; seen = shown; renderState(st); }
 let sid = null, busy = false, shown = -1, traceLen = 0, S = {}, seen = 0;
 const H = {}; function put(id, h) { if (H[id] === h) return false; H[id] = h; $(id).innerHTML = h; return true; }
 [['🎙 1 · Settlement','demo1()','bg-[#002e6e] text-white'],['🔊 2 · Soundbox','demo2()','bg-emerald-600 text-white'],
  ['📡 3 · Proactive','demo3()','bg-violet-600 text-white'],['⏩ +24h','ff()','bg-pink-500 text-white']]
  .forEach(([l, f, c]) => $('demos').insertAdjacentHTML('beforeend', `<button onclick="${f}" class="${c} rounded-lg px-3 py-1.5 shadow-sm hover:brightness-110 hover:-translate-y-0.5 transition">${l}</button>`));
-['Kal ka settlement nahi aaya','Soundbox bol nahi raha','Customer ka paisa kat gaya, payment fail','Mujhe loan chahiye','Mujhe bank account badalna hai']
- .forEach(t => $('chips').insertAdjacentHTML('beforeend', `<button class="bg-white border border-slate-200 text-slate-700 rounded-full px-2 py-1" onclick="say('${t}')">${t}</button>`));
+const SCEN = {
+  M1001: ['Kal ka settlement nahi aaya', 'Soundbox bol nahi raha', 'Customer ka paisa kat gaya, payment fail', 'Mujhe bank account badalna hai'],
+  M1002: ['Subah se ₹8,500 ka settlement hold pe hai', 'Mere regular customers ko Diwali offer bhej do', 'Mujhe loan chahiye'],
+  M1003: ['Soundbox bol nahi raha', 'Mere regular customers ko Diwali offer bhej do'],
+  C2001: ['Maine ₹420 bheje the, paisa kat gaya par dukaan wale ko nahi mila 😟'],
+  C2002: ['என் EMI கட்ட பயமா இருக்கு, late fee வருமா?', 'Meri EMI bounce ho jayegi kya, late fee lagegi?'],
+  C2003: ['I did NOT make this ₹12,000 payment!! someone stole my money', 'Maine ye ₹12,000 ka payment nahi kiya, fraud hua hai']};
+function chips() { $('chips').innerHTML = (SCEN[MID] || []).map(t => `<button class="bg-white border border-slate-200 text-slate-700 rounded-full px-2 py-1" onclick="say(this.textContent)">${esc(t)}</button>`).join(''); }
 async function api(p, o = {}) { const r = await fetch(API + p, {method: 'POST', headers: o.body instanceof FormData ? {} : {'Content-Type': 'application/json'}, ...o}); if (!r.ok) throw new Error(await r.text()); return r.json(); }
 const get = p => api(p, {method: 'GET'});
 function speak(m) {
@@ -98,11 +119,12 @@ function speak(m) {
   const vs = speechSynthesis.getVoices(), u = new SpeechSynthesisUtterance(m.text.replace(/[^\p{L}\p{N}\s.,₹?!]/gu, '')); u.voice = vs.find(v => v.lang === 'hi-IN') || vs.find(v => /en-IN/.test(v.lang)) || null; u.lang = u.voice?.lang || 'hi-IN'; u.rate = 1.05; speechSynthesis.speak(u);
 }
 function renderChat(msgs) {
-  const key = JSON.stringify(msgs.map(m => [m.ts, m.text, m.cta_done])); if (H.chatKey === key) return; H.chatKey = key;
+  const key = JSON.stringify([msgs.map(m => [m.ts, m.text, m.cta_done]), (S.exec?.campaigns || []).map(c => c.paid + c.clicked)]); if (H.chatKey === key) return; H.chatKey = key;
   $('chat').innerHTML = msgs.map((m, i) => `<div class="flex ${m.from === 'merchant' ? 'justify-end' : ''} ${i >= seen ? 'pop' : ''}"><div class="max-w-[82%] rounded-lg px-3 py-2 ${m.from === 'merchant' ? 'bg-[#d9fdd3] text-slate-800' : m.kind === 'pitch' ? 'bg-gradient-to-br from-white to-amber-50 border border-amber-300 text-slate-800' : 'bg-white text-slate-800 shadow-sm'}">
     ${m.kind === 'pitch' ? '<div class="text-[10px] text-amber-600 font-bold mb-1">💰 SUPPORT → SALES PIVOT</div>' : ''}${esc(m.text)}
     ${m.voice ? `<button onclick="speak(_m[${i}])" class="mt-2 flex items-center gap-2 bg-slate-100 rounded-full px-3 py-1 text-[11px] w-full">▶ <span class="flex-1 h-1 bg-[#00a884] rounded"></span> Hindi voice · ${({bulbul: 'Sarvam Bulbul', neural: 'Neural'})[m.voice.source] || 'TTS'}</button>` : ''}
     ${m.cta && !m.cta_done ? `<div class="mt-2 flex gap-2"><button onclick="lead('${m.ticket}','${m.cta.product}',${m.cta.amount})" class="flex-1 bg-yellow-400 text-black font-bold rounded py-1">${m.cta.label}</button><button onclick="lead('${m.ticket}','decline',0)" class="px-3 border border-slate-300 rounded text-slate-600">Abhi nahi</button></div>` : m.cta ? '<div class="mt-1 text-[10px] text-slate-400">✓ Response recorded</div>' : ''}
+    ${m.campaign ? (c => c ? `<div class="mt-2 grid grid-cols-4 gap-1 text-center bg-emerald-50 rounded p-1">${[['Sent', c.sent], ['Clicked', c.clicked], ['Paid', c.paid], ['GMV', '₹' + c.gmv.toLocaleString('en-IN')]].map(([l, v]) => `<div><b>${v}</b><div class="text-[9px] text-slate-500">${l}</div></div>`).join('')}</div>` : '')((S.exec?.campaigns || []).find(x => x.id === m.campaign)) : ''}
     ${m.options && i === msgs.length - 1 ? `<div class="mt-2 flex flex-col gap-1">${m.options.map(o => `<button onclick="say(this.textContent)" class="text-left text-xs border border-[#00a884] text-[#007a63] rounded-full px-3 py-1 hover:bg-emerald-50">${esc(o)}</button>`).join('')}</div>` : ''}
     ${m.csat ? `<div class="mt-2 flex gap-2 text-xs"><span class="text-slate-500">Kaisa laga?</span><button onclick="csat('${m.csat}',1)" class="px-2 rounded bg-emerald-100">👍</button><button onclick="csat('${m.csat}',0)" class="px-2 rounded bg-red-100">👎</button></div>` : ''}
     <div class="text-[9px] text-slate-400 text-right">${new Date(m.ts * 1000).toLocaleTimeString().slice(0, 5)}</div></div></div>`).join('');
@@ -125,6 +147,7 @@ async function apply(r) {
   const tk = r.trace.reduce((a, t) => a + t.tokens, 0); $('tel').textContent = `${r.trace.at(-1)?.ms ?? 0}ms · ${tk} tokens · ₹${(tk / 1000 * 0.9).toFixed(2)}`;
   $('sop').innerHTML = r.sop ? `<b class="text-white">${r.sop.id}</b> <span class="text-emerald-400">score ${r.sop.score}</span> <span class="text-slate-400">${r.sop.method || ''}</span><div>${esc(r.sop.steps)}</div>` : '—';
   $('diff').innerHTML = r.diff ? ['before', 'after'].map(k => `<div class="rounded p-2 ${k === 'before' ? 'bg-red-500/10 border border-red-500/30' : 'bg-emerald-500/10 border border-emerald-500/30'}"><b class="${k === 'before' ? 'text-red-400' : 'text-emerald-400'}">${k.toUpperCase()}</b><pre>${esc(JSON.stringify(r.diff[k], null, 1))}</pre></div>`).join('') : '—';
+  renderML(r.ml);
   if (r.status === 'WAITING_APPROVAL') tab('agent');
   setBadge(r.status); if (['VERIFIED', 'CLOSED'].includes(r.status)) setPhase(r.status === 'CLOSED' ? 'FOLLOWUP' : 'VERIFY', r.status === 'CLOSED');
   renderState(r);
@@ -133,7 +156,9 @@ function renderState(s) {
   S = s; renderChat(s.messages);
   $('llm').textContent = (s.live_llm ? `🟢 LIVE agent: ${s.live_llm}` : s.sarvam ? '● Sarvam-M · Saarika · Bulbul LIVE' : '● Scripted fallback (no LLM key)') + ` · 🗄 ${s.db}`;
   put('chain', s.chain_ok ? '<span class="text-emerald-600">🔒 SHA-256 chain verified</span>' : '<span class="text-red-600 font-bold">⚠ CHAIN BROKEN</span>');
-  if ($('msel').options.length !== s.merchants.length) $('msel').innerHTML = s.merchants.map(m => `<option class="text-black" value="${m.id}">${esc(m.owner)} · ${esc(m.name)}</option>`).join(''); $('msel').value = MID;
+  if ($('msel').options.length !== s.merchants.length) $('msel').innerHTML = s.merchants.map(m => `<option class="text-black" value="${m.id}">${m.persona === 'customer' ? '👤 Customer · ' + esc(m.name) : '🏪 Merchant · ' + esc(m.owner) + ' (' + esc(m.name) + ')'}</option>`).join(''); $('msel').value = MID;
+  renderExec(s);
+  if (s.profile.persona === 'customer') { renderCustomer(s.profile); } else {
   const p = s.profile, pill = (ok, a, b) => `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${ok ? 'bg-emerald-500/20 text-emerald-300' : 'bg-red-500/20 text-red-300 pulse'}">${ok ? a : b}</span>`;
   put('profile', `<div class="flex items-center"><div><div class="text-white font-semibold">${p.name}</div><div class="text-[11px] text-slate-400">${p.owner} · ${p.id} · GMV ₹${p.gmv.toLocaleString('en-IN')}/mo · Bank ${p.bank}</div></div></div>
     <div class="flex gap-1.5 mt-2 flex-wrap">${pill(p.soundbox_online, '🔊 ' + p.soundbox + ' online', '🔇 ' + p.soundbox + ' offline')}${pill(p.settlement === 'OK', '💸 Settlements OK', '💸 Settlement on HOLD')}
@@ -143,6 +168,7 @@ function renderState(s) {
     ${p.txns.map(t => `<tr class="border-t border-slate-100"><td>${esc(t.time)}</td><td class="font-mono">${t.id}</td><td>${esc(t.payer.replace(/^(.{3}).*@/, '$1…@'))}</td><td class="text-right">${t.amount.toLocaleString('en-IN')}</td><td class="text-right font-semibold ${t.status === 'SUCCESS' ? 'text-emerald-600' : t.status === 'REFUNDED' ? 'text-sky-600' : 'text-red-600'}">${t.status}</td></tr>`).join('')}</table>
     <div class="mt-3 text-[10px] font-bold text-slate-500">SETTLEMENTS</div>
     <table class="w-full text-[11px] mt-1">${p.settlements.map(t => `<tr class="border-t border-slate-100"><td class="font-mono">${t.id}</td><td>${esc(t.date)}</td><td class="text-right">₹${t.amount.toLocaleString('en-IN')}</td><td class="text-right font-semibold ${t.status === 'SETTLED' ? 'text-emerald-600' : 'text-red-600'}">${t.status}</td><td class="text-right font-mono text-slate-400">${t.utr || ''}</td></tr>`).join('')}</table>`);
+  }
   const m = s.metrics, tile = (v, k, tgt, ok) => `<div class="bg-black/20 rounded-lg p-2"><div class="text-xl font-bold ${ok ? 'text-emerald-400' : 'text-white'}">${v}</div><div class="text-[10px] text-slate-400">${k}</div><div class="text-[9px] text-slate-500">${tgt}</div></div>`;
   put('metrics', tile(m.median_ttr_s + 's', 'Median resolution', 'target < 10 min', m.resolved && m.median_ttr_s < 600)
     + tile(m.auto_pct + '%', 'Auto-resolved', 'target 50%+', m.auto_pct >= 50)
@@ -194,8 +220,42 @@ async function demo1() { await reset(); await switchMerchant('M1001'); await say
 async function demo2() { await api('/demo/soundbox_offline?merchant_id=' + MID); renderState(await get('/state?mid=' + MID)); await sleep(600); await say('Soundbox bol nahi raha, payment ki awaaz nahi aa rahi'); }
 async function demo3() { traceLen = 0; await run(api('/webhook/settlement_failed?merchant_id=' + MID)); await autoApprove(); }
 async function ff() { traceLen = 0; await run(api('/followup')); }
-function tab(t) { document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b.dataset.tab === t)); document.querySelectorAll('.panel').forEach(p => p.classList.toggle('hidden', p.dataset.panel !== t)); }
-document.querySelectorAll('.tab').forEach(b => b.onclick = () => tab(b.dataset.tab)); tab('brain');
+function renderCustomer(p) {
+  put('profile', `<div class="text-slate-900 font-semibold">👤 ${esc(p.name)} <span class="text-[10px] px-2 py-0.5 rounded-full bg-slate-100">CUSTOMER</span></div>
+    <div class="text-[11px] text-slate-500">${p.id} · ${esc(p.city)} · prefers ${p.lang} · phone ${p.phone} · past disputes ${p.disputes}</div>
+    <div class="mt-2">${p.frozen ? '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-100 text-red-700">🔒 ACCOUNT FROZEN (fraud protection)</span>' : '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700">Account active</span>'}</div>
+    ${p.emi ? `<div class="mt-3 text-[10px] font-bold text-slate-500">LOAN</div><div class="text-[11px]">${esc(p.emi.loan)} · EMI ₹${p.emi.emi.toLocaleString('en-IN')} due ${p.emi.due} · late fee ₹${p.emi.late_fee} ${p.emi.waived ? '<b class="text-emerald-600">WAIVED</b>' : ''} · <b class="${p.emi.paid ? 'text-emerald-600' : 'text-amber-600'}">${p.emi.paid ? 'PAID' : 'UNPAID'}</b></div>` : ''}
+    ${p.txns.length ? `<div class="mt-3 text-[10px] font-bold text-slate-500">RECENT UPI</div><table class="w-full text-[11px]">${p.txns.map(t => `<tr class="border-t border-slate-100"><td>${esc(t.time)}</td><td class="font-mono">${t.id}</td><td>→ ${esc(t.to)}</td><td class="text-right">₹${t.amount.toLocaleString('en-IN')}</td><td class="text-right font-semibold ${t.status === 'REFUNDED' ? 'text-sky-600' : t.status === 'PENDING' ? 'text-amber-600' : 'text-slate-700'}">${t.status}</td></tr>`).join('')}</table>` : ''}`);
+}
+function renderExec(s) {
+  const e = s.exec, k = (v, l, sub, ok) => `<div class="card p-3"><div class="text-2xl font-bold ${ok ? 'text-emerald-600' : 'text-slate-900'}">${v}</div><div class="text-[11px] text-slate-500">${l}</div><div class="text-[10px] text-slate-400">${sub}</div></div>`;
+  put('execkpi', k(e.loop_closure_pct + '%', 'Autonomous loop closure', `${e.closed_autonomously}/${e.tickets} tickets closed with no human`, e.loop_closure_pct >= 50)
+    + k(e.high_risk_caught, 'High-risk cases caught by ML', `${e.handoffs} handed off · avg ${e.handoff_ms ?? '—'}ms to human`, e.high_risk_caught > 0)
+    + k('₹' + e.campaign_gmv.toLocaleString('en-IN'), 'Campaign GMV lift', `${e.campaign_paid} paid orders from merchant campaigns`, e.campaign_gmv > 0)
+    + k((e.ml_avg_ms ?? '—') + 'ms', 'ML decision latency', `${e.ml_decisions} decisions · langs ${Object.entries(e.lang_mix).map(([l, n]) => l + ' ' + n).join(', ') || '—'}`, e.ml_avg_ms && e.ml_avg_ms < 10));
+  put('handq', e.queue.length ? e.queue.map(q => `<div class="border-l-4 ${q.ml_risk === 'HIGH' ? 'border-red-500 bg-red-50' : 'border-orange-400 bg-orange-50'} rounded p-2">
+    <div class="flex justify-between"><b>${q.tool}</b><span class="text-slate-500">${q.ticket} · waiting ${q.waiting_s}s</span></div>
+    <div class="my-1">📝 ${esc(q.summary)}</div>
+    <div class="flex gap-3 text-[11px]"><span>ML risk <b class="${q.ml_risk === 'HIGH' ? 'text-red-600' : ''}">${q.ml_risk ?? '—'} ${q.risk_score ?? ''}</b></span><span>Sentiment <b>${q.sentiment ?? '—'}</b></span><span>${q.lang ?? ''}</span></div>
+    <div class="text-[10px] text-slate-500 mt-1">Done so far: ${esc(q.actions.join(' · ') || '—')}</div>
+    <div class="flex gap-2 mt-1"><button onclick="decide('${q.id}','approve')" class="bg-emerald-600 text-white px-2 py-0.5 rounded">Take over & Approve</button><button onclick="decide('${q.id}','override')" class="border border-red-400 text-red-600 px-2 py-0.5 rounded">Override</button></div></div>`).join('')
+    : '<div class="text-slate-400">Queue empty — nothing needs a human right now.</div>');
+  put('camps', e.campaigns.length ? e.campaigns.map(c => `<div class="bg-slate-50 rounded p-2"><b>${c.id}</b> · ${esc(c.offer)} · ${c.merchant}
+    <div class="grid grid-cols-4 gap-1 mt-1 text-center">${[['Sent', c.sent], ['Clicked', c.clicked], ['Paid', c.paid], ['GMV', '₹' + c.gmv.toLocaleString('en-IN')]].map(([l, v]) => `<div><div class="text-base font-bold text-[#002e6e]">${v}</div><div class="text-[10px] text-slate-500">${l}</div></div>`).join('')}</div></div>`).join('')
+    : '<div class="text-slate-400">No campaigns yet — ask as Gupta Medicals: "Mere regular customers ko Diwali offer bhej do".</div>');
+  put('bankbtns', ['UP', 'DEGRADED', 'DOWN'].map(b => `<button onclick="api('/api/bank-status/${b}').then(() => get('/state?mid=' + MID)).then(renderState)" class="px-2 py-0.5 rounded border ${s.bank_status === b ? 'bg-[#002e6e] text-white' : 'border-slate-300'}">${b}</button>`).join(''));
+  const r = s.ml_report; put('mlcard', `<b class="text-[#00baf2]">ML MODEL</b> · ${esc(r.models)} · trained on ${r.rows} synthetic Paytm cases · held-out accuracy: issue ${(r.issue_acc * 100).toFixed(1)}%, action ${(r.action_acc * 100).toFixed(1)}% <span class="text-slate-400">(synthetic data — real accuracy will be lower)</span>`);
+}
+function renderML(d) {
+  if (!d) return;
+  const c = {HIGH: 'bg-red-100 text-red-700', MED: 'bg-amber-100 text-amber-700', LOW: 'bg-emerald-100 text-emerald-700'}[d.risk];
+  put('mlbox', `<div class="text-[11px] font-bold text-[#00baf2] mb-1">ML DECISION ENGINE (runs before LLM) · ${d.latency_ms}ms</div>
+    <div class="flex flex-wrap gap-2 text-xs items-center"><span class="px-2 py-0.5 rounded bg-slate-100">${d.lang}</span><span>Issue <b>${d.issue}</b> (${Math.round(d.issue_conf * 100)}%)</span>→
+    <span class="px-2 py-0.5 rounded bg-[#002e6e] text-white font-bold">${d.action}</span><span class="px-2 py-0.5 rounded font-bold ${c}">risk ${d.risk} ${d.risk_score}</span>
+    <span class="text-slate-500">sentiment ${d.sentiment} · ₹${(d.amount || 0).toLocaleString('en-IN')} · disputes ${d.disputes} · bank ${d.bank_status}</span></div>`);
+}
+function tab(t) { if (t === 'report' && !H.reportLoaded) get('/api/audit-report').then(r => { $('report').innerHTML = marked.parse(r.markdown); H.reportLoaded = 1; }); document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b.dataset.tab === t)); document.querySelectorAll('.panel').forEach(p => p.classList.toggle('hidden', p.dataset.panel !== t)); }
+document.querySelectorAll('.tab').forEach(b => b.onclick = () => tab(b.dataset.tab)); tab('brain'); chips();
 let lastQ = 0;
 setPhase(''); get('/state?mid=' + MID).then(renderState).catch(err);
 setInterval(() => !busy && get('/state?mid=' + MID).then(renderState).catch(() => {}), 4000);

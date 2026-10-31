@@ -1,0 +1,1501 @@
+persona,lang,issue_type,txn_amount,user_sentiment_score,past_dispute_count,bank_server_status,utterance,target_action
+Merchant,Hinglish,Festival_Promo_Broadcast,818,0.33,1,DOWN,Mere regular customers ko Diwali offer bhej do,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Telugu,Settlement_Hold,20944,0.24,0,DEGRADED,"పొద్దున్నుంచి ₹20,944 settlement hold లో ఉంది",RELEASE_INSTANT_SETTLEMENT
+Merchant,Marathi,Soundbox_Sync_Issue,1203,0.35,3,UP,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Customer,Tamil,Fraud_Unauthorized_Txn,38915,0.84,1,UP,"நான் இந்த ₹38,915 பேமெண்ட் பண்ணல, யாரோ பணம் எடுத்துட்டாங்க சீக்கிரம்!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hinglish,Fraud_Unauthorized_Txn,21387,0.52,0,UP,"Maine ye ₹21,387 ka payment nahi kiya, fraud hua hai",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hindi,EMI_Bounce_Fear,6919,0.72,3,DEGRADED,"₹6,919 की किस्त भरने में डर लग रहा है जल्दी करो!!",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Hinglish,Settlement_Hold,7604,0.0,0,UP,Kal ka settlement nahi aaya,RELEASE_INSTANT_SETTLEMENT
+Merchant,Bengali,Festival_Promo_Broadcast,1027,0.48,3,DOWN,আমার নিয়মিত খদ্দেরদের দিওয়ালি অফার পাঠিয়ে দিন,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Hindi,UPI_Pending,35290,0.35,0,DEGRADED,"₹35,290 का यूपीआई पेमेंट अटका हुआ है, पैसे कटे",RELEASE_INSTANT_SETTLEMENT
+Merchant,Hinglish,Festival_Promo_Broadcast,1261,0.19,0,UP,purane grahakon ko discount message bhejo,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,English,Settlement_Hold,3320,0.2,0,UP,Yesterday's settlement didn't arrive,RELEASE_INSTANT_SETTLEMENT
+Merchant,Marathi,Festival_Promo_Broadcast,1820,0.37,0,UP,माझ्या नेहमीच्या ग्राहकांना दिवाळी ऑफर पाठवा,FREEZE_AND_HUMAN_HANDOFF
+Customer,Tamil,EMI_Bounce_Fear,2067,0.45,0,UP,"என் EMI கட்ட பயமா இருக்கு, late fee வருமா?",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,English,Soundbox_Sync_Issue,8428,0.26,0,UP,"Soundbox is silent, no payment announcements",REMOTE_IOT_RESTART
+Customer,Hinglish,UPI_Pending,4659,0.49,1,UP,"UPI payment pending dikha raha hai, ₹4,659 debit ho gaye",AUTO_REFUND_INSTANT
+Customer,English,UPI_Pending,435,0.51,1,DOWN,"UPI payment stuck in pending, ₹435 deducted",AUTO_REFUND_INSTANT
+Customer,English,UPI_Pending,9634,0.52,2,DEGRADED,"UPI payment stuck in pending, ₹9,634 deducted",FREEZE_AND_HUMAN_HANDOFF
+Customer,Bengali,EMI_Bounce_Fear,5362,0.73,0,UP,"আমার EMI বাউন্স হবে না তো, লেট ফি লাগবে? তাড়াতাড়ি!!",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Marathi,UPI_Pending,6278,0.67,0,UP,"UPI पेमेंट अडकले आहे, ₹6,278 कापले गेले",FREEZE_AND_HUMAN_HANDOFF
+Customer,English,Fraud_Unauthorized_Txn,27059,0.77,2,UP,"Unauthorized transaction of ₹27,059 on my account urgent",FREEZE_AND_HUMAN_HANDOFF
+Customer,English,UPI_Pending,582,0.42,0,DOWN,"UPI payment stuck in pending, ₹582 deducted",AUTO_REFUND_INSTANT
+Merchant,Hindi,Festival_Promo_Broadcast,3673,0.0,0,UP,मेरे रेगुलर ग्राहकों को दिवाली ऑफर भेज दो,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Tamil,Soundbox_Sync_Issue,20556,0.41,2,UP,சவுண்ட்பாக்ஸ் பேசல,REMOTE_IOT_RESTART
+Merchant,Tamil,Soundbox_Sync_Issue,13826,0.4,0,DOWN,சவுண்ட்பாக்ஸ் பேசல,REMOTE_IOT_RESTART
+Customer,Hindi,EMI_Bounce_Fear,45497,0.82,6,UP,"₹45,497 की किस्त भरने में डर लग रहा है जल्दी करो!!",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Hindi,EMI_Bounce_Fear,21735,0.87,2,UP,"मेरी ईएमआई बाउंस हो जाएगी, लेट फीस लगेगी क्या? जल्दी करो!!",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Bengali,Festival_Promo_Broadcast,14512,0.03,0,DEGRADED,আমার নিয়মিত খদ্দেরদের দিওয়ালি অফার পাঠিয়ে দিন,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Telugu,Fraud_Unauthorized_Txn,10750,0.77,1,UP,"నేను ఈ ₹10,750 పేమెంట్ చేయలేదు, ఎవరో డబ్బు తీసుకున్నారు త్వరగా!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hinglish,EMI_Bounce_Fear,22886,0.86,1,UP,"Meri EMI bounce ho jayegi kya, late fee lagegi? bahut pareshan hoon",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Tamil,EMI_Bounce_Fear,21405,0.74,1,UP,"என் EMI கட்ட பயமா இருக்கு, late fee வருமா? சீக்கிரம்!!",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Bengali,Fraud_Unauthorized_Txn,34102,0.68,4,UP,"আমি এই ₹34,102 পেমেন্ট করিনি, কেউ টাকা তুলে নিয়েছে",FREEZE_AND_HUMAN_HANDOFF
+Customer,English,EMI_Bounce_Fear,926,0.61,0,UP,Will my EMI bounce? I'm worried about the late fee,SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Marathi,EMI_Bounce_Fear,630,0.85,0,UP,"माझा EMI बाउन्स होईल का, लेट फी लागेल का? लवकर!!",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Telugu,UPI_Pending,25668,0.47,2,UP,"UPI పేమెంట్ pending లో ఉంది, ₹25,668 కట్ అయింది",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Tamil,Settlement_Hold,5207,0.42,0,UP,"காலையிலிருந்து ₹5,207 settlement hold ஆகியிருக்கு",RELEASE_INSTANT_SETTLEMENT
+Customer,Bengali,Fraud_Unauthorized_Txn,15778,0.93,5,UP,"আমি এই ₹15,778 পেমেন্ট করিনি, কেউ টাকা তুলে নিয়েছে তাড়াতাড়ি!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Tamil,EMI_Bounce_Fear,42672,0.7,0,DOWN,"₹42,672 EMI bounce ஆயிடுமா?",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Tamil,UPI_Pending,13275,0.44,3,UP,"₹13,275 அனுப்பினேன், பணம் போயிடுச்சு ஆனா கடைக்காரருக்கு வரல",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hindi,Festival_Promo_Broadcast,5643,0.41,0,UP,त्योहार का ऑफर सब ग्राहकों को भेजना है,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Bengali,UPI_Pending,1463,0.42,0,UP,"UPI পেমেন্ট আটকে আছে, ₹1,463 কেটেছে",AUTO_REFUND_INSTANT
+Customer,English,Fraud_Unauthorized_Txn,44850,0.91,0,UP,"I didn't make this ₹44,850 payment, someone stole my money please help!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hinglish,Fraud_Unauthorized_Txn,7765,0.97,1,UP,"unknown transaction aaya hai, mera paisa chori ho gaya please help",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Bengali,Settlement_Hold,640,0.14,2,UP,সকাল থেকে ₹640 সেটেলমেন্ট আটকে আছে,RELEASE_INSTANT_SETTLEMENT
+Customer,English,UPI_Pending,19634,0.79,2,UP,"I sent ₹19,634, money got debited but the shop didn't receive it please help!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,English,Settlement_Hold,33476,0.31,1,UP,Yesterday's settlement didn't arrive,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Bengali,Festival_Promo_Broadcast,6005,0.42,0,UP,আমার নিয়মিত খদ্দেরদের দিওয়ালি অফার পাঠিয়ে দিন,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Tamil,Settlement_Hold,1039,0.29,0,UP,"காலையிலிருந்து ₹1,039 settlement hold ஆகியிருக்கு",RELEASE_INSTANT_SETTLEMENT
+Merchant,Hindi,Settlement_Hold,623,0.3,1,UP,सुबह से ₹623 का सेटलमेंट होल्ड पर है,RELEASE_INSTANT_SETTLEMENT
+Merchant,English,Soundbox_Sync_Issue,11774,0.27,0,UP,"Soundbox is silent, no payment announcements",REMOTE_IOT_RESTART
+Merchant,Bengali,Soundbox_Sync_Issue,1294,0.13,4,DEGRADED,সাউন্ডবক্স আওয়াজ করছে না,REMOTE_IOT_RESTART
+Customer,English,Fraud_Unauthorized_Txn,2842,1.0,5,UP,"Unauthorized transaction of ₹2,842 on my account I'm panicking",FREEZE_AND_HUMAN_HANDOFF
+Customer,Marathi,UPI_Pending,13152,0.61,0,UP,"मी ₹13,152 पाठवले, पैसे कापले पण दुकानदाराला मिळाले नाहीत",FREEZE_AND_HUMAN_HANDOFF
+Customer,Bengali,Fraud_Unauthorized_Txn,49672,0.84,0,UP,"আমি এই ₹49,672 পেমেন্ট করিনি, কেউ টাকা তুলে নিয়েছে তাড়াতাড়ি!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Telugu,Settlement_Hold,8267,0.19,4,UP,"పొద్దున్నుంచి ₹8,267 settlement hold లో ఉంది",RELEASE_INSTANT_SETTLEMENT
+Merchant,Hinglish,Soundbox_Sync_Issue,11825,0.29,0,UP,Soundbox bol nahi raha,REMOTE_IOT_RESTART
+Merchant,Tamil,Settlement_Hold,29266,0.55,1,DEGRADED,"காலையிலிருந்து ₹29,266 settlement hold ஆகியிருக்கு",RELEASE_INSTANT_SETTLEMENT
+Merchant,English,Settlement_Hold,10996,0.65,0,UP,Yesterday's settlement didn't arrive,RELEASE_INSTANT_SETTLEMENT
+Merchant,Hinglish,Settlement_Hold,19889,0.25,0,DEGRADED,Kal ka settlement nahi aaya,RELEASE_INSTANT_SETTLEMENT
+Customer,Bengali,EMI_Bounce_Fear,12349,0.83,0,DEGRADED,"₹12,349 কিস্তি দিতে ভয় লাগছে তাড়াতাড়ি!!",AUTO_REFUND_INSTANT
+Merchant,Marathi,Settlement_Hold,34788,0.15,0,UP,"सकाळपासून ₹34,788 चे सेटलमेंट होल्डवर आहे",RELEASE_INSTANT_SETTLEMENT
+Merchant,Hindi,Festival_Promo_Broadcast,14300,0.55,2,DOWN,त्योहार का ऑफर सब ग्राहकों को भेजना है,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Telugu,UPI_Pending,11653,0.78,4,DEGRADED,"₹11,653 పంపాను, డబ్బు కట్ అయింది కానీ షాప్ వాళ్ళకి రాలేదు త్వరగా!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Tamil,Soundbox_Sync_Issue,4439,0.18,2,DEGRADED,சவுண்ட்பாக்ஸ் பேசல,REMOTE_IOT_RESTART
+Merchant,Telugu,Soundbox_Sync_Issue,28332,0.35,0,DOWN,సౌండ్‌బాక్స్ మాట్లాడట్లేదు,REMOTE_IOT_RESTART
+Customer,Marathi,EMI_Bounce_Fear,1790,0.81,0,UP,"₹1,790 चा हप्ता भरायची भीती वाटते लवकर!!",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Marathi,Soundbox_Sync_Issue,8655,0.2,1,UP,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Customer,Hindi,EMI_Bounce_Fear,47576,0.71,9,UP,"मेरी ईएमआई बाउंस हो जाएगी, लेट फीस लगेगी क्या? जल्दी करो!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Tamil,EMI_Bounce_Fear,1148,0.97,0,DEGRADED,"என் EMI கட்ட பயமா இருக்கு, late fee வருமா? சீக்கிரம்!!",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Telugu,Settlement_Hold,857,0.2,0,UP,పొద్దున్నుంచి ₹857 settlement hold లో ఉంది,RELEASE_INSTANT_SETTLEMENT
+Customer,Bengali,Fraud_Unauthorized_Txn,18561,0.95,3,UP,"আমি এই ₹18,561 পেমেন্ট করিনি, কেউ টাকা তুলে নিয়েছে তাড়াতাড়ি!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hinglish,UPI_Pending,46016,0.49,4,DOWN,paise kat gaye lekin merchant ko credit nahi hua,FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hinglish,Settlement_Hold,1613,0.3,0,DOWN,"Subah se ₹1,613 ka settlement hold pe hai",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Marathi,Soundbox_Sync_Issue,1335,0.26,2,UP,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Merchant,Hinglish,Festival_Promo_Broadcast,49619,0.29,0,DEGRADED,Mere regular customers ko Diwali offer bhej do,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Bengali,Fraud_Unauthorized_Txn,40191,1.0,9,UP,"আমি এই ₹40,191 পেমেন্ট করিনি, কেউ টাকা তুলে নিয়েছে তাড়াতাড়ি!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Bengali,EMI_Bounce_Fear,41988,0.65,1,UP,"আমার EMI বাউন্স হবে না তো, লেট ফি লাগবে?",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Marathi,Soundbox_Sync_Issue,870,0.13,0,UP,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Merchant,Marathi,Festival_Promo_Broadcast,5245,0.0,2,UP,माझ्या नेहमीच्या ग्राहकांना दिवाळी ऑफर पाठवा,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Tamil,EMI_Bounce_Fear,5177,0.7,0,DOWN,"₹5,177 EMI bounce ஆயிடுமா?",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Telugu,EMI_Bounce_Fear,18697,0.9,0,UP,"నా EMI bounce అవుతుందా, late fee పడుతుందా? త్వరగా!!",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Telugu,EMI_Bounce_Fear,116,0.4,3,DEGRADED,"నా EMI bounce అవుతుందా, late fee పడుతుందా?",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Hinglish,Festival_Promo_Broadcast,49393,0.5,1,UP,purane grahakon ko discount message bhejo,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Tamil,Festival_Promo_Broadcast,916,0.35,0,DEGRADED,என் வழக்கமான வாடிக்கையாளர்களுக்கு தீபாவளி ஆஃபர் அனுப்புங்க,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,English,Festival_Promo_Broadcast,1656,0.33,2,UP,Broadcast a festive discount to repeat buyers,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Marathi,Festival_Promo_Broadcast,16984,0.07,2,UP,माझ्या नेहमीच्या ग्राहकांना दिवाळी ऑफर पाठवा,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Tamil,UPI_Pending,19119,0.7,0,UP,"₹19,119 அனுப்பினேன், பணம் போயிடுச்சு ஆனா கடைக்காரருக்கு வரல",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Marathi,Soundbox_Sync_Issue,658,0.26,2,DOWN,साउंडबॉक्स बोलत नाही,SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Telugu,UPI_Pending,9630,0.35,4,DEGRADED,"₹9,630 పంపాను, డబ్బు కట్ అయింది కానీ షాప్ వాళ్ళకి రాలేదు",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hindi,EMI_Bounce_Fear,34878,0.68,0,UP,"₹34,878 की किस्त भरने में डर लग रहा है",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Hindi,Fraud_Unauthorized_Txn,17007,0.65,0,UP,"मेरे खाते से बिना बताए ₹17,007 कट गए",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hinglish,Festival_Promo_Broadcast,3723,0.23,0,DOWN,festival offer sab customers ko WhatsApp kar do,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Telugu,EMI_Bounce_Fear,30396,0.58,1,DEGRADED,"నా EMI bounce అవుతుందా, late fee పడుతుందా?",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Tamil,Festival_Promo_Broadcast,11287,0.3,0,UP,என் வழக்கமான வாடிக்கையாளர்களுக்கு தீபாவளி ஆஃபர் அனுப்புங்க,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Hinglish,Fraud_Unauthorized_Txn,16918,0.97,1,UP,"Maine ye ₹16,918 ka payment nahi kiya, fraud hua hai bahut pareshan hoon",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hindi,UPI_Pending,9778,0.59,0,UP,"मैंने ₹9,778 भेजे, पैसा कट गया पर दुकानदार को नहीं मिला",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hinglish,Fraud_Unauthorized_Txn,12449,0.83,0,UP,"unknown transaction aaya hai, mera paisa chori ho gaya jaldi karo!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Marathi,Fraud_Unauthorized_Txn,24963,0.83,10,UP,"मी हे ₹24,963 पेमेंट केले नाही, कोणीतरी पैसे काढले लवकर!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Marathi,Settlement_Hold,771,0.34,0,DEGRADED,सकाळपासून ₹771 चे सेटलमेंट होल्डवर आहे,RELEASE_INSTANT_SETTLEMENT
+Customer,English,UPI_Pending,25128,0.34,0,UP,"UPI payment stuck in pending, ₹25,128 deducted",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hindi,Settlement_Hold,14211,0.25,0,DEGRADED,कल का सेटलमेंट नहीं आया,RELEASE_INSTANT_SETTLEMENT
+Merchant,Marathi,Settlement_Hold,5336,0.43,2,UP,"सकाळपासून ₹5,336 चे सेटलमेंट होल्डवर आहे",RELEASE_INSTANT_SETTLEMENT
+Customer,Hinglish,EMI_Bounce_Fear,24338,0.56,2,UP,"loan EMI miss ho gayi, ab kya hoga",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Marathi,Festival_Promo_Broadcast,4812,0.26,4,UP,माझ्या नेहमीच्या ग्राहकांना दिवाळी ऑफर पाठवा,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Tamil,EMI_Bounce_Fear,2712,0.83,0,DOWN,"₹2,712 EMI bounce ஆயிடுமா? சீக்கிரம்!!",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Marathi,Fraud_Unauthorized_Txn,27308,0.78,1,UP,"मी हे ₹27,308 पेमेंट केले नाही, कोणीतरी पैसे काढले लवकर!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Telugu,EMI_Bounce_Fear,745,0.58,5,DEGRADED,"నా EMI bounce అవుతుందా, late fee పడుతుందా?",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,English,Fraud_Unauthorized_Txn,22046,1.0,1,UP,"Unauthorized transaction of ₹22,046 on my account I'm panicking",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hinglish,Fraud_Unauthorized_Txn,33802,0.99,0,UP,"unknown transaction aaya hai, mera paisa chori ho gaya please help",FREEZE_AND_HUMAN_HANDOFF
+Merchant,English,Settlement_Hold,1276,0.36,0,UP,Yesterday's settlement didn't arrive,RELEASE_INSTANT_SETTLEMENT
+Merchant,Bengali,Settlement_Hold,1054,0.16,1,UP,"সকাল থেকে ₹1,054 সেটেলমেন্ট আটকে আছে",RELEASE_INSTANT_SETTLEMENT
+Customer,Hindi,Fraud_Unauthorized_Txn,43578,0.93,3,DOWN,"मैंने ये ₹43,578 का पेमेंट नहीं किया, किसी ने पैसे निकाल लिए जल्दी करो!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Tamil,Settlement_Hold,1969,0.28,2,UP,"காலையிலிருந்து ₹1,969 settlement hold ஆகியிருக்கு",RELEASE_INSTANT_SETTLEMENT
+Customer,Tamil,Fraud_Unauthorized_Txn,33713,1.0,1,UP,"நான் இந்த ₹33,713 பேமெண்ட் பண்ணல, யாரோ பணம் எடுத்துட்டாங்க சீக்கிரம்!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hinglish,EMI_Bounce_Fear,33231,0.61,0,UP,"₹33,231 ki kisht bharni hai, darr lag raha hai penalty ka",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Hindi,Fraud_Unauthorized_Txn,34973,0.58,0,DOWN,"मेरे खाते से बिना बताए ₹34,973 कट गए",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Tamil,Festival_Promo_Broadcast,8044,0.15,0,UP,என் வழக்கமான வாடிக்கையாளர்களுக்கு தீபாவளி ஆஃபர் அனுப்புங்க,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Hindi,Soundbox_Sync_Issue,10455,0.02,1,UP,पेमेंट की आवाज़ नहीं आ रही,REMOTE_IOT_RESTART
+Merchant,Hindi,Soundbox_Sync_Issue,34069,0.0,1,UP,पेमेंट की आवाज़ नहीं आ रही,REMOTE_IOT_RESTART
+Customer,Telugu,EMI_Bounce_Fear,475,0.83,0,UP,"నా EMI bounce అవుతుందా, late fee పడుతుందా? త్వరగా!!",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Hinglish,Fraud_Unauthorized_Txn,9630,0.92,0,DEGRADED,"unknown transaction aaya hai, mera paisa chori ho gaya jaldi karo!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Marathi,UPI_Pending,12903,0.7,0,DEGRADED,"UPI पेमेंट अडकले आहे, ₹12,903 कापले गेले",FREEZE_AND_HUMAN_HANDOFF
+Customer,Telugu,Fraud_Unauthorized_Txn,11619,0.49,3,UP,"నేను ఈ ₹11,619 పేమెంట్ చేయలేదు, ఎవరో డబ్బు తీసుకున్నారు",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hinglish,EMI_Bounce_Fear,129,0.48,0,UP,"loan EMI miss ho gayi, ab kya hoga",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Marathi,Fraud_Unauthorized_Txn,21075,0.71,0,UP,"मी हे ₹21,075 पेमेंट केले नाही, कोणीतरी पैसे काढले लवकर!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Marathi,Settlement_Hold,20274,0.25,9,UP,"सकाळपासून ₹20,274 चे सेटलमेंट होल्डवर आहे",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Marathi,Soundbox_Sync_Issue,6313,0.22,1,UP,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Customer,Hindi,EMI_Bounce_Fear,1812,0.64,2,DOWN,"₹1,812 की किस्त भरने में डर लग रहा है",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Tamil,Settlement_Hold,39867,0.41,4,DOWN,"காலையிலிருந்து ₹39,867 settlement hold ஆகியிருக்கு",FREEZE_AND_HUMAN_HANDOFF
+Customer,Marathi,Fraud_Unauthorized_Txn,16124,0.73,0,UP,"मी हे ₹16,124 पेमेंट केले नाही, कोणीतरी पैसे काढले लवकर!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hindi,UPI_Pending,12190,0.49,6,DEGRADED,"मैंने ₹12,190 भेजे, पैसा कट गया पर दुकानदार को नहीं मिला",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Marathi,Soundbox_Sync_Issue,19445,0.58,2,UP,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Merchant,Telugu,Soundbox_Sync_Issue,229,0.39,0,UP,సౌండ్‌బాక్స్ మాట్లాడట్లేదు,REMOTE_IOT_RESTART
+Merchant,Marathi,Soundbox_Sync_Issue,598,0.51,0,UP,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Merchant,Tamil,Festival_Promo_Broadcast,18172,0.45,2,DOWN,என் வழக்கமான வாடிக்கையாளர்களுக்கு தீபாவளி ஆஃபர் அனுப்புங்க,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Marathi,Fraud_Unauthorized_Txn,29403,0.78,1,UP,"मी हे ₹29,403 पेमेंट केले नाही, कोणीतरी पैसे काढले लवकर!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hinglish,Festival_Promo_Broadcast,903,0.29,0,DEGRADED,Mere regular customers ko Diwali offer bhej do,RELEASE_INSTANT_SETTLEMENT
+Customer,Telugu,UPI_Pending,47412,0.39,0,DOWN,"UPI పేమెంట్ pending లో ఉంది, ₹47,412 కట్ అయింది",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hinglish,Soundbox_Sync_Issue,22203,0.53,2,UP,soundbox offline dikha raha hai,REMOTE_IOT_RESTART
+Customer,Marathi,UPI_Pending,7826,0.83,2,UP,"मी ₹7,826 पाठवले, पैसे कापले पण दुकानदाराला मिळाले नाहीत लवकर!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Telugu,Festival_Promo_Broadcast,1855,0.16,0,DEGRADED,నా రెగ్యులర్ కస్టమర్లకి దీపావళి ఆఫర్ పంపండి,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Bengali,EMI_Bounce_Fear,14361,0.49,3,UP,"₹14,361 কিস্তি দিতে ভয় লাগছে",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Marathi,Settlement_Hold,1593,0.21,0,UP,"सकाळपासून ₹1,593 चे सेटलमेंट होल्डवर आहे",RELEASE_INSTANT_SETTLEMENT
+Merchant,Tamil,Festival_Promo_Broadcast,25131,0.36,0,UP,என் வழக்கமான வாடிக்கையாளர்களுக்கு தீபாவளி ஆஃபர் அனுப்புங்க,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Tamil,EMI_Bounce_Fear,1965,0.74,5,UP,"₹1,965 EMI bounce ஆயிடுமா? சீக்கிரம்!!",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Marathi,Festival_Promo_Broadcast,619,0.56,0,DEGRADED,माझ्या नेहमीच्या ग्राहकांना दिवाळी ऑफर पाठवा,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,English,Settlement_Hold,29578,0.51,6,UP,"My ₹29,578 settlement has been on hold since morning",FREEZE_AND_HUMAN_HANDOFF
+Customer,Marathi,Fraud_Unauthorized_Txn,46751,0.63,0,UP,"मी हे ₹46,751 पेमेंट केले नाही, कोणीतरी पैसे काढले",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hindi,Soundbox_Sync_Issue,9086,0.19,1,UP,पेमेंट की आवाज़ नहीं आ रही,REMOTE_IOT_RESTART
+Merchant,Marathi,Settlement_Hold,12315,0.4,0,DEGRADED,"सकाळपासून ₹12,315 चे सेटलमेंट होल्डवर आहे",RELEASE_INSTANT_SETTLEMENT
+Merchant,English,Festival_Promo_Broadcast,31,0.16,0,UP,Send a Diwali offer to my regular customers,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Bengali,EMI_Bounce_Fear,44935,0.7,0,DEGRADED,"₹44,935 কিস্তি দিতে ভয় লাগছে",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Marathi,Settlement_Hold,28768,0.46,0,UP,"सकाळपासून ₹28,768 चे सेटलमेंट होल्डवर आहे",RELEASE_INSTANT_SETTLEMENT
+Customer,Tamil,Fraud_Unauthorized_Txn,25824,0.83,0,UP,"நான் இந்த ₹25,824 பேமெண்ட் பண்ணல, யாரோ பணம் எடுத்துட்டாங்க சீக்கிரம்!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Marathi,Festival_Promo_Broadcast,10635,0.31,1,UP,माझ्या नेहमीच्या ग्राहकांना दिवाळी ऑफर पाठवा,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Hinglish,Soundbox_Sync_Issue,970,0.17,2,DEGRADED,payment ki awaaz nahi aa rahi soundbox se,REMOTE_IOT_RESTART
+Customer,Marathi,Fraud_Unauthorized_Txn,15903,1.0,0,UP,"मी हे ₹15,903 पेमेंट केले नाही, कोणीतरी पैसे काढले लवकर!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hindi,Settlement_Hold,13825,0.3,1,UP,"सुबह से ₹13,825 का सेटलमेंट होल्ड पर है",RELEASE_INSTANT_SETTLEMENT
+Merchant,Hinglish,Festival_Promo_Broadcast,1912,0.43,0,UP,festival offer sab customers ko WhatsApp kar do,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Bengali,EMI_Bounce_Fear,15982,1.0,1,UP,"আমার EMI বাউন্স হবে না তো, লেট ফি লাগবে? তাড়াতাড়ি!!",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,English,EMI_Bounce_Fear,935,0.68,3,DEGRADED,Will my EMI bounce? I'm worried about the late fee,SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Bengali,Soundbox_Sync_Issue,1610,0.2,0,DEGRADED,সাউন্ডবক্স আওয়াজ করছে না,REMOTE_IOT_RESTART
+Merchant,Telugu,Festival_Promo_Broadcast,4282,0.3,1,UP,నా రెగ్యులర్ కస్టమర్లకి దీపావళి ఆఫర్ పంపండి,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Telugu,EMI_Bounce_Fear,347,0.74,1,UP,"₹347 EMI కట్టాలి, భయంగా ఉంది త్వరగా!!",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Hindi,Soundbox_Sync_Issue,38617,0.16,1,UP,साउंडबॉक्स बोल नहीं रहा,REMOTE_IOT_RESTART
+Merchant,English,Festival_Promo_Broadcast,10366,0.3,0,UP,Send a Diwali offer to my regular customers,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Tamil,Soundbox_Sync_Issue,49441,0.22,2,UP,சவுண்ட்பாக்ஸ் பேசல,REMOTE_IOT_RESTART
+Merchant,Bengali,Festival_Promo_Broadcast,6737,0.37,1,UP,আমার নিয়মিত খদ্দেরদের দিওয়ালি অফার পাঠিয়ে দিন,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Telugu,Soundbox_Sync_Issue,1631,0.17,0,UP,సౌండ్‌బాక్స్ మాట్లాడట్లేదు,REMOTE_IOT_RESTART
+Customer,Telugu,UPI_Pending,41609,0.41,0,UP,"UPI పేమెంట్ pending లో ఉంది, ₹41,609 కట్ అయింది",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hindi,Soundbox_Sync_Issue,39644,0.23,0,UP,साउंडबॉक्स बोल नहीं रहा,REMOTE_IOT_RESTART
+Merchant,Marathi,Soundbox_Sync_Issue,947,0.14,0,UP,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Customer,English,EMI_Bounce_Fear,11209,0.39,0,UP,Will my EMI bounce? I'm worried about the late fee,SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Bengali,Soundbox_Sync_Issue,47621,0.02,2,UP,সাউন্ডবক্স আওয়াজ করছে না,REMOTE_IOT_RESTART
+Customer,Marathi,UPI_Pending,11729,0.51,2,UP,"मी ₹11,729 पाठवले, पैसे कापले पण दुकानदाराला मिळाले नाहीत",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hinglish,EMI_Bounce_Fear,1293,0.87,7,DEGRADED,"Meri EMI bounce ho jayegi kya, late fee lagegi? jaldi karo!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Tamil,UPI_Pending,11322,0.56,2,UP,"₹11,322 அனுப்பினேன், பணம் போயிடுச்சு ஆனா கடைக்காரருக்கு வரல",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Marathi,Soundbox_Sync_Issue,4372,0.14,1,DOWN,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Customer,Marathi,UPI_Pending,75,0.38,3,UP,"मी ₹75 पाठवले, पैसे कापले पण दुकानदाराला मिळाले नाहीत",AUTO_REFUND_INSTANT
+Merchant,Marathi,Festival_Promo_Broadcast,46872,0.43,1,UP,माझ्या नेहमीच्या ग्राहकांना दिवाळी ऑफर पाठवा,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Tamil,UPI_Pending,25749,0.6,2,UP,"UPI பேமெண்ட் pending ஆகுது, ₹25,749 கழிஞ்சுருச்சு",FREEZE_AND_HUMAN_HANDOFF
+Customer,Tamil,Fraud_Unauthorized_Txn,43460,0.77,0,UP,"நான் இந்த ₹43,460 பேமெண்ட் பண்ணல, யாரோ பணம் எடுத்துட்டாங்க சீக்கிரம்!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Bengali,Festival_Promo_Broadcast,6032,0.03,1,UP,আমার নিয়মিত খদ্দেরদের দিওয়ালি অফার পাঠিয়ে দিন,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Marathi,Festival_Promo_Broadcast,7267,0.12,2,DEGRADED,माझ्या नेहमीच्या ग्राहकांना दिवाळी ऑफर पाठवा,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,English,EMI_Bounce_Fear,11370,0.74,6,DEGRADED,"Scared I'll miss my ₹11,370 loan installment urgent",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Bengali,Fraud_Unauthorized_Txn,16137,0.83,0,DEGRADED,"আমি এই ₹16,137 পেমেন্ট করিনি, কেউ টাকা তুলে নিয়েছে তাড়াতাড়ি!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Bengali,Settlement_Hold,189,0.35,0,UP,সকাল থেকে ₹189 সেটেলমেন্ট আটকে আছে,RELEASE_INSTANT_SETTLEMENT
+Customer,Tamil,Fraud_Unauthorized_Txn,14739,0.88,2,UP,"நான் இந்த ₹14,739 பேமெண்ட் பண்ணல, யாரோ பணம் எடுத்துட்டாங்க சீக்கிரம்!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hinglish,EMI_Bounce_Fear,101,0.74,0,UP,"Meri EMI bounce ho jayegi kya, late fee lagegi? jaldi karo!!",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Tamil,UPI_Pending,584,1.0,3,UP,"₹584 அனுப்பினேன், பணம் போயிடுச்சு ஆனா கடைக்காரருக்கு வரல சீக்கிரம்!!",AUTO_REFUND_INSTANT
+Merchant,Telugu,Festival_Promo_Broadcast,9321,0.4,3,UP,నా రెగ్యులర్ కస్టమర్లకి దీపావళి ఆఫర్ పంపండి,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Hindi,UPI_Pending,39224,0.2,4,UP,"₹39,224 का यूपीआई पेमेंट अटका हुआ है, पैसे कटे",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hindi,Soundbox_Sync_Issue,30283,0.39,0,DOWN,पेमेंट की आवाज़ नहीं आ रही,REMOTE_IOT_RESTART
+Customer,Tamil,EMI_Bounce_Fear,1987,0.76,0,DOWN,"என் EMI கட்ட பயமா இருக்கு, late fee வருமா? சீக்கிரம்!!",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Marathi,Fraud_Unauthorized_Txn,7422,0.88,0,DEGRADED,"मी हे ₹7,422 पेमेंट केले नाही, कोणीतरी पैसे काढले लवकर!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,English,Settlement_Hold,3727,0.2,0,UP,Yesterday's settlement didn't arrive,RELEASE_INSTANT_SETTLEMENT
+Customer,Marathi,EMI_Bounce_Fear,45664,0.76,4,DEGRADED,"माझा EMI बाउन्स होईल का, लेट फी लागेल का? लवकर!!",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,English,Fraud_Unauthorized_Txn,7156,0.98,0,UP,"Unauthorized transaction of ₹7,156 on my account urgent",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hindi,Settlement_Hold,7997,0.23,0,UP,कल का सेटलमेंट नहीं आया,RELEASE_INSTANT_SETTLEMENT
+Customer,Telugu,EMI_Bounce_Fear,4447,0.58,0,DEGRADED,"₹4,447 EMI కట్టాలి, భయంగా ఉంది",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Telugu,Festival_Promo_Broadcast,7211,0.35,0,DOWN,నా రెగ్యులర్ కస్టమర్లకి దీపావళి ఆఫర్ పంపండి,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Hinglish,Soundbox_Sync_Issue,1156,0.3,0,DOWN,Soundbox bol nahi raha,REMOTE_IOT_RESTART
+Customer,Telugu,UPI_Pending,602,0.65,2,DOWN,"₹602 పంపాను, డబ్బు కట్ అయింది కానీ షాప్ వాళ్ళకి రాలేదు",AUTO_REFUND_INSTANT
+Customer,Telugu,UPI_Pending,37341,0.56,2,UP,"₹37,341 పంపాను, డబ్బు కట్ అయింది కానీ షాప్ వాళ్ళకి రాలేదు",FREEZE_AND_HUMAN_HANDOFF
+Customer,Telugu,UPI_Pending,457,0.56,3,UP,"₹457 పంపాను, డబ్బు కట్ అయింది కానీ షాప్ వాళ్ళకి రాలేదు",AUTO_REFUND_INSTANT
+Customer,Bengali,EMI_Bounce_Fear,3432,0.69,1,UP,"আমার EMI বাউন্স হবে না তো, লেট ফি লাগবে?",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Hindi,EMI_Bounce_Fear,13341,0.72,3,DOWN,"₹13,341 की किस्त भरने में डर लग रहा है बहुत परेशान हूँ",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,English,Soundbox_Sync_Issue,1946,0.09,0,UP,"Soundbox is silent, no payment announcements",REMOTE_IOT_RESTART
+Merchant,Hindi,Festival_Promo_Broadcast,39324,0.44,1,UP,त्योहार का ऑफर सब ग्राहकों को भेजना है,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Hindi,UPI_Pending,13707,0.6,1,DEGRADED,"₹13,707 का यूपीआई पेमेंट अटका हुआ है, पैसे कटे",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Telugu,Soundbox_Sync_Issue,16680,0.0,2,UP,సౌండ్‌బాక్స్ మాట్లాడట్లేదు,REMOTE_IOT_RESTART
+Customer,Bengali,EMI_Bounce_Fear,4750,0.65,0,UP,"আমার EMI বাউন্স হবে না তো, লেট ফি লাগবে?",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Marathi,Fraud_Unauthorized_Txn,46848,1.0,0,UP,"मी हे ₹46,848 पेमेंट केले नाही, कोणीतरी पैसे काढले लवकर!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Telugu,UPI_Pending,11599,0.61,3,UP,"₹11,599 పంపాను, డబ్బు కట్ అయింది కానీ షాప్ వాళ్ళకి రాలేదు",FREEZE_AND_HUMAN_HANDOFF
+Customer,Marathi,EMI_Bounce_Fear,1183,0.7,4,UP,"₹1,183 चा हप्ता भरायची भीती वाटते",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,English,Fraud_Unauthorized_Txn,4205,0.87,0,UP,"Unauthorized transaction of ₹4,205 on my account I'm panicking",FREEZE_AND_HUMAN_HANDOFF
+Merchant,English,Festival_Promo_Broadcast,11192,0.17,1,DOWN,Broadcast a festive discount to repeat buyers,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Marathi,Settlement_Hold,1305,0.24,0,UP,"सकाळपासून ₹1,305 चे सेटलमेंट होल्डवर आहे",RELEASE_INSTANT_SETTLEMENT
+Merchant,Telugu,Settlement_Hold,1600,0.29,0,UP,"పొద్దున్నుంచి ₹1,600 settlement hold లో ఉంది",RELEASE_INSTANT_SETTLEMENT
+Customer,Tamil,Fraud_Unauthorized_Txn,7386,0.85,0,DOWN,"நான் இந்த ₹7,386 பேமெண்ட் பண்ணல, யாரோ பணம் எடுத்துட்டாங்க சீக்கிரம்!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hinglish,Soundbox_Sync_Issue,2988,0.48,0,UP,Soundbox bol nahi raha,REMOTE_IOT_RESTART
+Customer,Hinglish,Fraud_Unauthorized_Txn,19694,0.81,2,UP,"kisi ne mere account se ₹19,694 nikaal liye bahut pareshan hoon",FREEZE_AND_HUMAN_HANDOFF
+Customer,Marathi,EMI_Bounce_Fear,5296,0.89,3,UP,"₹5,296 चा हप्ता भरायची भीती वाटते लवकर!!",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Hinglish,UPI_Pending,27373,0.17,0,DOWN,"Maine ₹27,373 bheje, paisa kat gaya par dukaan wale ko nahi mila",FREEZE_AND_HUMAN_HANDOFF
+Customer,Tamil,EMI_Bounce_Fear,7332,0.54,0,DOWN,"₹7,332 EMI bounce ஆயிடுமா?",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Hinglish,UPI_Pending,3094,0.45,2,UP,"Maine ₹3,094 bheje, paisa kat gaya par dukaan wale ko nahi mila",AUTO_REFUND_INSTANT
+Merchant,Marathi,Soundbox_Sync_Issue,4531,0.15,1,UP,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Merchant,English,Festival_Promo_Broadcast,21229,0.51,9,UP,Send a Diwali offer to my regular customers,FREEZE_AND_HUMAN_HANDOFF
+Customer,Hindi,UPI_Pending,14544,0.28,0,DOWN,"मैंने ₹14,544 भेजे, पैसा कट गया पर दुकानदार को नहीं मिला",FREEZE_AND_HUMAN_HANDOFF
+Merchant,English,Festival_Promo_Broadcast,11950,0.44,0,UP,Broadcast a festive discount to repeat buyers,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Bengali,Fraud_Unauthorized_Txn,49675,0.67,3,UP,"আমি এই ₹49,675 পেমেন্ট করিনি, কেউ টাকা তুলে নিয়েছে",FREEZE_AND_HUMAN_HANDOFF
+Customer,Tamil,Fraud_Unauthorized_Txn,25507,0.79,4,UP,"நான் இந்த ₹25,507 பேமெண்ட் பண்ணல, யாரோ பணம் எடுத்துட்டாங்க சீக்கிரம்!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hindi,Settlement_Hold,31813,0.27,3,UP,कल का सेटलमेंट नहीं आया,RELEASE_INSTANT_SETTLEMENT
+Merchant,Bengali,Settlement_Hold,10474,0.26,1,UP,"সকাল থেকে ₹10,474 সেটেলমেন্ট আটকে আছে",RELEASE_INSTANT_SETTLEMENT
+Customer,Hinglish,Fraud_Unauthorized_Txn,27072,0.86,1,DOWN,"Maine ye ₹27,072 ka payment nahi kiya, fraud hua hai jaldi karo!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Telugu,Settlement_Hold,37497,0.03,0,UP,"పొద్దున్నుంచి ₹37,497 settlement hold లో ఉంది",RELEASE_INSTANT_SETTLEMENT
+Customer,Hinglish,Fraud_Unauthorized_Txn,23302,0.8,2,DOWN,"kisi ne mere account se ₹23,302 nikaal liye bahut pareshan hoon",FREEZE_AND_HUMAN_HANDOFF
+Merchant,English,Festival_Promo_Broadcast,1057,0.25,1,UP,Send a Diwali offer to my regular customers,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,English,UPI_Pending,7025,0.58,0,UP,"I sent ₹7,025, money got debited but the shop didn't receive it",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hinglish,EMI_Bounce_Fear,32433,0.79,0,UP,"loan EMI miss ho gayi, ab kya hoga jaldi karo!!",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,English,Fraud_Unauthorized_Txn,5789,0.74,0,UP,"Unauthorized transaction of ₹5,789 on my account I'm panicking",FREEZE_AND_HUMAN_HANDOFF
+Customer,Marathi,UPI_Pending,35,0.52,0,UP,"मी ₹35 पाठवले, पैसे कापले पण दुकानदाराला मिळाले नाहीत",AUTO_REFUND_INSTANT
+Customer,Hindi,Fraud_Unauthorized_Txn,26074,0.71,0,UP,"मेरे खाते से बिना बताए ₹26,074 कट गए जल्दी करो!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hinglish,Fraud_Unauthorized_Txn,39269,0.93,3,DEGRADED,"kisi ne mere account se ₹39,269 nikaal liye please help",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hindi,Settlement_Hold,40545,0.2,2,UP,कल का सेटलमेंट नहीं आया,RELEASE_INSTANT_SETTLEMENT
+Merchant,Telugu,Soundbox_Sync_Issue,55,0.37,0,DOWN,సౌండ్‌బాక్స్ మాట్లాడట్లేదు,REMOTE_IOT_RESTART
+Merchant,Hindi,Festival_Promo_Broadcast,10744,0.43,0,UP,मेरे रेगुलर ग्राहकों को दिवाली ऑफर भेज दो,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Bengali,Festival_Promo_Broadcast,8346,0.28,0,UP,আমার নিয়মিত খদ্দেরদের দিওয়ালি অফার পাঠিয়ে দিন,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Marathi,EMI_Bounce_Fear,3517,0.76,1,DEGRADED,"₹3,517 चा हप्ता भरायची भीती वाटते लवकर!!",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Hinglish,EMI_Bounce_Fear,29186,0.48,1,UP,"₹29,186 ki kisht bharni hai, darr lag raha hai penalty ka",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,English,EMI_Bounce_Fear,23581,0.77,10,UP,"Scared I'll miss my ₹23,581 loan installment I'm panicking",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hinglish,Fraud_Unauthorized_Txn,9025,0.9,1,UP,"kisi ne mere account se ₹9,025 nikaal liye bahut pareshan hoon",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hindi,Settlement_Hold,13767,0.24,0,DEGRADED,"सुबह से ₹13,767 का सेटलमेंट होल्ड पर है",RELEASE_INSTANT_SETTLEMENT
+Customer,Tamil,EMI_Bounce_Fear,395,0.52,1,UP,"என் EMI கட்ட பயமா இருக்கு, late fee வருமா?",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Hinglish,UPI_Pending,4066,0.5,0,DEGRADED,"UPI payment pending dikha raha hai, ₹4,066 debit ho gaye",AUTO_REFUND_INSTANT
+Merchant,English,Soundbox_Sync_Issue,1777,0.52,1,UP,"Soundbox is silent, no payment announcements",REMOTE_IOT_RESTART
+Merchant,Telugu,Soundbox_Sync_Issue,38076,0.34,0,UP,సౌండ్‌బాక్స్ మాట్లాడట్లేదు,REMOTE_IOT_RESTART
+Merchant,Hinglish,Soundbox_Sync_Issue,13098,0.39,0,UP,payment ki awaaz nahi aa rahi soundbox se,REMOTE_IOT_RESTART
+Customer,Tamil,Fraud_Unauthorized_Txn,15719,0.87,1,DEGRADED,"நான் இந்த ₹15,719 பேமெண்ட் பண்ணல, யாரோ பணம் எடுத்துட்டாங்க சீக்கிரம்!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Tamil,Fraud_Unauthorized_Txn,19565,1.0,1,UP,"நான் இந்த ₹19,565 பேமெண்ட் பண்ணல, யாரோ பணம் எடுத்துட்டாங்க சீக்கிரம்!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hinglish,Festival_Promo_Broadcast,7663,0.12,1,UP,purane grahakon ko discount message bhejo,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Tamil,EMI_Bounce_Fear,3473,0.52,1,UP,"₹3,473 EMI bounce ஆயிடுமா?",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Marathi,Soundbox_Sync_Issue,431,0.35,1,UP,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Customer,English,EMI_Bounce_Fear,1315,0.74,0,UP,"Scared I'll miss my ₹1,315 loan installment please help!!",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Telugu,Soundbox_Sync_Issue,30589,0.28,0,UP,సౌండ్‌బాక్స్ మాట్లాడట్లేదు,REMOTE_IOT_RESTART
+Merchant,Tamil,Soundbox_Sync_Issue,23742,0.42,0,DEGRADED,சவுண்ட்பாக்ஸ் பேசல,REMOTE_IOT_RESTART
+Customer,Marathi,EMI_Bounce_Fear,4536,0.8,2,UP,"₹4,536 चा हप्ता भरायची भीती वाटते लवकर!!",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Hindi,EMI_Bounce_Fear,133,0.75,5,UP,₹133 की किस्त भरने में डर लग रहा है बहुत परेशान हूँ,SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Hinglish,Festival_Promo_Broadcast,1151,0.38,1,DOWN,festival offer sab customers ko WhatsApp kar do,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Tamil,Soundbox_Sync_Issue,1523,0.07,1,DEGRADED,சவுண்ட்பாக்ஸ் பேசல,AUTO_REFUND_INSTANT
+Merchant,Tamil,Soundbox_Sync_Issue,31476,0.0,0,UP,சவுண்ட்பாக்ஸ் பேசல,RELEASE_INSTANT_SETTLEMENT
+Customer,Tamil,EMI_Bounce_Fear,49434,0.78,2,DEGRADED,"₹49,434 EMI bounce ஆயிடுமா? சீக்கிரம்!!",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Tamil,Festival_Promo_Broadcast,23935,0.53,4,DEGRADED,என் வழக்கமான வாடிக்கையாளர்களுக்கு தீபாவளி ஆஃபர் அனுப்புங்க,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Hindi,UPI_Pending,1170,0.71,1,UP,"₹1,170 का यूपीआई पेमेंट अटका हुआ है, पैसे कटे जल्दी करो!!",AUTO_REFUND_INSTANT
+Customer,Hinglish,EMI_Bounce_Fear,293,0.59,6,DEGRADED,"₹293 ki kisht bharni hai, darr lag raha hai penalty ka",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Tamil,Soundbox_Sync_Issue,2524,0.34,0,DEGRADED,சவுண்ட்பாக்ஸ் பேசல,REMOTE_IOT_RESTART
+Customer,Marathi,UPI_Pending,4888,0.6,0,UP,"UPI पेमेंट अडकले आहे, ₹4,888 कापले गेले",AUTO_REFUND_INSTANT
+Merchant,Hindi,Settlement_Hold,7303,0.13,1,UP,कल का सेटलमेंट नहीं आया,RELEASE_INSTANT_SETTLEMENT
+Customer,Hindi,Fraud_Unauthorized_Txn,43951,0.93,0,UP,"मेरे खाते से बिना बताए ₹43,951 कट गए बहुत परेशान हूँ",FREEZE_AND_HUMAN_HANDOFF
+Customer,Tamil,EMI_Bounce_Fear,49760,0.75,1,UP,"என் EMI கட்ட பயமா இருக்கு, late fee வருமா? சீக்கிரம்!!",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Bengali,Festival_Promo_Broadcast,38593,0.32,0,UP,আমার নিয়মিত খদ্দেরদের দিওয়ালি অফার পাঠিয়ে দিন,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Hinglish,EMI_Bounce_Fear,1132,0.72,0,UP,"₹1,132 ki kisht bharni hai, darr lag raha hai penalty ka bahut pareshan hoon",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Telugu,Fraud_Unauthorized_Txn,34432,0.76,3,UP,"నేను ఈ ₹34,432 పేమెంట్ చేయలేదు, ఎవరో డబ్బు తీసుకున్నారు త్వరగా!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,English,EMI_Bounce_Fear,48242,0.84,1,DOWN,Will my EMI bounce? I'm worried about the late fee urgent,SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Bengali,Settlement_Hold,360,0.0,0,DEGRADED,সকাল থেকে ₹360 সেটেলমেন্ট আটকে আছে,RELEASE_INSTANT_SETTLEMENT
+Customer,Tamil,UPI_Pending,2248,0.48,0,DEGRADED,"₹2,248 அனுப்பினேன், பணம் போயிடுச்சு ஆனா கடைக்காரருக்கு வரல",AUTO_REFUND_INSTANT
+Merchant,English,Soundbox_Sync_Issue,39050,0.52,3,DEGRADED,"Soundbox is silent, no payment announcements",REMOTE_IOT_RESTART
+Customer,Hinglish,UPI_Pending,10407,0.54,1,UP,paise kat gaye lekin merchant ko credit nahi hua,FREEZE_AND_HUMAN_HANDOFF
+Customer,Hindi,Fraud_Unauthorized_Txn,24022,0.81,0,UP,"मेरे खाते से बिना बताए ₹24,022 कट गए जल्दी करो!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hindi,Settlement_Hold,161,0.18,1,UP,सुबह से ₹161 का सेटलमेंट होल्ड पर है,RELEASE_INSTANT_SETTLEMENT
+Merchant,Bengali,Festival_Promo_Broadcast,14475,0.26,0,UP,আমার নিয়মিত খদ্দেরদের দিওয়ালি অফার পাঠিয়ে দিন,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,English,Settlement_Hold,74,0.14,1,DEGRADED,My ₹74 settlement has been on hold since morning,RELEASE_INSTANT_SETTLEMENT
+Merchant,Telugu,Settlement_Hold,479,0.15,0,UP,పొద్దున్నుంచి ₹479 settlement hold లో ఉంది,RELEASE_INSTANT_SETTLEMENT
+Customer,Bengali,Fraud_Unauthorized_Txn,48460,0.66,0,UP,"আমি এই ₹48,460 পেমেন্ট করিনি, কেউ টাকা তুলে নিয়েছে",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Tamil,Settlement_Hold,2336,0.34,3,UP,"காலையிலிருந்து ₹2,336 settlement hold ஆகியிருக்கு",RELEASE_INSTANT_SETTLEMENT
+Customer,Tamil,EMI_Bounce_Fear,19160,0.79,1,UP,"என் EMI கட்ட பயமா இருக்கு, late fee வருமா? சீக்கிரம்!!",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,English,UPI_Pending,42934,0.54,1,UP,"UPI payment stuck in pending, ₹42,934 deducted",FREEZE_AND_HUMAN_HANDOFF
+Customer,English,EMI_Bounce_Fear,4312,0.78,0,DEGRADED,Will my EMI bounce? I'm worried about the late fee urgent,SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Telugu,Soundbox_Sync_Issue,37099,0.27,0,DOWN,సౌండ్‌బాక్స్ మాట్లాడట్లేదు,REMOTE_IOT_RESTART
+Customer,English,EMI_Bounce_Fear,490,0.74,1,UP,Scared I'll miss my ₹490 loan installment I'm panicking,SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Bengali,EMI_Bounce_Fear,34758,0.95,0,DEGRADED,"₹34,758 কিস্তি দিতে ভয় লাগছে তাড়াতাড়ি!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hindi,Fraud_Unauthorized_Txn,23966,0.99,2,UP,"मैंने ये ₹23,966 का पेमेंट नहीं किया, किसी ने पैसे निकाल लिए बहुत परेशान हूँ",FREEZE_AND_HUMAN_HANDOFF
+Customer,Tamil,EMI_Bounce_Fear,1848,0.64,1,UP,"என் EMI கட்ட பயமா இருக்கு, late fee வருமா?",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Telugu,Settlement_Hold,33522,0.24,2,DOWN,"పొద్దున్నుంచి ₹33,522 settlement hold లో ఉంది",FREEZE_AND_HUMAN_HANDOFF
+Customer,Tamil,Fraud_Unauthorized_Txn,18536,0.77,1,DEGRADED,"நான் இந்த ₹18,536 பேமெண்ட் பண்ணல, யாரோ பணம் எடுத்துட்டாங்க சீக்கிரம்!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,English,Festival_Promo_Broadcast,2443,0.09,0,DEGRADED,Send a Diwali offer to my regular customers,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Tamil,Fraud_Unauthorized_Txn,31167,0.68,3,UP,"நான் இந்த ₹31,167 பேமெண்ட் பண்ணல, யாரோ பணம் எடுத்துட்டாங்க",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hindi,Festival_Promo_Broadcast,860,0.37,0,DEGRADED,मेरे रेगुलर ग्राहकों को दिवाली ऑफर भेज दो,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Telugu,Festival_Promo_Broadcast,25053,0.35,6,UP,నా రెగ్యులర్ కస్టమర్లకి దీపావళి ఆఫర్ పంపండి,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,English,Festival_Promo_Broadcast,17073,0.21,6,UP,Broadcast a festive discount to repeat buyers,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Tamil,Fraud_Unauthorized_Txn,31979,1.0,0,DEGRADED,"நான் இந்த ₹31,979 பேமெண்ட் பண்ணல, யாரோ பணம் எடுத்துட்டாங்க சீக்கிரம்!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Telugu,EMI_Bounce_Fear,16831,0.69,1,UP,"నా EMI bounce అవుతుందా, late fee పడుతుందా?",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Tamil,Fraud_Unauthorized_Txn,11422,0.89,1,UP,"நான் இந்த ₹11,422 பேமெண்ட் பண்ணல, யாரோ பணம் எடுத்துட்டாங்க சீக்கிரம்!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hinglish,Settlement_Hold,7639,0.36,0,UP,"Subah se ₹7,639 ka settlement hold pe hai",RELEASE_INSTANT_SETTLEMENT
+Merchant,Telugu,Soundbox_Sync_Issue,1390,0.56,1,UP,సౌండ్‌బాక్స్ మాట్లాడట్లేదు,REMOTE_IOT_RESTART
+Merchant,English,Soundbox_Sync_Issue,468,0.29,0,UP,"Soundbox is silent, no payment announcements",REMOTE_IOT_RESTART
+Merchant,Telugu,Festival_Promo_Broadcast,11331,0.46,3,DEGRADED,నా రెగ్యులర్ కస్టమర్లకి దీపావళి ఆఫర్ పంపండి,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,English,EMI_Bounce_Fear,6629,0.95,0,UP,"Scared I'll miss my ₹6,629 loan installment please help!!",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,English,EMI_Bounce_Fear,1819,0.66,2,DEGRADED,Will my EMI bounce? I'm worried about the late fee,SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Tamil,EMI_Bounce_Fear,1413,0.67,4,UP,"₹1,413 EMI bounce ஆயிடுமா?",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Telugu,EMI_Bounce_Fear,8507,0.65,0,DOWN,"₹8,507 EMI కట్టాలి, భయంగా ఉంది",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Bengali,UPI_Pending,490,0.68,1,UP,"₹490 পাঠিয়েছি, টাকা কেটে গেছে কিন্তু দোকানদার পায়নি",AUTO_REFUND_INSTANT
+Merchant,Hindi,Festival_Promo_Broadcast,3807,0.45,5,UP,मेरे रेगुलर ग्राहकों को दिवाली ऑफर भेज दो,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Bengali,Soundbox_Sync_Issue,312,0.02,5,UP,সাউন্ডবক্স আওয়াজ করছে না,REMOTE_IOT_RESTART
+Customer,Marathi,EMI_Bounce_Fear,158,0.6,0,UP,"माझा EMI बाउन्स होईल का, लेट फी लागेल का?",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Telugu,UPI_Pending,11119,0.78,1,UP,"UPI పేమెంట్ pending లో ఉంది, ₹11,119 కట్ అయింది త్వరగా!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Marathi,Soundbox_Sync_Issue,8541,0.32,1,UP,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Merchant,Telugu,Settlement_Hold,1656,0.03,0,UP,"పొద్దున్నుంచి ₹1,656 settlement hold లో ఉంది",RELEASE_INSTANT_SETTLEMENT
+Customer,Marathi,EMI_Bounce_Fear,17205,0.44,0,UP,"₹17,205 चा हप्ता भरायची भीती वाटते",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Bengali,Settlement_Hold,44851,0.55,3,UP,"সকাল থেকে ₹44,851 সেটেলমেন্ট আটকে আছে",RELEASE_INSTANT_SETTLEMENT
+Merchant,English,Soundbox_Sync_Issue,38278,0.3,0,DOWN,"Soundbox is silent, no payment announcements",REMOTE_IOT_RESTART
+Merchant,English,Soundbox_Sync_Issue,29631,0.31,3,DEGRADED,"Soundbox is silent, no payment announcements",REMOTE_IOT_RESTART
+Merchant,Bengali,Settlement_Hold,19315,0.18,0,UP,"সকাল থেকে ₹19,315 সেটেলমেন্ট আটকে আছে",RELEASE_INSTANT_SETTLEMENT
+Customer,Marathi,EMI_Bounce_Fear,362,0.47,3,DEGRADED,"माझा EMI बाउन्स होईल का, लेट फी लागेल का?",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,English,Festival_Promo_Broadcast,9013,0.08,0,UP,Send a Diwali offer to my regular customers,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,English,Soundbox_Sync_Issue,10541,0.24,0,UP,"Soundbox is silent, no payment announcements",REMOTE_IOT_RESTART
+Merchant,Marathi,Settlement_Hold,1644,0.2,0,UP,"सकाळपासून ₹1,644 चे सेटलमेंट होल्डवर आहे",RELEASE_INSTANT_SETTLEMENT
+Customer,Bengali,EMI_Bounce_Fear,10575,0.65,0,UP,"আমার EMI বাউন্স হবে না তো, লেট ফি লাগবে?",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Tamil,Fraud_Unauthorized_Txn,18193,1.0,2,UP,"நான் இந்த ₹18,193 பேமெண்ட் பண்ணல, யாரோ பணம் எடுத்துட்டாங்க சீக்கிரம்!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,English,Settlement_Hold,604,0.27,0,DEGRADED,Yesterday's settlement didn't arrive,RELEASE_INSTANT_SETTLEMENT
+Customer,English,Fraud_Unauthorized_Txn,38725,0.71,0,UP,"Unauthorized transaction of ₹38,725 on my account please help!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,English,Festival_Promo_Broadcast,3309,0.18,4,UP,Send a Diwali offer to my regular customers,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Telugu,Fraud_Unauthorized_Txn,31838,0.95,0,UP,"నేను ఈ ₹31,838 పేమెంట్ చేయలేదు, ఎవరో డబ్బు తీసుకున్నారు త్వరగా!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Marathi,UPI_Pending,14131,0.22,0,UP,"UPI पेमेंट अडकले आहे, ₹14,131 कापले गेले",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hindi,UPI_Pending,462,0.46,1,DEGRADED,"मैंने ₹462 भेजे, पैसा कट गया पर दुकानदार को नहीं मिला",AUTO_REFUND_INSTANT
+Customer,English,UPI_Pending,5274,0.67,2,DEGRADED,"I sent ₹5,274, money got debited but the shop didn't receive it",FREEZE_AND_HUMAN_HANDOFF
+Customer,English,UPI_Pending,4384,0.41,0,DOWN,"I sent ₹4,384, money got debited but the shop didn't receive it",AUTO_REFUND_INSTANT
+Merchant,Bengali,Festival_Promo_Broadcast,3419,0.29,1,UP,আমার নিয়মিত খদ্দেরদের দিওয়ালি অফার পাঠিয়ে দিন,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Tamil,Festival_Promo_Broadcast,43580,0.6,0,UP,என் வழக்கமான வாடிக்கையாளர்களுக்கு தீபாவளி ஆஃபர் அனுப்புங்க,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Tamil,Soundbox_Sync_Issue,47046,0.18,2,UP,சவுண்ட்பாக்ஸ் பேசல,REMOTE_IOT_RESTART
+Customer,Bengali,UPI_Pending,148,0.48,0,DEGRADED,"UPI পেমেন্ট আটকে আছে, ₹148 কেটেছে",AUTO_REFUND_INSTANT
+Customer,English,EMI_Bounce_Fear,12006,0.8,3,UP,"Scared I'll miss my ₹12,006 loan installment I'm panicking",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,English,EMI_Bounce_Fear,1812,0.59,0,DEGRADED,Will my EMI bounce? I'm worried about the late fee,SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Marathi,Soundbox_Sync_Issue,1392,0.21,2,DEGRADED,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Customer,English,EMI_Bounce_Fear,197,0.63,1,UP,Scared I'll miss my ₹197 loan installment,SEND_EMI_LINK_WITH_REASSURANCE
+Customer,English,EMI_Bounce_Fear,126,0.74,2,DEGRADED,Scared I'll miss my ₹126 loan installment I'm panicking,SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Tamil,EMI_Bounce_Fear,36259,0.79,3,UP,"என் EMI கட்ட பயமா இருக்கு, late fee வருமா? சீக்கிரம்!!",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Telugu,Festival_Promo_Broadcast,329,0.17,0,UP,నా రెగ్యులర్ కస్టమర్లకి దీపావళి ఆఫర్ పంపండి,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Telugu,Soundbox_Sync_Issue,244,0.11,1,UP,సౌండ్‌బాక్స్ మాట్లాడట్లేదు,REMOTE_IOT_RESTART
+Merchant,Hindi,Festival_Promo_Broadcast,1546,0.34,0,UP,मेरे रेगुलर ग्राहकों को दिवाली ऑफर भेज दो,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Tamil,Settlement_Hold,29888,0.42,4,UP,"காலையிலிருந்து ₹29,888 settlement hold ஆகியிருக்கு",RELEASE_INSTANT_SETTLEMENT
+Merchant,Hinglish,Festival_Promo_Broadcast,1944,0.37,1,UP,festival offer sab customers ko WhatsApp kar do,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,English,Festival_Promo_Broadcast,152,0.42,2,UP,Send a Diwali offer to my regular customers,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Hindi,Settlement_Hold,48643,0.48,0,UP,कल का सेटलमेंट नहीं आया,RELEASE_INSTANT_SETTLEMENT
+Merchant,Marathi,Soundbox_Sync_Issue,1513,0.42,1,UP,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Merchant,Tamil,Settlement_Hold,315,0.35,1,UP,காலையிலிருந்து ₹315 settlement hold ஆகியிருக்கு,RELEASE_INSTANT_SETTLEMENT
+Customer,Hinglish,EMI_Bounce_Fear,17756,0.6,0,DOWN,"₹17,756 ki kisht bharni hai, darr lag raha hai penalty ka",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Hinglish,EMI_Bounce_Fear,1870,0.67,4,UP,"loan EMI miss ho gayi, ab kya hoga",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Marathi,Soundbox_Sync_Issue,479,0.28,3,DOWN,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Customer,Hindi,Fraud_Unauthorized_Txn,44308,0.75,1,DEGRADED,"मैंने ये ₹44,308 का पेमेंट नहीं किया, किसी ने पैसे निकाल लिए जल्दी करो!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hindi,Festival_Promo_Broadcast,5520,0.25,0,DEGRADED,त्योहार का ऑफर सब ग्राहकों को भेजना है,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Hindi,EMI_Bounce_Fear,660,0.75,2,UP,"मेरी ईएमआई बाउंस हो जाएगी, लेट फीस लगेगी क्या? बहुत परेशान हूँ",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Hinglish,EMI_Bounce_Fear,36696,0.71,6,DOWN,"₹36,696 ki kisht bharni hai, darr lag raha hai penalty ka jaldi karo!!",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Hindi,Festival_Promo_Broadcast,1548,0.33,0,UP,त्योहार का ऑफर सब ग्राहकों को भेजना है,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Marathi,Settlement_Hold,1591,0.26,0,UP,"सकाळपासून ₹1,591 चे सेटलमेंट होल्डवर आहे",RELEASE_INSTANT_SETTLEMENT
+Merchant,Telugu,Soundbox_Sync_Issue,14918,0.14,4,UP,సౌండ్‌బాక్స్ మాట్లాడట్లేదు,REMOTE_IOT_RESTART
+Merchant,English,Festival_Promo_Broadcast,1726,0.44,1,UP,Broadcast a festive discount to repeat buyers,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Marathi,Soundbox_Sync_Issue,40874,0.15,2,UP,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Merchant,English,Soundbox_Sync_Issue,7563,0.0,0,UP,"Soundbox is silent, no payment announcements",REMOTE_IOT_RESTART
+Merchant,Telugu,Settlement_Hold,11908,0.41,0,UP,"పొద్దున్నుంచి ₹11,908 settlement hold లో ఉంది",RELEASE_INSTANT_SETTLEMENT
+Merchant,Tamil,Festival_Promo_Broadcast,27274,0.45,3,UP,என் வழக்கமான வாடிக்கையாளர்களுக்கு தீபாவளி ஆஃபர் அனுப்புங்க,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Marathi,Soundbox_Sync_Issue,8154,0.25,0,UP,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Merchant,Bengali,Festival_Promo_Broadcast,1629,0.67,0,UP,আমার নিয়মিত খদ্দেরদের দিওয়ালি অফার পাঠিয়ে দিন,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Telugu,EMI_Bounce_Fear,31437,0.61,1,DEGRADED,"₹31,437 EMI కట్టాలి, భయంగా ఉంది",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Marathi,Festival_Promo_Broadcast,48703,0.36,0,UP,माझ्या नेहमीच्या ग्राहकांना दिवाळी ऑफर पाठवा,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Marathi,Soundbox_Sync_Issue,39632,0.32,1,UP,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Merchant,Hindi,Soundbox_Sync_Issue,8179,0.25,2,DEGRADED,पेमेंट की आवाज़ नहीं आ रही,REMOTE_IOT_RESTART
+Merchant,Telugu,Festival_Promo_Broadcast,290,0.43,1,DOWN,నా రెగ్యులర్ కస్టమర్లకి దీపావళి ఆఫర్ పంపండి,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Tamil,Soundbox_Sync_Issue,14492,0.61,2,UP,சவுண்ட்பாக்ஸ் பேசல,REMOTE_IOT_RESTART
+Merchant,Marathi,Soundbox_Sync_Issue,38608,0.41,2,UP,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Merchant,Hinglish,Festival_Promo_Broadcast,421,0.22,0,UP,purane grahakon ko discount message bhejo,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Bengali,UPI_Pending,38600,0.6,4,UP,"UPI পেমেন্ট আটকে আছে, ₹38,600 কেটেছে",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hindi,Settlement_Hold,6263,0.42,0,DEGRADED,कल का सेटलमेंट नहीं आया,RELEASE_INSTANT_SETTLEMENT
+Customer,Bengali,EMI_Bounce_Fear,41755,0.82,0,UP,"₹41,755 কিস্তি দিতে ভয় লাগছে তাড়াতাড়ি!!",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Telugu,Festival_Promo_Broadcast,40922,0.57,2,DEGRADED,నా రెగ్యులర్ కస్టమర్లకి దీపావళి ఆఫర్ పంపండి,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Hindi,UPI_Pending,13437,0.44,6,DEGRADED,"मैंने ₹13,437 भेजे, पैसा कट गया पर दुकानदार को नहीं मिला",FREEZE_AND_HUMAN_HANDOFF
+Merchant,English,Soundbox_Sync_Issue,13661,0.22,0,UP,"Soundbox is silent, no payment announcements",REMOTE_IOT_RESTART
+Merchant,English,Settlement_Hold,14939,0.09,0,UP,"My ₹14,939 settlement has been on hold since morning",RELEASE_INSTANT_SETTLEMENT
+Customer,Telugu,Fraud_Unauthorized_Txn,22998,1.0,1,DOWN,"నేను ఈ ₹22,998 పేమెంట్ చేయలేదు, ఎవరో డబ్బు తీసుకున్నారు త్వరగా!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hinglish,Soundbox_Sync_Issue,1193,0.19,3,DEGRADED,Soundbox bol nahi raha,REMOTE_IOT_RESTART
+Merchant,English,Soundbox_Sync_Issue,1554,0.25,3,DEGRADED,"Soundbox is silent, no payment announcements",REMOTE_IOT_RESTART
+Customer,Marathi,EMI_Bounce_Fear,40187,0.84,2,UP,"₹40,187 चा हप्ता भरायची भीती वाटते लवकर!!",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Hindi,Festival_Promo_Broadcast,13075,0.16,0,UP,मेरे रेगुलर ग्राहकों को दिवाली ऑफर भेज दो,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Hinglish,Festival_Promo_Broadcast,9499,0.29,0,UP,Mere regular customers ko Diwali offer bhej do,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Hindi,Settlement_Hold,34277,0.35,4,DOWN,"सुबह से ₹34,277 का सेटलमेंट होल्ड पर है",FREEZE_AND_HUMAN_HANDOFF
+Customer,Tamil,EMI_Bounce_Fear,1729,0.66,1,UP,"என் EMI கட்ட பயமா இருக்கு, late fee வருமா?",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Marathi,Festival_Promo_Broadcast,11583,0.26,0,DOWN,माझ्या नेहमीच्या ग्राहकांना दिवाळी ऑफर पाठवा,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,English,UPI_Pending,36589,0.61,1,UP,"UPI payment stuck in pending, ₹36,589 deducted",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Bengali,Soundbox_Sync_Issue,37392,0.3,0,UP,সাউন্ডবক্স আওয়াজ করছে না,REMOTE_IOT_RESTART
+Customer,Marathi,UPI_Pending,10457,0.6,2,DEGRADED,"मी ₹10,457 पाठवले, पैसे कापले पण दुकानदाराला मिळाले नाहीत",FREEZE_AND_HUMAN_HANDOFF
+Merchant,English,Soundbox_Sync_Issue,16501,0.04,2,DEGRADED,"Soundbox is silent, no payment announcements",REMOTE_IOT_RESTART
+Merchant,Hindi,Settlement_Hold,32287,0.24,1,DOWN,कल का सेटलमेंट नहीं आया,FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hinglish,Soundbox_Sync_Issue,1425,0.37,2,UP,Soundbox bol nahi raha,REMOTE_IOT_RESTART
+Customer,Tamil,EMI_Bounce_Fear,1602,0.88,1,DEGRADED,"என் EMI கட்ட பயமா இருக்கு, late fee வருமா? சீக்கிரம்!!",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Bengali,Festival_Promo_Broadcast,5428,0.16,1,DOWN,আমার নিয়মিত খদ্দেরদের দিওয়ালি অফার পাঠিয়ে দিন,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Telugu,Fraud_Unauthorized_Txn,29418,0.87,0,UP,"నేను ఈ ₹29,418 పేమెంట్ చేయలేదు, ఎవరో డబ్బు తీసుకున్నారు త్వరగా!!",AUTO_REFUND_INSTANT
+Merchant,English,Settlement_Hold,5341,0.32,0,UP,Yesterday's settlement didn't arrive,RELEASE_INSTANT_SETTLEMENT
+Merchant,Hinglish,Soundbox_Sync_Issue,5988,0.25,1,UP,Soundbox bol nahi raha,REMOTE_IOT_RESTART
+Customer,Bengali,Fraud_Unauthorized_Txn,38166,0.9,2,UP,"আমি এই ₹38,166 পেমেন্ট করিনি, কেউ টাকা তুলে নিয়েছে তাড়াতাড়ি!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,English,Soundbox_Sync_Issue,45773,0.45,0,UP,"Soundbox is silent, no payment announcements",REMOTE_IOT_RESTART
+Customer,English,EMI_Bounce_Fear,5747,0.51,1,DEGRADED,Will my EMI bounce? I'm worried about the late fee,SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Marathi,Soundbox_Sync_Issue,88,0.31,0,UP,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Customer,Bengali,UPI_Pending,11470,0.51,0,UP,"UPI পেমেন্ট আটকে আছে, ₹11,470 কেটেছে",FREEZE_AND_HUMAN_HANDOFF
+Customer,English,UPI_Pending,1817,0.66,1,UP,"UPI payment stuck in pending, ₹1,817 deducted",AUTO_REFUND_INSTANT
+Customer,Hindi,UPI_Pending,20611,0.69,1,UP,"मैंने ₹20,611 भेजे, पैसा कट गया पर दुकानदार को नहीं मिला",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Bengali,Soundbox_Sync_Issue,6767,0.21,0,UP,সাউন্ডবক্স আওয়াজ করছে না,REMOTE_IOT_RESTART
+Merchant,Marathi,Soundbox_Sync_Issue,1516,0.13,1,UP,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Customer,Marathi,UPI_Pending,3661,0.53,0,UP,"UPI पेमेंट अडकले आहे, ₹3,661 कापले गेले",AUTO_REFUND_INSTANT
+Customer,Hindi,UPI_Pending,22449,0.68,1,UP,"₹22,449 का यूपीआई पेमेंट अटका हुआ है, पैसे कटे",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Bengali,Settlement_Hold,28816,0.3,0,UP,"সকাল থেকে ₹28,816 সেটেলমেন্ট আটকে আছে",RELEASE_INSTANT_SETTLEMENT
+Customer,English,EMI_Bounce_Fear,1876,0.59,1,UP,"Scared I'll miss my ₹1,876 loan installment",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,English,Festival_Promo_Broadcast,7709,0.23,0,DOWN,Broadcast a festive discount to repeat buyers,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Tamil,Festival_Promo_Broadcast,6091,0.36,1,UP,என் வழக்கமான வாடிக்கையாளர்களுக்கு தீபாவளி ஆஃபர் அனுப்புங்க,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Hindi,Festival_Promo_Broadcast,14632,0.35,0,DEGRADED,त्योहार का ऑफर सब ग्राहकों को भेजना है,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Tamil,Festival_Promo_Broadcast,10802,0.12,0,UP,என் வழக்கமான வாடிக்கையாளர்களுக்கு தீபாவளி ஆஃபர் அனுப்புங்க,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Bengali,Settlement_Hold,20874,0.33,3,UP,"সকাল থেকে ₹20,874 সেটেলমেন্ট আটকে আছে",RELEASE_INSTANT_SETTLEMENT
+Customer,Hinglish,UPI_Pending,25907,0.67,4,UP,"UPI payment pending dikha raha hai, ₹25,907 debit ho gaye",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hindi,Festival_Promo_Broadcast,28711,0.28,1,UP,मेरे रेगुलर ग्राहकों को दिवाली ऑफर भेज दो,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Telugu,Soundbox_Sync_Issue,19190,0.69,0,UP,సౌండ్‌బాక్స్ మాట్లాడట్లేదు,REMOTE_IOT_RESTART
+Customer,Hindi,Fraud_Unauthorized_Txn,18721,0.99,3,UP,"मेरे खाते से बिना बताए ₹18,721 कट गए बहुत परेशान हूँ",FREEZE_AND_HUMAN_HANDOFF
+Customer,Telugu,EMI_Bounce_Fear,3553,0.57,0,UP,"₹3,553 EMI కట్టాలి, భయంగా ఉంది",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Hindi,EMI_Bounce_Fear,37986,0.54,3,UP,"मेरी ईएमआई बाउंस हो जाएगी, लेट फीस लगेगी क्या?",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Marathi,Soundbox_Sync_Issue,1212,0.48,0,UP,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Merchant,Hindi,Soundbox_Sync_Issue,1176,0.32,3,UP,पेमेंट की आवाज़ नहीं आ रही,REMOTE_IOT_RESTART
+Merchant,Hinglish,Soundbox_Sync_Issue,8051,0.31,0,UP,Soundbox bol nahi raha,REMOTE_IOT_RESTART
+Customer,Tamil,EMI_Bounce_Fear,1568,0.46,2,DEGRADED,"என் EMI கட்ட பயமா இருக்கு, late fee வருமா?",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Tamil,Settlement_Hold,1791,0.05,1,DEGRADED,"காலையிலிருந்து ₹1,791 settlement hold ஆகியிருக்கு",RELEASE_INSTANT_SETTLEMENT
+Merchant,Telugu,Settlement_Hold,3897,0.14,0,UP,"పొద్దున్నుంచి ₹3,897 settlement hold లో ఉంది",RELEASE_INSTANT_SETTLEMENT
+Merchant,Telugu,Settlement_Hold,134,0.24,0,UP,పొద్దున్నుంచి ₹134 settlement hold లో ఉంది,RELEASE_INSTANT_SETTLEMENT
+Customer,Hindi,Fraud_Unauthorized_Txn,49573,0.89,10,DOWN,"मेरे खाते से बिना बताए ₹49,573 कट गए जल्दी करो!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Bengali,Settlement_Hold,124,0.5,1,UP,সকাল থেকে ₹124 সেটেলমেন্ট আটকে আছে,RELEASE_INSTANT_SETTLEMENT
+Merchant,Telugu,Festival_Promo_Broadcast,1902,0.37,0,UP,నా రెగ్యులర్ కస్టమర్లకి దీపావళి ఆఫర్ పంపండి,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Telugu,Soundbox_Sync_Issue,26794,0.1,0,UP,సౌండ్‌బాక్స్ మాట్లాడట్లేదు,REMOTE_IOT_RESTART
+Merchant,Marathi,Soundbox_Sync_Issue,10800,0.26,0,UP,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Merchant,Marathi,Festival_Promo_Broadcast,26909,0.23,0,UP,माझ्या नेहमीच्या ग्राहकांना दिवाळी ऑफर पाठवा,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Tamil,UPI_Pending,4301,0.55,4,UP,"₹4,301 அனுப்பினேன், பணம் போயிடுச்சு ஆனா கடைக்காரருக்கு வரல",RELEASE_INSTANT_SETTLEMENT
+Customer,Hindi,EMI_Bounce_Fear,48531,0.45,1,DOWN,"मेरी ईएमआई बाउंस हो जाएगी, लेट फीस लगेगी क्या?",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Hinglish,Settlement_Hold,14850,0.36,0,UP,Kal ka settlement nahi aaya,RELEASE_INSTANT_SETTLEMENT
+Merchant,Hindi,Soundbox_Sync_Issue,1174,0.68,2,UP,पेमेंट की आवाज़ नहीं आ रही,REMOTE_IOT_RESTART
+Merchant,Bengali,Settlement_Hold,1132,0.29,0,UP,"সকাল থেকে ₹1,132 সেটেলমেন্ট আটকে আছে",RELEASE_INSTANT_SETTLEMENT
+Customer,Bengali,EMI_Bounce_Fear,667,0.84,0,UP,₹667 কিস্তি দিতে ভয় লাগছে তাড়াতাড়ি!!,SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Marathi,Fraud_Unauthorized_Txn,27522,0.98,2,DOWN,"मी हे ₹27,522 पेमेंट केले नाही, कोणीतरी पैसे काढले लवकर!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,English,EMI_Bounce_Fear,19806,0.74,0,UP,Will my EMI bounce? I'm worried about the late fee urgent,SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Bengali,Soundbox_Sync_Issue,39219,0.4,0,DEGRADED,সাউন্ডবক্স আওয়াজ করছে না,REMOTE_IOT_RESTART
+Merchant,Tamil,Soundbox_Sync_Issue,5875,0.28,5,UP,சவுண்ட்பாக்ஸ் பேசல,REMOTE_IOT_RESTART
+Customer,Bengali,UPI_Pending,28915,0.39,0,UP,"₹28,915 পাঠিয়েছি, টাকা কেটে গেছে কিন্তু দোকানদার পায়নি",FREEZE_AND_HUMAN_HANDOFF
+Merchant,English,Festival_Promo_Broadcast,1999,0.6,5,UP,Broadcast a festive discount to repeat buyers,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Marathi,EMI_Bounce_Fear,8075,0.52,0,UP,"माझा EMI बाउन्स होईल का, लेट फी लागेल का?",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Hindi,UPI_Pending,41616,0.33,0,UP,"₹41,616 का यूपीआई पेमेंट अटका हुआ है, पैसे कटे",FREEZE_AND_HUMAN_HANDOFF
+Customer,Bengali,Fraud_Unauthorized_Txn,12296,0.94,1,DEGRADED,"আমি এই ₹12,296 পেমেন্ট করিনি, কেউ টাকা তুলে নিয়েছে তাড়াতাড়ি!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,English,Soundbox_Sync_Issue,28370,0.09,0,UP,"Soundbox is silent, no payment announcements",REMOTE_IOT_RESTART
+Merchant,Marathi,Festival_Promo_Broadcast,19242,0.09,2,UP,माझ्या नेहमीच्या ग्राहकांना दिवाळी ऑफर पाठवा,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Marathi,Settlement_Hold,1158,0.36,2,DEGRADED,"सकाळपासून ₹1,158 चे सेटलमेंट होल्डवर आहे",RELEASE_INSTANT_SETTLEMENT
+Customer,Hinglish,UPI_Pending,32375,0.57,0,UP,"Maine ₹32,375 bheje, paisa kat gaya par dukaan wale ko nahi mila",FREEZE_AND_HUMAN_HANDOFF
+Customer,Telugu,EMI_Bounce_Fear,3201,0.54,0,UP,"₹3,201 EMI కట్టాలి, భయంగా ఉంది",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Hindi,Festival_Promo_Broadcast,1908,0.29,0,DOWN,मेरे रेगुलर ग्राहकों को दिवाली ऑफर भेज दो,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Tamil,Soundbox_Sync_Issue,709,0.35,0,DOWN,சவுண்ட்பாக்ஸ் பேசல,REMOTE_IOT_RESTART
+Merchant,Telugu,Soundbox_Sync_Issue,798,0.28,1,UP,సౌండ్‌బాక్స్ మాట్లాడట్లేదు,REMOTE_IOT_RESTART
+Merchant,Telugu,Soundbox_Sync_Issue,30154,0.35,0,UP,సౌండ్‌బాక్స్ మాట్లాడట్లేదు,REMOTE_IOT_RESTART
+Customer,Bengali,EMI_Bounce_Fear,451,0.65,1,UP,"আমার EMI বাউন্স হবে না তো, লেট ফি লাগবে?",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Hindi,Soundbox_Sync_Issue,462,0.12,1,UP,साउंडबॉक्स बोल नहीं रहा,REMOTE_IOT_RESTART
+Customer,Tamil,EMI_Bounce_Fear,1366,0.8,0,DEGRADED,"₹1,366 EMI bounce ஆயிடுமா? சீக்கிரம்!!",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Tamil,Soundbox_Sync_Issue,123,0.36,0,UP,சவுண்ட்பாக்ஸ் பேசல,REMOTE_IOT_RESTART
+Merchant,Hinglish,Soundbox_Sync_Issue,2495,0.43,1,UP,soundbox offline dikha raha hai,REMOTE_IOT_RESTART
+Merchant,English,Festival_Promo_Broadcast,19591,0.42,0,UP,Broadcast a festive discount to repeat buyers,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Hinglish,Fraud_Unauthorized_Txn,28220,0.87,0,DOWN,"kisi ne mere account se ₹28,220 nikaal liye bahut pareshan hoon",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hindi,Settlement_Hold,1314,0.16,3,DOWN,"सुबह से ₹1,314 का सेटलमेंट होल्ड पर है",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Bengali,Soundbox_Sync_Issue,19491,0.32,0,UP,সাউন্ডবক্স আওয়াজ করছে না,REMOTE_IOT_RESTART
+Merchant,Hindi,Soundbox_Sync_Issue,23850,0.14,0,UP,साउंडबॉक्स बोल नहीं रहा,REMOTE_IOT_RESTART
+Customer,English,Fraud_Unauthorized_Txn,26154,0.86,0,UP,"I didn't make this ₹26,154 payment, someone stole my money urgent",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hindi,UPI_Pending,14134,0.39,0,UP,"₹14,134 का यूपीआई पेमेंट अटका हुआ है, पैसे कटे",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Marathi,Settlement_Hold,23495,0.43,0,DEGRADED,"सकाळपासून ₹23,495 चे सेटलमेंट होल्डवर आहे",RELEASE_INSTANT_SETTLEMENT
+Customer,Tamil,UPI_Pending,24733,0.9,0,UP,"UPI பேமெண்ட் pending ஆகுது, ₹24,733 கழிஞ்சுருச்சு சீக்கிரம்!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,English,UPI_Pending,10,0.58,0,UP,"UPI payment stuck in pending, ₹10 deducted",AUTO_REFUND_INSTANT
+Merchant,English,Festival_Promo_Broadcast,6357,0.19,0,UP,Broadcast a festive discount to repeat buyers,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Hindi,EMI_Bounce_Fear,41907,0.67,4,DEGRADED,"मेरी ईएमआई बाउंस हो जाएगी, लेट फीस लगेगी क्या?",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Hinglish,Soundbox_Sync_Issue,4466,0.11,1,UP,payment ki awaaz nahi aa rahi soundbox se,REMOTE_IOT_RESTART
+Customer,Hinglish,EMI_Bounce_Fear,37046,0.71,3,DEGRADED,"Meri EMI bounce ho jayegi kya, late fee lagegi? bahut pareshan hoon",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Marathi,Fraud_Unauthorized_Txn,31616,0.73,2,DEGRADED,"मी हे ₹31,616 पेमेंट केले नाही, कोणीतरी पैसे काढले लवकर!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hindi,UPI_Pending,252,0.56,0,DEGRADED,"मैंने ₹252 भेजे, पैसा कट गया पर दुकानदार को नहीं मिला",AUTO_REFUND_INSTANT
+Merchant,Telugu,Soundbox_Sync_Issue,9809,0.36,1,DEGRADED,సౌండ్‌బాక్స్ మాట్లాడట్లేదు,REMOTE_IOT_RESTART
+Merchant,Marathi,Festival_Promo_Broadcast,38086,0.47,10,DEGRADED,माझ्या नेहमीच्या ग्राहकांना दिवाळी ऑफर पाठवा,FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hindi,Settlement_Hold,1813,0.2,0,UP,"सुबह से ₹1,813 का सेटलमेंट होल्ड पर है",RELEASE_INSTANT_SETTLEMENT
+Customer,Hindi,Fraud_Unauthorized_Txn,47820,1.0,0,UP,"मेरे खाते से बिना बताए ₹47,820 कट गए जल्दी करो!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Bengali,Soundbox_Sync_Issue,2946,0.7,3,DOWN,সাউন্ডবক্স আওয়াজ করছে না,REMOTE_IOT_RESTART
+Merchant,Marathi,Soundbox_Sync_Issue,8829,0.26,2,UP,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Customer,Bengali,EMI_Bounce_Fear,1969,0.78,0,UP,"আমার EMI বাউন্স হবে না তো, লেট ফি লাগবে? তাড়াতাড়ি!!",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Hinglish,UPI_Pending,47925,0.85,1,DOWN,paise kat gaye lekin merchant ko credit nahi hua jaldi karo!!,FREEZE_AND_HUMAN_HANDOFF
+Merchant,Telugu,Soundbox_Sync_Issue,1655,0.08,1,UP,సౌండ్‌బాక్స్ మాట్లాడట్లేదు,REMOTE_IOT_RESTART
+Customer,Bengali,EMI_Bounce_Fear,1297,0.69,3,UP,"আমার EMI বাউন্স হবে না তো, লেট ফি লাগবে?",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Bengali,EMI_Bounce_Fear,30214,0.38,0,DEGRADED,"আমার EMI বাউন্স হবে না তো, লেট ফি লাগবে?",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Bengali,Soundbox_Sync_Issue,5536,0.34,4,UP,সাউন্ডবক্স আওয়াজ করছে না,REMOTE_IOT_RESTART
+Customer,Marathi,Fraud_Unauthorized_Txn,12045,0.83,1,DOWN,"मी हे ₹12,045 पेमेंट केले नाही, कोणीतरी पैसे काढले लवकर!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hinglish,EMI_Bounce_Fear,4641,0.56,0,UP,"Meri EMI bounce ho jayegi kya, late fee lagegi?",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Tamil,Fraud_Unauthorized_Txn,28170,0.76,1,UP,"நான் இந்த ₹28,170 பேமெண்ட் பண்ணல, யாரோ பணம் எடுத்துட்டாங்க சீக்கிரம்!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Bengali,Settlement_Hold,415,0.19,0,UP,সকাল থেকে ₹415 সেটেলমেন্ট আটকে আছে,RELEASE_INSTANT_SETTLEMENT
+Merchant,Marathi,Festival_Promo_Broadcast,38068,0.3,1,UP,माझ्या नेहमीच्या ग्राहकांना दिवाळी ऑफर पाठवा,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Bengali,Fraud_Unauthorized_Txn,34151,0.62,0,UP,"আমি এই ₹34,151 পেমেন্ট করিনি, কেউ টাকা তুলে নিয়েছে",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Marathi,Soundbox_Sync_Issue,15256,0.05,0,UP,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Customer,Bengali,Fraud_Unauthorized_Txn,36804,0.64,0,UP,"আমি এই ₹36,804 পেমেন্ট করিনি, কেউ টাকা তুলে নিয়েছে",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Telugu,Settlement_Hold,38818,0.23,3,UP,"పొద్దున్నుంచి ₹38,818 settlement hold లో ఉంది",RELEASE_INSTANT_SETTLEMENT
+Merchant,Hindi,Settlement_Hold,40370,0.1,0,UP,कल का सेटलमेंट नहीं आया,RELEASE_INSTANT_SETTLEMENT
+Merchant,Bengali,Soundbox_Sync_Issue,6519,0.13,2,UP,সাউন্ডবক্স আওয়াজ করছে না,SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Hindi,EMI_Bounce_Fear,4303,0.66,0,DEGRADED,"मेरी ईएमआई बाउंस हो जाएगी, लेट फीस लगेगी क्या?",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Bengali,Fraud_Unauthorized_Txn,13444,0.9,0,UP,"আমি এই ₹13,444 পেমেন্ট করিনি, কেউ টাকা তুলে নিয়েছে তাড়াতাড়ি!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,English,Soundbox_Sync_Issue,11781,0.35,0,UP,"Soundbox is silent, no payment announcements",REMOTE_IOT_RESTART
+Customer,Hindi,EMI_Bounce_Fear,38456,0.66,4,UP,"मेरी ईएमआई बाउंस हो जाएगी, लेट फीस लगेगी क्या?",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Tamil,Settlement_Hold,8701,0.34,8,DEGRADED,"காலையிலிருந்து ₹8,701 settlement hold ஆகியிருக்கு",FREEZE_AND_HUMAN_HANDOFF
+Customer,English,EMI_Bounce_Fear,12256,1.0,1,UP,Will my EMI bounce? I'm worried about the late fee urgent,SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Hindi,Fraud_Unauthorized_Txn,42305,0.77,4,DEGRADED,"मैंने ये ₹42,305 का पेमेंट नहीं किया, किसी ने पैसे निकाल लिए बहुत परेशान हूँ",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hinglish,Settlement_Hold,15301,0.43,2,DEGRADED,"payout ruka hua hai, ₹15,301 abhi tak nahi aaye",RELEASE_INSTANT_SETTLEMENT
+Merchant,Telugu,Festival_Promo_Broadcast,27389,0.14,0,UP,నా రెగ్యులర్ కస్టమర్లకి దీపావళి ఆఫర్ పంపండి,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Hinglish,Settlement_Hold,15280,0.45,1,UP,"payout ruka hua hai, ₹15,280 abhi tak nahi aaye",RELEASE_INSTANT_SETTLEMENT
+Customer,Tamil,Fraud_Unauthorized_Txn,6237,0.57,0,UP,"நான் இந்த ₹6,237 பேமெண்ட் பண்ணல, யாரோ பணம் எடுத்துட்டாங்க",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Bengali,Festival_Promo_Broadcast,1049,0.31,1,UP,আমার নিয়মিত খদ্দেরদের দিওয়ালি অফার পাঠিয়ে দিন,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Bengali,UPI_Pending,43953,0.57,0,UP,"₹43,953 পাঠিয়েছি, টাকা কেটে গেছে কিন্তু দোকানদার পায়নি",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Tamil,Soundbox_Sync_Issue,3065,0.24,2,UP,சவுண்ட்பாக்ஸ் பேசல,REMOTE_IOT_RESTART
+Merchant,English,Soundbox_Sync_Issue,14427,0.22,1,UP,"Soundbox is silent, no payment announcements",REMOTE_IOT_RESTART
+Customer,English,EMI_Bounce_Fear,18507,0.55,7,UP,Will my EMI bounce? I'm worried about the late fee,FREEZE_AND_HUMAN_HANDOFF
+Merchant,English,Settlement_Hold,520,0.27,0,DEGRADED,My ₹520 settlement has been on hold since morning,RELEASE_INSTANT_SETTLEMENT
+Customer,Telugu,Fraud_Unauthorized_Txn,19870,0.86,0,DOWN,"నేను ఈ ₹19,870 పేమెంట్ చేయలేదు, ఎవరో డబ్బు తీసుకున్నారు త్వరగా!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Marathi,UPI_Pending,10194,0.72,0,DEGRADED,"मी ₹10,194 पाठवले, पैसे कापले पण दुकानदाराला मिळाले नाहीत लवकर!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hinglish,UPI_Pending,339,0.83,1,UP,"UPI payment pending dikha raha hai, ₹339 debit ho gaye jaldi karo!!",AUTO_REFUND_INSTANT
+Merchant,English,Settlement_Hold,18961,0.14,1,UP,"My ₹18,961 settlement has been on hold since morning",RELEASE_INSTANT_SETTLEMENT
+Customer,Bengali,EMI_Bounce_Fear,3961,0.8,3,DOWN,"₹3,961 কিস্তি দিতে ভয় লাগছে তাড়াতাড়ি!!",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Bengali,Festival_Promo_Broadcast,47603,0.23,0,UP,আমার নিয়মিত খদ্দেরদের দিওয়ালি অফার পাঠিয়ে দিন,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Telugu,EMI_Bounce_Fear,6630,0.77,1,UP,"నా EMI bounce అవుతుందా, late fee పడుతుందా? త్వరగా!!",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Tamil,UPI_Pending,39213,0.61,1,UP,"₹39,213 அனுப்பினேன், பணம் போயிடுச்சு ஆனா கடைக்காரருக்கு வரல",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Marathi,Soundbox_Sync_Issue,27342,0.0,0,UP,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Customer,Hindi,Fraud_Unauthorized_Txn,5447,0.9,0,DEGRADED,"मैंने ये ₹5,447 का पेमेंट नहीं किया, किसी ने पैसे निकाल लिए बहुत परेशान हूँ",FREEZE_AND_HUMAN_HANDOFF
+Customer,Marathi,EMI_Bounce_Fear,13684,0.82,0,UP,"₹13,684 चा हप्ता भरायची भीती वाटते लवकर!!",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Hindi,Soundbox_Sync_Issue,37939,0.06,0,UP,साउंडबॉक्स बोल नहीं रहा,REMOTE_IOT_RESTART
+Customer,Hindi,EMI_Bounce_Fear,32527,0.5,3,UP,"₹32,527 की किस्त भरने में डर लग रहा है",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Telugu,Settlement_Hold,19409,0.5,0,DEGRADED,"పొద్దున్నుంచి ₹19,409 settlement hold లో ఉంది",RELEASE_INSTANT_SETTLEMENT
+Merchant,Tamil,Settlement_Hold,1793,0.0,8,DOWN,"காலையிலிருந்து ₹1,793 settlement hold ஆகியிருக்கு",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Tamil,Soundbox_Sync_Issue,4185,0.3,0,UP,சவுண்ட்பாக்ஸ் பேசல,REMOTE_IOT_RESTART
+Customer,Bengali,Fraud_Unauthorized_Txn,31164,0.93,1,UP,"আমি এই ₹31,164 পেমেন্ট করিনি, কেউ টাকা তুলে নিয়েছে তাড়াতাড়ি!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,English,EMI_Bounce_Fear,21,0.69,1,UP,Scared I'll miss my ₹21 loan installment,SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Marathi,EMI_Bounce_Fear,44663,0.37,0,UP,"माझा EMI बाउन्स होईल का, लेट फी लागेल का?",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Hindi,Festival_Promo_Broadcast,7433,0.21,0,UP,त्योहार का ऑफर सब ग्राहकों को भेजना है,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Hinglish,EMI_Bounce_Fear,635,0.52,2,UP,"Meri EMI bounce ho jayegi kya, late fee lagegi?",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Hindi,Settlement_Hold,25261,0.33,0,UP,"सुबह से ₹25,261 का सेटलमेंट होल्ड पर है",RELEASE_INSTANT_SETTLEMENT
+Customer,Hinglish,EMI_Bounce_Fear,5432,0.53,1,UP,"₹5,432 ki kisht bharni hai, darr lag raha hai penalty ka",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Telugu,Soundbox_Sync_Issue,216,0.18,0,UP,సౌండ్‌బాక్స్ మాట్లాడట్లేదు,REMOTE_IOT_RESTART
+Merchant,Telugu,Settlement_Hold,1419,0.27,0,UP,"పొద్దున్నుంచి ₹1,419 settlement hold లో ఉంది",RELEASE_INSTANT_SETTLEMENT
+Merchant,Hindi,Soundbox_Sync_Issue,10229,0.38,1,DEGRADED,पेमेंट की आवाज़ नहीं आ रही,REMOTE_IOT_RESTART
+Customer,English,Fraud_Unauthorized_Txn,5198,1.0,1,UP,"I didn't make this ₹5,198 payment, someone stole my money I'm panicking",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hindi,Soundbox_Sync_Issue,1626,0.34,0,DOWN,पेमेंट की आवाज़ नहीं आ रही,REMOTE_IOT_RESTART
+Merchant,English,Soundbox_Sync_Issue,761,0.19,6,UP,"Soundbox is silent, no payment announcements",REMOTE_IOT_RESTART
+Customer,Marathi,Fraud_Unauthorized_Txn,17883,0.83,0,UP,"मी हे ₹17,883 पेमेंट केले नाही, कोणीतरी पैसे काढले लवकर!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hindi,Festival_Promo_Broadcast,35860,0.23,2,DEGRADED,त्योहार का ऑफर सब ग्राहकों को भेजना है,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,English,Soundbox_Sync_Issue,1951,0.26,2,UP,"Soundbox is silent, no payment announcements",REMOTE_IOT_RESTART
+Customer,Hinglish,Fraud_Unauthorized_Txn,33822,0.94,0,UP,"unknown transaction aaya hai, mera paisa chori ho gaya jaldi karo!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Tamil,Festival_Promo_Broadcast,14616,0.19,4,UP,என் வழக்கமான வாடிக்கையாளர்களுக்கு தீபாவளி ஆஃபர் அனுப்புங்க,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Telugu,Festival_Promo_Broadcast,13610,0.29,1,DEGRADED,నా రెగ్యులర్ కస్టమర్లకి దీపావళి ఆఫర్ పంపండి,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Marathi,Festival_Promo_Broadcast,637,0.31,0,UP,माझ्या नेहमीच्या ग्राहकांना दिवाळी ऑफर पाठवा,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Tamil,Soundbox_Sync_Issue,8003,0.06,1,UP,சவுண்ட்பாக்ஸ் பேசல,REMOTE_IOT_RESTART
+Customer,Bengali,Fraud_Unauthorized_Txn,23108,0.81,2,DEGRADED,"আমি এই ₹23,108 পেমেন্ট করিনি, কেউ টাকা তুলে নিয়েছে তাড়াতাড়ি!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Telugu,Festival_Promo_Broadcast,13666,0.36,3,DEGRADED,నా రెగ్యులర్ కస్టమర్లకి దీపావళి ఆఫర్ పంపండి,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Tamil,EMI_Bounce_Fear,27017,0.72,4,DEGRADED,"₹27,017 EMI bounce ஆயிடுமா? சீக்கிரம்!!",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Telugu,UPI_Pending,5150,0.65,1,UP,"UPI పేమెంట్ pending లో ఉంది, ₹5,150 కట్ అయింది",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Bengali,Settlement_Hold,2331,0.4,2,UP,"সকাল থেকে ₹2,331 সেটেলমেন্ট আটকে আছে",RELEASE_INSTANT_SETTLEMENT
+Merchant,Hindi,Soundbox_Sync_Issue,1289,0.54,0,UP,साउंडबॉक्स बोल नहीं रहा,REMOTE_IOT_RESTART
+Customer,Marathi,EMI_Bounce_Fear,5943,0.48,0,UP,"₹5,943 चा हप्ता भरायची भीती वाटते",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Hindi,Fraud_Unauthorized_Txn,14746,0.75,0,DOWN,"मेरे खाते से बिना बताए ₹14,746 कट गए जल्दी करो!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Tamil,UPI_Pending,828,0.49,1,UP,"UPI பேமெண்ட் pending ஆகுது, ₹828 கழிஞ்சுருச்சு",AUTO_REFUND_INSTANT
+Merchant,Telugu,Soundbox_Sync_Issue,18563,0.4,0,UP,సౌండ్‌బాక్స్ మాట్లాడట్లేదు,REMOTE_IOT_RESTART
+Merchant,Bengali,Settlement_Hold,1968,0.55,2,DOWN,"সকাল থেকে ₹1,968 সেটেলমেন্ট আটকে আছে",FREEZE_AND_HUMAN_HANDOFF
+Customer,Marathi,EMI_Bounce_Fear,14,0.62,0,UP,₹14 चा हप्ता भरायची भीती वाटते,SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Marathi,Festival_Promo_Broadcast,39145,0.39,1,UP,माझ्या नेहमीच्या ग्राहकांना दिवाळी ऑफर पाठवा,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Tamil,Settlement_Hold,7496,0.46,2,UP,"காலையிலிருந்து ₹7,496 settlement hold ஆகியிருக்கு",RELEASE_INSTANT_SETTLEMENT
+Merchant,Marathi,Festival_Promo_Broadcast,1099,0.16,0,UP,माझ्या नेहमीच्या ग्राहकांना दिवाळी ऑफर पाठवा,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Hinglish,UPI_Pending,5239,0.81,0,UP,"Maine ₹5,239 bheje, paisa kat gaya par dukaan wale ko nahi mila bahut pareshan hoon",FREEZE_AND_HUMAN_HANDOFF
+Merchant,English,Festival_Promo_Broadcast,2954,0.37,1,UP,Broadcast a festive discount to repeat buyers,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Bengali,EMI_Bounce_Fear,26435,1.0,0,DEGRADED,"আমার EMI বাউন্স হবে না তো, লেট ফি লাগবে? তাড়াতাড়ি!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Tamil,Festival_Promo_Broadcast,23782,0.09,0,UP,என் வழக்கமான வாடிக்கையாளர்களுக்கு தீபாவளி ஆஃபர் அனுப்புங்க,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,English,Fraud_Unauthorized_Txn,29801,0.87,2,UP,"I didn't make this ₹29,801 payment, someone stole my money urgent",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hinglish,Fraud_Unauthorized_Txn,40898,0.71,1,UP,"Maine ye ₹40,898 ka payment nahi kiya, fraud hua hai please help",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hinglish,UPI_Pending,1864,0.41,1,UP,"Maine ₹1,864 bheje, paisa kat gaya par dukaan wale ko nahi mila",AUTO_REFUND_INSTANT
+Merchant,Telugu,Soundbox_Sync_Issue,1101,0.22,1,UP,సౌండ్‌బాక్స్ మాట్లాడట్లేదు,REMOTE_IOT_RESTART
+Customer,Hindi,UPI_Pending,1288,0.75,0,UP,"₹1,288 का यूपीआई पेमेंट अटका हुआ है, पैसे कटे बहुत परेशान हूँ",AUTO_REFUND_INSTANT
+Customer,English,UPI_Pending,33411,0.8,2,UP,"I sent ₹33,411, money got debited but the shop didn't receive it I'm panicking",FREEZE_AND_HUMAN_HANDOFF
+Customer,Bengali,Fraud_Unauthorized_Txn,36373,0.73,1,DEGRADED,"আমি এই ₹36,373 পেমেন্ট করিনি, কেউ টাকা তুলে নিয়েছে তাড়াতাড়ি!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Tamil,EMI_Bounce_Fear,564,0.74,0,UP,₹564 EMI bounce ஆயிடுமா? சீக்கிரம்!!,SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Bengali,Festival_Promo_Broadcast,2435,0.4,0,UP,আমার নিয়মিত খদ্দেরদের দিওয়ালি অফার পাঠিয়ে দিন,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Telugu,EMI_Bounce_Fear,45922,0.74,1,UP,"నా EMI bounce అవుతుందా, late fee పడుతుందా? త్వరగా!!",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Hindi,Soundbox_Sync_Issue,39699,0.65,1,UP,पेमेंट की आवाज़ नहीं आ रही,REMOTE_IOT_RESTART
+Merchant,Tamil,Festival_Promo_Broadcast,23221,0.32,3,DEGRADED,என் வழக்கமான வாடிக்கையாளர்களுக்கு தீபாவளி ஆஃபர் அனுப்புங்க,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,English,Settlement_Hold,1389,0.18,3,UP,"My ₹1,389 settlement has been on hold since morning",RELEASE_INSTANT_SETTLEMENT
+Customer,Tamil,EMI_Bounce_Fear,12557,0.64,2,DEGRADED,"என் EMI கட்ட பயமா இருக்கு, late fee வருமா?",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Hinglish,Fraud_Unauthorized_Txn,7296,0.92,0,DOWN,"Maine ye ₹7,296 ka payment nahi kiya, fraud hua hai please help",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Bengali,Soundbox_Sync_Issue,218,0.56,1,UP,সাউন্ডবক্স আওয়াজ করছে না,REMOTE_IOT_RESTART
+Merchant,Hindi,Festival_Promo_Broadcast,25330,0.0,0,UP,मेरे रेगुलर ग्राहकों को दिवाली ऑफर भेज दो,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,English,Fraud_Unauthorized_Txn,14289,0.95,0,UP,"Unauthorized transaction of ₹14,289 on my account please help!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hinglish,Settlement_Hold,770,0.36,2,DEGRADED,Subah se ₹770 ka settlement hold pe hai,RELEASE_INSTANT_SETTLEMENT
+Customer,Telugu,UPI_Pending,1437,0.56,2,UP,"UPI పేమెంట్ pending లో ఉంది, ₹1,437 కట్ అయింది",AUTO_REFUND_INSTANT
+Merchant,Hindi,Settlement_Hold,43881,0.34,0,DEGRADED,कल का सेटलमेंट नहीं आया,RELEASE_INSTANT_SETTLEMENT
+Merchant,English,Settlement_Hold,18218,0.38,3,DOWN,"My ₹18,218 settlement has been on hold since morning",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Telugu,Festival_Promo_Broadcast,31965,0.66,1,UP,నా రెగ్యులర్ కస్టమర్లకి దీపావళి ఆఫర్ పంపండి,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,English,EMI_Bounce_Fear,624,0.51,1,UP,Scared I'll miss my ₹624 loan installment,SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Bengali,Fraud_Unauthorized_Txn,3980,0.68,1,UP,"আমি এই ₹3,980 পেমেন্ট করিনি, কেউ টাকা তুলে নিয়েছে",FREEZE_AND_HUMAN_HANDOFF
+Customer,Marathi,Fraud_Unauthorized_Txn,48715,0.54,0,DEGRADED,"मी हे ₹48,715 पेमेंट केले नाही, कोणीतरी पैसे काढले",FREEZE_AND_HUMAN_HANDOFF
+Customer,Telugu,Fraud_Unauthorized_Txn,8519,0.46,1,UP,"నేను ఈ ₹8,519 పేమెంట్ చేయలేదు, ఎవరో డబ్బు తీసుకున్నారు",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hinglish,Settlement_Hold,5274,0.13,0,DEGRADED,Kal ka settlement nahi aaya,RELEASE_INSTANT_SETTLEMENT
+Customer,Hindi,Fraud_Unauthorized_Txn,10854,0.62,0,DEGRADED,"मेरे खाते से बिना बताए ₹10,854 कट गए",FREEZE_AND_HUMAN_HANDOFF
+Customer,Bengali,Fraud_Unauthorized_Txn,16401,0.87,0,UP,"আমি এই ₹16,401 পেমেন্ট করিনি, কেউ টাকা তুলে নিয়েছে তাড়াতাড়ি!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hindi,UPI_Pending,3788,0.57,1,DEGRADED,"₹3,788 का यूपीआई पेमेंट अटका हुआ है, पैसे कटे",AUTO_REFUND_INSTANT
+Merchant,Hindi,Settlement_Hold,24903,0.31,0,UP,"सुबह से ₹24,903 का सेटलमेंट होल्ड पर है",RELEASE_INSTANT_SETTLEMENT
+Merchant,Telugu,Settlement_Hold,11600,0.36,3,UP,"పొద్దున్నుంచి ₹11,600 settlement hold లో ఉంది",RELEASE_INSTANT_SETTLEMENT
+Merchant,Telugu,Soundbox_Sync_Issue,635,0.34,1,UP,సౌండ్‌బాక్స్ మాట్లాడట్లేదు,REMOTE_IOT_RESTART
+Merchant,Hinglish,Festival_Promo_Broadcast,9161,0.33,1,UP,purane grahakon ko discount message bhejo,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Bengali,Soundbox_Sync_Issue,3542,0.22,0,DEGRADED,সাউন্ডবক্স আওয়াজ করছে না,REMOTE_IOT_RESTART
+Merchant,Hinglish,Festival_Promo_Broadcast,32944,0.42,6,DEGRADED,festival offer sab customers ko WhatsApp kar do,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,English,Festival_Promo_Broadcast,1763,0.52,2,UP,Send a Diwali offer to my regular customers,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Hinglish,Soundbox_Sync_Issue,6245,0.3,1,DEGRADED,Soundbox bol nahi raha,REMOTE_IOT_RESTART
+Customer,Hinglish,UPI_Pending,49647,0.27,5,UP,paise kat gaye lekin merchant ko credit nahi hua,FREEZE_AND_HUMAN_HANDOFF
+Merchant,Marathi,Festival_Promo_Broadcast,11203,0.45,1,UP,माझ्या नेहमीच्या ग्राहकांना दिवाळी ऑफर पाठवा,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Bengali,EMI_Bounce_Fear,1602,0.71,2,DEGRADED,"আমার EMI বাউন্স হবে না তো, লেট ফি লাগবে? তাড়াতাড়ি!!",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,English,Festival_Promo_Broadcast,9787,0.21,1,DOWN,Send a Diwali offer to my regular customers,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Hinglish,Soundbox_Sync_Issue,25202,0.13,3,UP,Soundbox bol nahi raha,REMOTE_IOT_RESTART
+Customer,English,EMI_Bounce_Fear,7391,0.62,0,UP,Will my EMI bounce? I'm worried about the late fee,SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Telugu,EMI_Bounce_Fear,43873,0.65,5,UP,"₹43,873 EMI కట్టాలి, భయంగా ఉంది",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Hindi,Fraud_Unauthorized_Txn,44497,0.85,1,UP,"मेरे खाते से बिना बताए ₹44,497 कट गए जल्दी करो!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Bengali,Festival_Promo_Broadcast,16378,0.23,1,UP,আমার নিয়মিত খদ্দেরদের দিওয়ালি অফার পাঠিয়ে দিন,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Telugu,Fraud_Unauthorized_Txn,13336,0.58,0,DOWN,"నేను ఈ ₹13,336 పేమెంట్ చేయలేదు, ఎవరో డబ్బు తీసుకున్నారు",FREEZE_AND_HUMAN_HANDOFF
+Customer,English,EMI_Bounce_Fear,603,0.78,0,UP,Scared I'll miss my ₹603 loan installment I'm panicking,SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,English,Settlement_Hold,9298,0.24,1,UP,"My ₹9,298 settlement has been on hold since morning",RELEASE_INSTANT_SETTLEMENT
+Customer,English,EMI_Bounce_Fear,242,0.77,0,DOWN,Scared I'll miss my ₹242 loan installment urgent,SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,English,Soundbox_Sync_Issue,2948,0.43,0,UP,"Soundbox is silent, no payment announcements",REMOTE_IOT_RESTART
+Merchant,Telugu,Soundbox_Sync_Issue,1042,0.45,1,UP,సౌండ్‌బాక్స్ మాట్లాడట్లేదు,REMOTE_IOT_RESTART
+Merchant,Telugu,Settlement_Hold,127,0.09,0,UP,పొద్దున్నుంచి ₹127 settlement hold లో ఉంది,RELEASE_INSTANT_SETTLEMENT
+Merchant,Hindi,Festival_Promo_Broadcast,3536,0.41,1,UP,मेरे रेगुलर ग्राहकों को दिवाली ऑफर भेज दो,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Tamil,Fraud_Unauthorized_Txn,41478,0.71,5,UP,"நான் இந்த ₹41,478 பேமெண்ட் பண்ணல, யாரோ பணம் எடுத்துட்டாங்க சீக்கிரம்!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Marathi,Settlement_Hold,43327,0.24,1,DEGRADED,"सकाळपासून ₹43,327 चे सेटलमेंट होल्डवर आहे",RELEASE_INSTANT_SETTLEMENT
+Merchant,Marathi,Settlement_Hold,6531,0.26,3,UP,"सकाळपासून ₹6,531 चे सेटलमेंट होल्डवर आहे",RELEASE_INSTANT_SETTLEMENT
+Merchant,Marathi,Festival_Promo_Broadcast,11885,0.26,2,UP,माझ्या नेहमीच्या ग्राहकांना दिवाळी ऑफर पाठवा,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Marathi,Fraud_Unauthorized_Txn,48881,0.95,1,UP,"मी हे ₹48,881 पेमेंट केले नाही, कोणीतरी पैसे काढले लवकर!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hinglish,UPI_Pending,666,0.76,2,UP,"UPI payment pending dikha raha hai, ₹666 debit ho gaye jaldi karo!!",AUTO_REFUND_INSTANT
+Merchant,Bengali,Soundbox_Sync_Issue,36331,0.34,1,DOWN,সাউন্ডবক্স আওয়াজ করছে না,REMOTE_IOT_RESTART
+Customer,Telugu,Fraud_Unauthorized_Txn,12267,1.0,0,UP,"నేను ఈ ₹12,267 పేమెంట్ చేయలేదు, ఎవరో డబ్బు తీసుకున్నారు త్వరగా!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hinglish,UPI_Pending,41029,0.23,1,DEGRADED,"UPI payment pending dikha raha hai, ₹41,029 debit ho gaye",FREEZE_AND_HUMAN_HANDOFF
+Customer,Telugu,EMI_Bounce_Fear,17649,0.86,1,DEGRADED,"₹17,649 EMI కట్టాలి, భయంగా ఉంది త్వరగా!!",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,English,EMI_Bounce_Fear,639,0.45,3,DEGRADED,Will my EMI bounce? I'm worried about the late fee,SEND_EMI_LINK_WITH_REASSURANCE
+Customer,English,EMI_Bounce_Fear,12383,0.73,0,DEGRADED,"Scared I'll miss my ₹12,383 loan installment I'm panicking",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Bengali,Soundbox_Sync_Issue,31491,0.29,1,UP,সাউন্ডবক্স আওয়াজ করছে না,REMOTE_IOT_RESTART
+Customer,Marathi,EMI_Bounce_Fear,1437,0.7,0,UP,"₹1,437 चा हप्ता भरायची भीती वाटते",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Telugu,Soundbox_Sync_Issue,10853,0.05,0,UP,సౌండ్‌బాక్స్ మాట్లాడట్లేదు,REMOTE_IOT_RESTART
+Customer,English,UPI_Pending,23,0.67,0,DOWN,"UPI payment stuck in pending, ₹23 deducted",AUTO_REFUND_INSTANT
+Merchant,Tamil,Settlement_Hold,43549,0.42,0,UP,"காலையிலிருந்து ₹43,549 settlement hold ஆகியிருக்கு",RELEASE_INSTANT_SETTLEMENT
+Customer,Telugu,EMI_Bounce_Fear,6799,0.63,0,UP,"నా EMI bounce అవుతుందా, late fee పడుతుందా?",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,English,Soundbox_Sync_Issue,39893,0.37,4,DOWN,"Soundbox is silent, no payment announcements",REMOTE_IOT_RESTART
+Merchant,English,Settlement_Hold,6200,0.21,2,UP,Yesterday's settlement didn't arrive,RELEASE_INSTANT_SETTLEMENT
+Customer,Telugu,UPI_Pending,8264,0.62,1,UP,"₹8,264 పంపాను, డబ్బు కట్ అయింది కానీ షాప్ వాళ్ళకి రాలేదు",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hinglish,Soundbox_Sync_Issue,640,0.26,1,DOWN,soundbox offline dikha raha hai,REMOTE_IOT_RESTART
+Customer,Hinglish,Fraud_Unauthorized_Txn,27889,1.0,2,DEGRADED,"kisi ne mere account se ₹27,889 nikaal liye bahut pareshan hoon",FREEZE_AND_HUMAN_HANDOFF
+Merchant,English,Festival_Promo_Broadcast,1799,0.15,0,DEGRADED,Send a Diwali offer to my regular customers,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Tamil,EMI_Bounce_Fear,5322,0.68,1,DEGRADED,"₹5,322 EMI bounce ஆயிடுமா?",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Telugu,Festival_Promo_Broadcast,5699,0.1,0,DOWN,నా రెగ్యులర్ కస్టమర్లకి దీపావళి ఆఫర్ పంపండి,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Telugu,Fraud_Unauthorized_Txn,39530,0.83,1,DOWN,"నేను ఈ ₹39,530 పేమెంట్ చేయలేదు, ఎవరో డబ్బు తీసుకున్నారు త్వరగా!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Marathi,Settlement_Hold,47740,0.08,2,UP,"सकाळपासून ₹47,740 चे सेटलमेंट होल्डवर आहे",RELEASE_INSTANT_SETTLEMENT
+Customer,Hinglish,EMI_Bounce_Fear,14784,0.63,3,UP,"Meri EMI bounce ho jayegi kya, late fee lagegi?",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Hinglish,UPI_Pending,5393,0.66,2,UP,"Maine ₹5,393 bheje, paisa kat gaya par dukaan wale ko nahi mila",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Telugu,Soundbox_Sync_Issue,469,0.45,1,UP,సౌండ్‌బాక్స్ మాట్లాడట్లేదు,REMOTE_IOT_RESTART
+Merchant,Tamil,Festival_Promo_Broadcast,922,0.21,2,DOWN,என் வழக்கமான வாடிக்கையாளர்களுக்கு தீபாவளி ஆஃபர் அனுப்புங்க,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Bengali,EMI_Bounce_Fear,40737,0.67,0,UP,"₹40,737 কিস্তি দিতে ভয় লাগছে",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Hinglish,Fraud_Unauthorized_Txn,15916,0.75,0,UP,"kisi ne mere account se ₹15,916 nikaal liye bahut pareshan hoon",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Telugu,Festival_Promo_Broadcast,11383,0.21,0,UP,నా రెగ్యులర్ కస్టమర్లకి దీపావళి ఆఫర్ పంపండి,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Telugu,Soundbox_Sync_Issue,16951,0.16,2,UP,సౌండ్‌బాక్స్ మాట్లాడట్లేదు,REMOTE_IOT_RESTART
+Merchant,Bengali,Soundbox_Sync_Issue,14380,0.26,6,UP,সাউন্ডবক্স আওয়াজ করছে না,REMOTE_IOT_RESTART
+Customer,Marathi,UPI_Pending,23974,0.56,1,DEGRADED,"UPI पेमेंट अडकले आहे, ₹23,974 कापले गेले",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hinglish,Fraud_Unauthorized_Txn,23276,0.58,0,UP,"unknown transaction aaya hai, mera paisa chori ho gaya",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hinglish,EMI_Bounce_Fear,857,0.51,5,UP,"loan EMI miss ho gayi, ab kya hoga",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Telugu,Soundbox_Sync_Issue,6642,0.44,1,DOWN,సౌండ్‌బాక్స్ మాట్లాడట్లేదు,REMOTE_IOT_RESTART
+Customer,Tamil,EMI_Bounce_Fear,5251,0.68,3,UP,"என் EMI கட்ட பயமா இருக்கு, late fee வருமா?",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Hinglish,Festival_Promo_Broadcast,22647,0.28,0,UP,Mere regular customers ko Diwali offer bhej do,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Bengali,UPI_Pending,9310,0.43,2,UP,"UPI পেমেন্ট আটকে আছে, ₹9,310 কেটেছে",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Bengali,Festival_Promo_Broadcast,9791,0.43,4,UP,আমার নিয়মিত খদ্দেরদের দিওয়ালি অফার পাঠিয়ে দিন,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Hinglish,UPI_Pending,1905,0.61,0,UP,"UPI payment pending dikha raha hai, ₹1,905 debit ho gaye",AUTO_REFUND_INSTANT
+Merchant,Tamil,Settlement_Hold,27604,0.47,1,UP,"காலையிலிருந்து ₹27,604 settlement hold ஆகியிருக்கு",RELEASE_INSTANT_SETTLEMENT
+Merchant,Tamil,Soundbox_Sync_Issue,3401,0.36,1,UP,சவுண்ட்பாக்ஸ் பேசல,REMOTE_IOT_RESTART
+Customer,English,EMI_Bounce_Fear,780,0.71,1,UP,Will my EMI bounce? I'm worried about the late fee urgent,SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Hinglish,Settlement_Hold,1971,0.61,0,UP,"Subah se ₹1,971 ka settlement hold pe hai",RELEASE_INSTANT_SETTLEMENT
+Merchant,English,Settlement_Hold,29693,0.23,2,UP,"My ₹29,693 settlement has been on hold since morning",RELEASE_INSTANT_SETTLEMENT
+Customer,Marathi,Fraud_Unauthorized_Txn,5923,0.64,0,DOWN,"मी हे ₹5,923 पेमेंट केले नाही, कोणीतरी पैसे काढले",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Telugu,Settlement_Hold,34736,0.43,2,UP,"పొద్దున్నుంచి ₹34,736 settlement hold లో ఉంది",RELEASE_INSTANT_SETTLEMENT
+Merchant,Marathi,Festival_Promo_Broadcast,27334,0.66,0,DEGRADED,माझ्या नेहमीच्या ग्राहकांना दिवाळी ऑफर पाठवा,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Bengali,UPI_Pending,43740,0.43,1,UP,"₹43,740 পাঠিয়েছি, টাকা কেটে গেছে কিন্তু দোকানদার পায়নি",FREEZE_AND_HUMAN_HANDOFF
+Customer,Tamil,Fraud_Unauthorized_Txn,31032,1.0,0,UP,"நான் இந்த ₹31,032 பேமெண்ட் பண்ணல, யாரோ பணம் எடுத்துட்டாங்க சீக்கிரம்!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hindi,Festival_Promo_Broadcast,18737,0.29,10,UP,मेरे रेगुलर ग्राहकों को दिवाली ऑफर भेज दो,FREEZE_AND_HUMAN_HANDOFF
+Customer,Telugu,EMI_Bounce_Fear,1589,0.68,3,UP,"₹1,589 EMI కట్టాలి, భయంగా ఉంది",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Hinglish,UPI_Pending,38851,0.4,0,DEGRADED,paise kat gaye lekin merchant ko credit nahi hua,FREEZE_AND_HUMAN_HANDOFF
+Customer,Hinglish,Fraud_Unauthorized_Txn,15960,0.82,0,UP,"kisi ne mere account se ₹15,960 nikaal liye please help",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Marathi,Soundbox_Sync_Issue,13957,0.37,0,DEGRADED,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Merchant,Bengali,Soundbox_Sync_Issue,959,0.48,0,UP,সাউন্ডবক্স আওয়াজ করছে না,REMOTE_IOT_RESTART
+Merchant,Hindi,Settlement_Hold,36907,0.35,1,DOWN,"सुबह से ₹36,907 का सेटलमेंट होल्ड पर है",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hindi,Soundbox_Sync_Issue,6406,0.16,0,UP,पेमेंट की आवाज़ नहीं आ रही,REMOTE_IOT_RESTART
+Customer,Bengali,EMI_Bounce_Fear,7926,0.58,0,UP,"₹7,926 কিস্তি দিতে ভয় লাগছে",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Telugu,UPI_Pending,7297,0.46,0,UP,"₹7,297 పంపాను, డబ్బు కట్ అయింది కానీ షాప్ వాళ్ళకి రాలేదు",FREEZE_AND_HUMAN_HANDOFF
+Customer,Marathi,UPI_Pending,595,0.55,3,UP,"मी ₹595 पाठवले, पैसे कापले पण दुकानदाराला मिळाले नाहीत",AUTO_REFUND_INSTANT
+Merchant,English,Soundbox_Sync_Issue,9694,0.37,2,DEGRADED,"Soundbox is silent, no payment announcements",REMOTE_IOT_RESTART
+Customer,English,Fraud_Unauthorized_Txn,4765,0.91,0,UP,"Unauthorized transaction of ₹4,765 on my account I'm panicking",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hinglish,Fraud_Unauthorized_Txn,27599,0.85,2,UP,"Maine ye ₹27,599 ka payment nahi kiya, fraud hua hai please help",FREEZE_AND_HUMAN_HANDOFF
+Customer,Tamil,Fraud_Unauthorized_Txn,47993,1.0,1,DOWN,"நான் இந்த ₹47,993 பேமெண்ட் பண்ணல, யாரோ பணம் எடுத்துட்டாங்க சீக்கிரம்!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hindi,UPI_Pending,26481,0.26,0,UP,"मैंने ₹26,481 भेजे, पैसा कट गया पर दुकानदार को नहीं मिला",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Bengali,Festival_Promo_Broadcast,4438,0.3,0,UP,আমার নিয়মিত খদ্দেরদের দিওয়ালি অফার পাঠিয়ে দিন,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Hinglish,Soundbox_Sync_Issue,610,0.38,0,UP,Soundbox bol nahi raha,REMOTE_IOT_RESTART
+Customer,Telugu,EMI_Bounce_Fear,14446,0.6,3,DOWN,"నా EMI bounce అవుతుందా, late fee పడుతుందా?",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Telugu,UPI_Pending,1702,0.73,1,UP,"UPI పేమెంట్ pending లో ఉంది, ₹1,702 కట్ అయింది త్వరగా!!",AUTO_REFUND_INSTANT
+Merchant,Marathi,Festival_Promo_Broadcast,48609,0.27,1,UP,माझ्या नेहमीच्या ग्राहकांना दिवाळी ऑफर पाठवा,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Tamil,Fraud_Unauthorized_Txn,5318,0.91,0,UP,"நான் இந்த ₹5,318 பேமெண்ட் பண்ணல, யாரோ பணம் எடுத்துட்டாங்க சீக்கிரம்!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,English,Festival_Promo_Broadcast,37697,0.28,2,DEGRADED,Send a Diwali offer to my regular customers,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Hinglish,UPI_Pending,1169,0.64,0,UP,paise kat gaye lekin merchant ko credit nahi hua,AUTO_REFUND_INSTANT
+Merchant,Telugu,Festival_Promo_Broadcast,104,0.12,0,DEGRADED,నా రెగ్యులర్ కస్టమర్లకి దీపావళి ఆఫర్ పంపండి,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Hinglish,Soundbox_Sync_Issue,11918,0.27,0,DEGRADED,Soundbox bol nahi raha,REMOTE_IOT_RESTART
+Merchant,Bengali,Festival_Promo_Broadcast,12719,0.5,4,UP,আমার নিয়মিত খদ্দেরদের দিওয়ালি অফার পাঠিয়ে দিন,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Bengali,Soundbox_Sync_Issue,26771,0.35,0,UP,সাউন্ডবক্স আওয়াজ করছে না,REMOTE_IOT_RESTART
+Merchant,Telugu,Soundbox_Sync_Issue,1840,0.25,0,DEGRADED,సౌండ్‌బాక్స్ మాట్లాడట్లేదు,REMOTE_IOT_RESTART
+Customer,Hindi,EMI_Bounce_Fear,1243,0.56,3,DOWN,"मेरी ईएमआई बाउंस हो जाएगी, लेट फीस लगेगी क्या?",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Marathi,Settlement_Hold,10888,0.56,0,UP,"सकाळपासून ₹10,888 चे सेटलमेंट होल्डवर आहे",RELEASE_INSTANT_SETTLEMENT
+Customer,Tamil,EMI_Bounce_Fear,36237,0.66,2,UP,"₹36,237 EMI bounce ஆயிடுமா?",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,English,UPI_Pending,22704,0.69,0,UP,"UPI payment stuck in pending, ₹22,704 deducted",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hindi,Settlement_Hold,1112,0.23,2,DEGRADED,कल का सेटलमेंट नहीं आया,RELEASE_INSTANT_SETTLEMENT
+Merchant,English,Soundbox_Sync_Issue,13357,0.04,0,UP,"Soundbox is silent, no payment announcements",REMOTE_IOT_RESTART
+Customer,Tamil,UPI_Pending,632,0.54,0,UP,"UPI பேமெண்ட் pending ஆகுது, ₹632 கழிஞ்சுருச்சு",AUTO_REFUND_INSTANT
+Merchant,English,Festival_Promo_Broadcast,11097,0.0,0,DEGRADED,Broadcast a festive discount to repeat buyers,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Hinglish,Soundbox_Sync_Issue,1355,0.37,1,UP,payment ki awaaz nahi aa rahi soundbox se,REMOTE_IOT_RESTART
+Customer,Hindi,Fraud_Unauthorized_Txn,9893,0.68,5,UP,"मैंने ये ₹9,893 का पेमेंट नहीं किया, किसी ने पैसे निकाल लिए",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hinglish,UPI_Pending,31,0.33,0,DEGRADED,paise kat gaye lekin merchant ko credit nahi hua,AUTO_REFUND_INSTANT
+Merchant,English,Settlement_Hold,30208,0.52,0,UP,Yesterday's settlement didn't arrive,RELEASE_INSTANT_SETTLEMENT
+Customer,Tamil,UPI_Pending,903,0.3,1,DOWN,"₹903 அனுப்பினேன், பணம் போயிடுச்சு ஆனா கடைக்காரருக்கு வரல",AUTO_REFUND_INSTANT
+Merchant,Marathi,Soundbox_Sync_Issue,1012,0.2,0,DEGRADED,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Customer,Marathi,UPI_Pending,2742,0.72,0,UP,"UPI पेमेंट अडकले आहे, ₹2,742 कापले गेले लवकर!!",AUTO_REFUND_INSTANT
+Customer,English,Fraud_Unauthorized_Txn,21011,0.94,1,UP,"Unauthorized transaction of ₹21,011 on my account I'm panicking",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hindi,Settlement_Hold,4026,0.26,4,UP,"सुबह से ₹4,026 का सेटलमेंट होल्ड पर है",RELEASE_INSTANT_SETTLEMENT
+Customer,Hinglish,EMI_Bounce_Fear,7591,0.47,0,UP,"loan EMI miss ho gayi, ab kya hoga",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,English,Soundbox_Sync_Issue,34651,0.11,0,UP,"Soundbox is silent, no payment announcements",REMOTE_IOT_RESTART
+Customer,Telugu,UPI_Pending,1950,0.46,1,UP,"₹1,950 పంపాను, డబ్బు కట్ అయింది కానీ షాప్ వాళ్ళకి రాలేదు",AUTO_REFUND_INSTANT
+Merchant,English,Settlement_Hold,5784,0.27,0,UP,Yesterday's settlement didn't arrive,RELEASE_INSTANT_SETTLEMENT
+Merchant,Bengali,Settlement_Hold,3840,0.0,3,UP,"সকাল থেকে ₹3,840 সেটেলমেন্ট আটকে আছে",RELEASE_INSTANT_SETTLEMENT
+Customer,Bengali,UPI_Pending,45259,0.68,0,UP,"₹45,259 পাঠিয়েছি, টাকা কেটে গেছে কিন্তু দোকানদার পায়নি",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Bengali,Settlement_Hold,31611,0.29,0,DOWN,"সকাল থেকে ₹31,611 সেটেলমেন্ট আটকে আছে",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Tamil,Soundbox_Sync_Issue,40066,0.29,0,UP,சவுண்ட்பாக்ஸ் பேசல,REMOTE_IOT_RESTART
+Merchant,Hindi,Festival_Promo_Broadcast,30507,0.58,2,UP,मेरे रेगुलर ग्राहकों को दिवाली ऑफर भेज दो,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Hindi,Festival_Promo_Broadcast,13412,0.61,2,DEGRADED,त्योहार का ऑफर सब ग्राहकों को भेजना है,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Hinglish,EMI_Bounce_Fear,13721,0.87,4,UP,"loan EMI miss ho gayi, ab kya hoga please help",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Telugu,Festival_Promo_Broadcast,1278,0.32,1,UP,నా రెగ్యులర్ కస్టమర్లకి దీపావళి ఆఫర్ పంపండి,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Tamil,Settlement_Hold,41973,0.27,0,UP,"காலையிலிருந்து ₹41,973 settlement hold ஆகியிருக்கு",RELEASE_INSTANT_SETTLEMENT
+Customer,Hinglish,Fraud_Unauthorized_Txn,45322,0.92,0,DEGRADED,"unknown transaction aaya hai, mera paisa chori ho gaya please help",FREEZE_AND_HUMAN_HANDOFF
+Customer,Telugu,UPI_Pending,30836,0.49,0,UP,"₹30,836 పంపాను, డబ్బు కట్ అయింది కానీ షాప్ వాళ్ళకి రాలేదు",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hindi,EMI_Bounce_Fear,5652,0.59,0,DOWN,"मेरी ईएमआई बाउंस हो जाएगी, लेट फीस लगेगी क्या?",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Marathi,Settlement_Hold,7308,0.26,0,UP,"सकाळपासून ₹7,308 चे सेटलमेंट होल्डवर आहे",RELEASE_INSTANT_SETTLEMENT
+Merchant,Hindi,Settlement_Hold,30756,0.38,0,UP,कल का सेटलमेंट नहीं आया,RELEASE_INSTANT_SETTLEMENT
+Merchant,Telugu,Settlement_Hold,4241,0.02,0,UP,"పొద్దున్నుంచి ₹4,241 settlement hold లో ఉంది",RELEASE_INSTANT_SETTLEMENT
+Customer,Hinglish,Fraud_Unauthorized_Txn,42118,0.89,0,DEGRADED,"kisi ne mere account se ₹42,118 nikaal liye bahut pareshan hoon",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Bengali,Settlement_Hold,1345,0.2,0,DEGRADED,"সকাল থেকে ₹1,345 সেটেলমেন্ট আটকে আছে",RELEASE_INSTANT_SETTLEMENT
+Merchant,Hindi,Festival_Promo_Broadcast,45297,0.6,1,UP,मेरे रेगुलर ग्राहकों को दिवाली ऑफर भेज दो,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Hindi,EMI_Bounce_Fear,1087,0.59,2,UP,"₹1,087 की किस्त भरने में डर लग रहा है",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Marathi,Festival_Promo_Broadcast,1279,0.3,0,UP,माझ्या नेहमीच्या ग्राहकांना दिवाळी ऑफर पाठवा,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Hindi,Festival_Promo_Broadcast,1258,0.29,2,UP,त्योहार का ऑफर सब ग्राहकों को भेजना है,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,English,Festival_Promo_Broadcast,1892,0.23,2,DEGRADED,Broadcast a festive discount to repeat buyers,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,English,Festival_Promo_Broadcast,1895,0.25,0,DEGRADED,Send a Diwali offer to my regular customers,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Telugu,UPI_Pending,15277,0.49,2,DEGRADED,"₹15,277 పంపాను, డబ్బు కట్ అయింది కానీ షాప్ వాళ్ళకి రాలేదు",FREEZE_AND_HUMAN_HANDOFF
+Customer,Tamil,UPI_Pending,21085,0.59,2,UP,"₹21,085 அனுப்பினேன், பணம் போயிடுச்சு ஆனா கடைக்காரருக்கு வரல",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hindi,EMI_Bounce_Fear,15124,0.8,2,DEGRADED,"मेरी ईएमआई बाउंस हो जाएगी, लेट फीस लगेगी क्या? जल्दी करो!!",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Hinglish,EMI_Bounce_Fear,7318,0.63,7,UP,"₹7,318 ki kisht bharni hai, darr lag raha hai penalty ka",FREEZE_AND_HUMAN_HANDOFF
+Customer,English,Fraud_Unauthorized_Txn,1264,0.86,0,DEGRADED,"I didn't make this ₹1,264 payment, someone stole my money urgent",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Marathi,Festival_Promo_Broadcast,11392,0.16,4,UP,माझ्या नेहमीच्या ग्राहकांना दिवाळी ऑफर पाठवा,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Bengali,Festival_Promo_Broadcast,18193,0.5,0,UP,আমার নিয়মিত খদ্দেরদের দিওয়ালি অফার পাঠিয়ে দিন,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Bengali,Fraud_Unauthorized_Txn,16468,0.97,0,UP,"আমি এই ₹16,468 পেমেন্ট করিনি, কেউ টাকা তুলে নিয়েছে তাড়াতাড়ি!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Telugu,EMI_Bounce_Fear,551,0.72,0,UP,"₹551 EMI కట్టాలి, భయంగా ఉంది త్వరగా!!",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,English,Fraud_Unauthorized_Txn,15367,0.77,2,UP,"I didn't make this ₹15,367 payment, someone stole my money please help!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Bengali,UPI_Pending,540,0.28,1,DEGRADED,"₹540 পাঠিয়েছি, টাকা কেটে গেছে কিন্তু দোকানদার পায়নি",AUTO_REFUND_INSTANT
+Merchant,Tamil,Festival_Promo_Broadcast,16255,0.33,3,DEGRADED,என் வழக்கமான வாடிக்கையாளர்களுக்கு தீபாவளி ஆஃபர் அனுப்புங்க,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Hinglish,Soundbox_Sync_Issue,44964,0.38,3,UP,soundbox offline dikha raha hai,REMOTE_IOT_RESTART
+Customer,Hindi,UPI_Pending,27435,0.82,1,DEGRADED,"मैंने ₹27,435 भेजे, पैसा कट गया पर दुकानदार को नहीं मिला जल्दी करो!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,English,Fraud_Unauthorized_Txn,12060,0.78,1,DOWN,"Unauthorized transaction of ₹12,060 on my account urgent",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Telugu,Festival_Promo_Broadcast,1185,0.33,0,UP,నా రెగ్యులర్ కస్టమర్లకి దీపావళి ఆఫర్ పంపండి,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Hinglish,EMI_Bounce_Fear,24834,0.61,2,UP,"Meri EMI bounce ho jayegi kya, late fee lagegi?",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Hinglish,EMI_Bounce_Fear,5028,0.58,0,UP,"₹5,028 ki kisht bharni hai, darr lag raha hai penalty ka",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Hinglish,UPI_Pending,140,0.62,1,UP,"Maine ₹140 bheje, paisa kat gaya par dukaan wale ko nahi mila",AUTO_REFUND_INSTANT
+Merchant,Hinglish,Festival_Promo_Broadcast,42595,0.31,5,UP,purane grahakon ko discount message bhejo,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Bengali,Settlement_Hold,25633,0.07,1,DOWN,"সকাল থেকে ₹25,633 সেটেলমেন্ট আটকে আছে",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hinglish,EMI_Bounce_Fear,1174,0.59,0,UP,"loan EMI miss ho gayi, ab kya hoga",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,English,Settlement_Hold,32586,0.17,0,DEGRADED,Yesterday's settlement didn't arrive,RELEASE_INSTANT_SETTLEMENT
+Customer,Telugu,UPI_Pending,1028,0.92,1,UP,"UPI పేమెంట్ pending లో ఉంది, ₹1,028 కట్ అయింది త్వరగా!!",AUTO_REFUND_INSTANT
+Merchant,Hindi,Settlement_Hold,4812,0.47,0,UP,"सुबह से ₹4,812 का सेटलमेंट होल्ड पर है",RELEASE_INSTANT_SETTLEMENT
+Merchant,Bengali,Soundbox_Sync_Issue,186,0.27,0,UP,সাউন্ডবক্স আওয়াজ করছে না,REMOTE_IOT_RESTART
+Customer,Hinglish,UPI_Pending,281,0.43,5,UP,paise kat gaye lekin merchant ko credit nahi hua,FREEZE_AND_HUMAN_HANDOFF
+Customer,Marathi,UPI_Pending,11743,0.64,1,DEGRADED,"मी ₹11,743 पाठवले, पैसे कापले पण दुकानदाराला मिळाले नाहीत",FREEZE_AND_HUMAN_HANDOFF
+Customer,Bengali,Fraud_Unauthorized_Txn,28095,0.77,4,UP,"আমি এই ₹28,095 পেমেন্ট করিনি, কেউ টাকা তুলে নিয়েছে তাড়াতাড়ি!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hinglish,Festival_Promo_Broadcast,1007,0.2,1,DEGRADED,festival offer sab customers ko WhatsApp kar do,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Marathi,Soundbox_Sync_Issue,533,0.31,1,UP,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Merchant,Tamil,Settlement_Hold,537,0.23,0,UP,காலையிலிருந்து ₹537 settlement hold ஆகியிருக்கு,RELEASE_INSTANT_SETTLEMENT
+Customer,Hinglish,Fraud_Unauthorized_Txn,1199,0.94,4,DEGRADED,"unknown transaction aaya hai, mera paisa chori ho gaya bahut pareshan hoon",FREEZE_AND_HUMAN_HANDOFF
+Customer,Tamil,UPI_Pending,31395,0.62,0,UP,"₹31,395 அனுப்பினேன், பணம் போயிடுச்சு ஆனா கடைக்காரருக்கு வரல",FREEZE_AND_HUMAN_HANDOFF
+Customer,Telugu,Fraud_Unauthorized_Txn,14528,0.81,0,DEGRADED,"నేను ఈ ₹14,528 పేమెంట్ చేయలేదు, ఎవరో డబ్బు తీసుకున్నారు త్వరగా!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hinglish,UPI_Pending,805,0.37,0,DEGRADED,"Maine ₹805 bheje, paisa kat gaya par dukaan wale ko nahi mila",AUTO_REFUND_INSTANT
+Customer,Hinglish,Fraud_Unauthorized_Txn,21378,0.68,2,UP,"kisi ne mere account se ₹21,378 nikaal liye",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hindi,Settlement_Hold,1591,0.35,0,UP,"सुबह से ₹1,591 का सेटलमेंट होल्ड पर है",RELEASE_INSTANT_SETTLEMENT
+Customer,Hinglish,UPI_Pending,491,0.4,5,UP,"Maine ₹491 bheje, paisa kat gaya par dukaan wale ko nahi mila",FREEZE_AND_HUMAN_HANDOFF
+Customer,English,UPI_Pending,1066,0.34,1,DEGRADED,"UPI payment stuck in pending, ₹1,066 deducted",AUTO_REFUND_INSTANT
+Merchant,Marathi,Festival_Promo_Broadcast,186,0.24,1,UP,माझ्या नेहमीच्या ग्राहकांना दिवाळी ऑफर पाठवा,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Hindi,Festival_Promo_Broadcast,1292,0.39,1,UP,मेरे रेगुलर ग्राहकों को दिवाली ऑफर भेज दो,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Bengali,UPI_Pending,284,0.63,1,UP,"₹284 পাঠিয়েছি, টাকা কেটে গেছে কিন্তু দোকানদার পায়নি",AUTO_REFUND_INSTANT
+Merchant,Hinglish,Festival_Promo_Broadcast,1161,0.34,1,UP,purane grahakon ko discount message bhejo,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Hindi,UPI_Pending,465,0.54,2,UP,"₹465 का यूपीआई पेमेंट अटका हुआ है, पैसे कटे",AUTO_REFUND_INSTANT
+Customer,Bengali,UPI_Pending,19580,0.43,1,UP,"UPI পেমেন্ট আটকে আছে, ₹19,580 কেটেছে",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Bengali,Settlement_Hold,1317,0.19,1,DEGRADED,"সকাল থেকে ₹1,317 সেটেলমেন্ট আটকে আছে",RELEASE_INSTANT_SETTLEMENT
+Merchant,Tamil,Festival_Promo_Broadcast,11814,0.23,4,UP,என் வழக்கமான வாடிக்கையாளர்களுக்கு தீபாவளி ஆஃபர் அனுப்புங்க,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Hindi,Fraud_Unauthorized_Txn,16506,0.78,3,DOWN,"मेरे खाते से बिना बताए ₹16,506 कट गए जल्दी करो!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Marathi,Fraud_Unauthorized_Txn,20453,0.94,0,UP,"मी हे ₹20,453 पेमेंट केले नाही, कोणीतरी पैसे काढले लवकर!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,English,EMI_Bounce_Fear,45152,0.67,1,DEGRADED,"Scared I'll miss my ₹45,152 loan installment",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Telugu,Fraud_Unauthorized_Txn,1965,0.78,1,UP,"నేను ఈ ₹1,965 పేమెంట్ చేయలేదు, ఎవరో డబ్బు తీసుకున్నారు త్వరగా!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Telugu,Settlement_Hold,14,0.33,1,UP,పొద్దున్నుంచి ₹14 settlement hold లో ఉంది,RELEASE_INSTANT_SETTLEMENT
+Customer,Telugu,UPI_Pending,39967,0.57,0,UP,"₹39,967 పంపాను, డబ్బు కట్ అయింది కానీ షాప్ వాళ్ళకి రాలేదు",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Bengali,Settlement_Hold,1721,0.17,0,DEGRADED,"সকাল থেকে ₹1,721 সেটেলমেন্ট আটকে আছে",RELEASE_INSTANT_SETTLEMENT
+Merchant,English,Soundbox_Sync_Issue,6401,0.49,0,UP,"Soundbox is silent, no payment announcements",AUTO_REFUND_INSTANT
+Customer,English,Fraud_Unauthorized_Txn,40664,0.77,0,UP,"Unauthorized transaction of ₹40,664 on my account I'm panicking",FREEZE_AND_HUMAN_HANDOFF
+Merchant,English,Soundbox_Sync_Issue,1333,0.26,0,DEGRADED,"Soundbox is silent, no payment announcements",REMOTE_IOT_RESTART
+Merchant,Hindi,Settlement_Hold,26352,0.29,1,UP,कल का सेटलमेंट नहीं आया,RELEASE_INSTANT_SETTLEMENT
+Merchant,Bengali,Settlement_Hold,35128,0.22,1,UP,"সকাল থেকে ₹35,128 সেটেলমেন্ট আটকে আছে",RELEASE_INSTANT_SETTLEMENT
+Merchant,Telugu,Soundbox_Sync_Issue,14494,0.42,2,UP,సౌండ్‌బాక్స్ మాట్లాడట్లేదు,REMOTE_IOT_RESTART
+Customer,English,EMI_Bounce_Fear,18150,0.63,4,UP,Will my EMI bounce? I'm worried about the late fee,SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Hindi,EMI_Bounce_Fear,23447,0.54,1,UP,"₹23,447 की किस्त भरने में डर लग रहा है",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Bengali,Settlement_Hold,2365,0.57,0,DOWN,"সকাল থেকে ₹2,365 সেটেলমেন্ট আটকে আছে",FREEZE_AND_HUMAN_HANDOFF
+Customer,Telugu,EMI_Bounce_Fear,5967,0.72,1,DEGRADED,"₹5,967 EMI కట్టాలి, భయంగా ఉంది త్వరగా!!",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,English,Fraud_Unauthorized_Txn,27714,0.65,0,UP,"Unauthorized transaction of ₹27,714 on my account",FREEZE_AND_HUMAN_HANDOFF
+Customer,Bengali,Fraud_Unauthorized_Txn,24252,0.93,0,UP,"আমি এই ₹24,252 পেমেন্ট করিনি, কেউ টাকা তুলে নিয়েছে তাড়াতাড়ি!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Marathi,Fraud_Unauthorized_Txn,34515,0.89,0,UP,"मी हे ₹34,515 पेमेंट केले नाही, कोणीतरी पैसे काढले लवकर!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Telugu,UPI_Pending,5975,0.73,2,UP,"₹5,975 పంపాను, డబ్బు కట్ అయింది కానీ షాప్ వాళ్ళకి రాలేదు త్వరగా!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Marathi,Soundbox_Sync_Issue,8372,0.06,1,UP,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Merchant,Hinglish,Festival_Promo_Broadcast,14891,0.59,0,UP,Mere regular customers ko Diwali offer bhej do,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Hinglish,Soundbox_Sync_Issue,48675,0.45,1,UP,payment ki awaaz nahi aa rahi soundbox se,REMOTE_IOT_RESTART
+Customer,Tamil,EMI_Bounce_Fear,45603,0.7,3,UP,"₹45,603 EMI bounce ஆயிடுமா?",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Tamil,EMI_Bounce_Fear,995,0.46,0,UP,"என் EMI கட்ட பயமா இருக்கு, late fee வருமா?",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Tamil,EMI_Bounce_Fear,19533,0.73,1,DEGRADED,"₹19,533 EMI bounce ஆயிடுமா? சீக்கிரம்!!",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Hinglish,EMI_Bounce_Fear,10301,0.95,0,UP,"Meri EMI bounce ho jayegi kya, late fee lagegi? bahut pareshan hoon",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Bengali,Soundbox_Sync_Issue,6265,0.43,2,UP,সাউন্ডবক্স আওয়াজ করছে না,REMOTE_IOT_RESTART
+Customer,Hinglish,Fraud_Unauthorized_Txn,48075,0.96,0,UP,"kisi ne mere account se ₹48,075 nikaal liye jaldi karo!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Telugu,Festival_Promo_Broadcast,449,0.26,0,DEGRADED,నా రెగ్యులర్ కస్టమర్లకి దీపావళి ఆఫర్ పంపండి,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Bengali,Fraud_Unauthorized_Txn,6428,1.0,0,UP,"আমি এই ₹6,428 পেমেন্ট করিনি, কেউ টাকা তুলে নিয়েছে তাড়াতাড়ি!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,English,Soundbox_Sync_Issue,708,0.38,2,DEGRADED,"Soundbox is silent, no payment announcements",REMOTE_IOT_RESTART
+Customer,Marathi,UPI_Pending,43896,0.41,0,UP,"UPI पेमेंट अडकले आहे, ₹43,896 कापले गेले",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hindi,UPI_Pending,14681,0.37,7,UP,"मैंने ₹14,681 भेजे, पैसा कट गया पर दुकानदार को नहीं मिला",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hinglish,Fraud_Unauthorized_Txn,29177,1.0,0,UP,"kisi ne mere account se ₹29,177 nikaal liye please help",FREEZE_AND_HUMAN_HANDOFF
+Customer,Tamil,Fraud_Unauthorized_Txn,10351,0.76,0,UP,"நான் இந்த ₹10,351 பேமெண்ட் பண்ணல, யாரோ பணம் எடுத்துட்டாங்க சீக்கிரம்!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Tamil,Soundbox_Sync_Issue,28697,0.15,0,DEGRADED,சவுண்ட்பாக்ஸ் பேசல,REMOTE_IOT_RESTART
+Merchant,Bengali,Settlement_Hold,12682,0.35,2,UP,"সকাল থেকে ₹12,682 সেটেলমেন্ট আটকে আছে",RELEASE_INSTANT_SETTLEMENT
+Customer,Marathi,UPI_Pending,1121,0.67,1,UP,"UPI पेमेंट अडकले आहे, ₹1,121 कापले गेले",AUTO_REFUND_INSTANT
+Customer,Telugu,UPI_Pending,10280,0.7,0,UP,"₹10,280 పంపాను, డబ్బు కట్ అయింది కానీ షాప్ వాళ్ళకి రాలేదు",FREEZE_AND_HUMAN_HANDOFF
+Merchant,English,Soundbox_Sync_Issue,18538,0.17,1,UP,"Soundbox is silent, no payment announcements",REMOTE_IOT_RESTART
+Customer,Bengali,EMI_Bounce_Fear,1044,0.7,5,UP,"₹1,044 কিস্তি দিতে ভয় লাগছে",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Telugu,UPI_Pending,1972,0.46,0,DOWN,"₹1,972 పంపాను, డబ్బు కట్ అయింది కానీ షాప్ వాళ్ళకి రాలేదు",AUTO_REFUND_INSTANT
+Merchant,English,Settlement_Hold,163,0.46,0,UP,My ₹163 settlement has been on hold since morning,RELEASE_INSTANT_SETTLEMENT
+Customer,Tamil,Fraud_Unauthorized_Txn,24989,0.89,3,DEGRADED,"நான் இந்த ₹24,989 பேமெண்ட் பண்ணல, யாரோ பணம் எடுத்துட்டாங்க சீக்கிரம்!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hindi,UPI_Pending,37164,0.65,3,DEGRADED,"₹37,164 का यूपीआई पेमेंट अटका हुआ है, पैसे कटे",FREEZE_AND_HUMAN_HANDOFF
+Merchant,English,Festival_Promo_Broadcast,895,0.1,6,UP,Send a Diwali offer to my regular customers,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Hindi,EMI_Bounce_Fear,85,0.82,1,UP,"मेरी ईएमआई बाउंस हो जाएगी, लेट फीस लगेगी क्या? बहुत परेशान हूँ",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Hindi,Fraud_Unauthorized_Txn,27788,1.0,0,DEGRADED,"मेरे खाते से बिना बताए ₹27,788 कट गए जल्दी करो!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Tamil,Festival_Promo_Broadcast,21051,0.0,3,UP,என் வழக்கமான வாடிக்கையாளர்களுக்கு தீபாவளி ஆஃபர் அனுப்புங்க,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Hinglish,Settlement_Hold,1767,0.22,0,UP,"payout ruka hua hai, ₹1,767 abhi tak nahi aaye",RELEASE_INSTANT_SETTLEMENT
+Merchant,Tamil,Settlement_Hold,1707,0.21,1,DEGRADED,"காலையிலிருந்து ₹1,707 settlement hold ஆகியிருக்கு",RELEASE_INSTANT_SETTLEMENT
+Merchant,Telugu,Soundbox_Sync_Issue,2194,0.35,0,UP,సౌండ్‌బాక్స్ మాట్లాడట్లేదు,REMOTE_IOT_RESTART
+Customer,Hindi,UPI_Pending,430,0.51,0,UP,"मैंने ₹430 भेजे, पैसा कट गया पर दुकानदार को नहीं मिला",AUTO_REFUND_INSTANT
+Customer,Telugu,EMI_Bounce_Fear,1154,0.65,1,UP,"నా EMI bounce అవుతుందా, late fee పడుతుందా?",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Tamil,Settlement_Hold,26876,0.15,0,DEGRADED,"காலையிலிருந்து ₹26,876 settlement hold ஆகியிருக்கு",RELEASE_INSTANT_SETTLEMENT
+Merchant,Hindi,Settlement_Hold,48487,0.27,3,UP,कल का सेटलमेंट नहीं आया,RELEASE_INSTANT_SETTLEMENT
+Merchant,Tamil,Settlement_Hold,49767,0.25,3,UP,"காலையிலிருந்து ₹49,767 settlement hold ஆகியிருக்கு",RELEASE_INSTANT_SETTLEMENT
+Merchant,Marathi,Soundbox_Sync_Issue,761,0.22,0,UP,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Merchant,Hindi,Festival_Promo_Broadcast,4030,0.23,0,UP,मेरे रेगुलर ग्राहकों को दिवाली ऑफर भेज दो,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,English,Fraud_Unauthorized_Txn,16194,1.0,1,UP,"I didn't make this ₹16,194 payment, someone stole my money please help!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Marathi,EMI_Bounce_Fear,7472,0.78,4,UP,"₹7,472 चा हप्ता भरायची भीती वाटते लवकर!!",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Hinglish,Soundbox_Sync_Issue,41611,0.36,2,UP,Soundbox bol nahi raha,REMOTE_IOT_RESTART
+Customer,Hinglish,UPI_Pending,32489,0.56,1,UP,"Maine ₹32,489 bheje, paisa kat gaya par dukaan wale ko nahi mila",FREEZE_AND_HUMAN_HANDOFF
+Customer,Tamil,EMI_Bounce_Fear,11654,0.66,0,UP,"₹11,654 EMI bounce ஆயிடுமா?",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Marathi,UPI_Pending,32473,0.56,2,DEGRADED,"UPI पेमेंट अडकले आहे, ₹32,473 कापले गेले",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Bengali,Festival_Promo_Broadcast,1873,0.0,0,UP,আমার নিয়মিত খদ্দেরদের দিওয়ালি অফার পাঠিয়ে দিন,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Hindi,Soundbox_Sync_Issue,1771,0.34,0,UP,साउंडबॉक्स बोल नहीं रहा,REMOTE_IOT_RESTART
+Merchant,Bengali,Festival_Promo_Broadcast,49487,0.19,5,UP,আমার নিয়মিত খদ্দেরদের দিওয়ালি অফার পাঠিয়ে দিন,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,English,Settlement_Hold,33077,0.49,0,UP,Yesterday's settlement didn't arrive,RELEASE_INSTANT_SETTLEMENT
+Merchant,Hinglish,Settlement_Hold,726,0.4,0,UP,Subah se ₹726 ka settlement hold pe hai,RELEASE_INSTANT_SETTLEMENT
+Customer,English,Fraud_Unauthorized_Txn,29297,0.74,5,UP,"I didn't make this ₹29,297 payment, someone stole my money please help!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Tamil,Soundbox_Sync_Issue,856,0.42,1,UP,சவுண்ட்பாக்ஸ் பேசல,REMOTE_IOT_RESTART
+Merchant,Tamil,Soundbox_Sync_Issue,19975,0.43,1,UP,சவுண்ட்பாக்ஸ் பேசல,REMOTE_IOT_RESTART
+Merchant,English,Festival_Promo_Broadcast,1525,0.07,0,DOWN,Send a Diwali offer to my regular customers,AUTO_REFUND_INSTANT
+Customer,Telugu,UPI_Pending,32442,0.72,2,UP,"₹32,442 పంపాను, డబ్బు కట్ అయింది కానీ షాప్ వాళ్ళకి రాలేదు త్వరగా!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Tamil,Fraud_Unauthorized_Txn,43523,1.0,3,DEGRADED,"நான் இந்த ₹43,523 பேமெண்ட் பண்ணல, யாரோ பணம் எடுத்துட்டாங்க சீக்கிரம்!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Bengali,Soundbox_Sync_Issue,33896,0.14,0,DEGRADED,সাউন্ডবক্স আওয়াজ করছে না,REMOTE_IOT_RESTART
+Merchant,Bengali,Festival_Promo_Broadcast,8502,0.48,0,DEGRADED,আমার নিয়মিত খদ্দেরদের দিওয়ালি অফার পাঠিয়ে দিন,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Hinglish,Festival_Promo_Broadcast,1313,0.4,3,DEGRADED,festival offer sab customers ko WhatsApp kar do,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Telugu,Festival_Promo_Broadcast,29216,0.4,7,UP,నా రెగ్యులర్ కస్టమర్లకి దీపావళి ఆఫర్ పంపండి,FREEZE_AND_HUMAN_HANDOFF
+Customer,English,EMI_Bounce_Fear,262,0.8,3,DEGRADED,Will my EMI bounce? I'm worried about the late fee I'm panicking,SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Marathi,EMI_Bounce_Fear,6912,0.83,0,UP,"₹6,912 चा हप्ता भरायची भीती वाटते लवकर!!",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Hindi,Soundbox_Sync_Issue,42792,0.37,0,UP,पेमेंट की आवाज़ नहीं आ रही,REMOTE_IOT_RESTART
+Customer,Telugu,EMI_Bounce_Fear,1794,0.41,0,UP,"నా EMI bounce అవుతుందా, late fee పడుతుందా?",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Marathi,Settlement_Hold,11038,0.27,0,UP,"सकाळपासून ₹11,038 चे सेटलमेंट होल्डवर आहे",RELEASE_INSTANT_SETTLEMENT
+Customer,Marathi,Fraud_Unauthorized_Txn,34184,1.0,5,UP,"मी हे ₹34,184 पेमेंट केले नाही, कोणीतरी पैसे काढले लवकर!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Telugu,Soundbox_Sync_Issue,14193,0.25,1,UP,సౌండ్‌బాక్స్ మాట్లాడట్లేదు,REMOTE_IOT_RESTART
+Merchant,Bengali,Festival_Promo_Broadcast,1443,0.43,2,UP,আমার নিয়মিত খদ্দেরদের দিওয়ালি অফার পাঠিয়ে দিন,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,English,UPI_Pending,7242,0.6,0,UP,"UPI payment stuck in pending, ₹7,242 deducted",FREEZE_AND_HUMAN_HANDOFF
+Customer,English,Fraud_Unauthorized_Txn,1252,0.7,0,UP,"I didn't make this ₹1,252 payment, someone stole my money",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hinglish,Settlement_Hold,1470,0.3,0,UP,"Subah se ₹1,470 ka settlement hold pe hai",RELEASE_INSTANT_SETTLEMENT
+Merchant,Tamil,Festival_Promo_Broadcast,521,0.53,0,DEGRADED,என் வழக்கமான வாடிக்கையாளர்களுக்கு தீபாவளி ஆஃபர் அனுப்புங்க,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Hindi,UPI_Pending,24492,0.5,5,DEGRADED,"मैंने ₹24,492 भेजे, पैसा कट गया पर दुकानदार को नहीं मिला",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hindi,EMI_Bounce_Fear,90,0.62,0,UP,"मेरी ईएमआई बाउंस हो जाएगी, लेट फीस लगेगी क्या?",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Hinglish,UPI_Pending,4302,0.46,3,UP,"UPI payment pending dikha raha hai, ₹4,302 debit ho gaye",AUTO_REFUND_INSTANT
+Merchant,Marathi,Festival_Promo_Broadcast,21484,0.21,2,UP,माझ्या नेहमीच्या ग्राहकांना दिवाळी ऑफर पाठवा,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Hinglish,Soundbox_Sync_Issue,1653,0.48,1,DEGRADED,Soundbox bol nahi raha,REMOTE_IOT_RESTART
+Merchant,Marathi,Soundbox_Sync_Issue,59,0.48,1,UP,साउंडबॉक्स बोलत नाही,FREEZE_AND_HUMAN_HANDOFF
+Merchant,Bengali,Festival_Promo_Broadcast,42341,0.29,8,DOWN,আমার নিয়মিত খদ্দেরদের দিওয়ালি অফার পাঠিয়ে দিন,FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hinglish,Settlement_Hold,696,0.13,3,DEGRADED,Subah se ₹696 ka settlement hold pe hai,RELEASE_INSTANT_SETTLEMENT
+Merchant,Hinglish,Settlement_Hold,1741,0.05,2,UP,"Subah se ₹1,741 ka settlement hold pe hai",RELEASE_INSTANT_SETTLEMENT
+Merchant,Bengali,Soundbox_Sync_Issue,12701,0.28,3,UP,সাউন্ডবক্স আওয়াজ করছে না,REMOTE_IOT_RESTART
+Merchant,Marathi,Festival_Promo_Broadcast,308,0.12,0,UP,माझ्या नेहमीच्या ग्राहकांना दिवाळी ऑफर पाठवा,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Marathi,Festival_Promo_Broadcast,830,0.2,0,UP,माझ्या नेहमीच्या ग्राहकांना दिवाळी ऑफर पाठवा,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Marathi,Soundbox_Sync_Issue,48401,0.32,3,DOWN,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Customer,Hinglish,EMI_Bounce_Fear,24361,0.58,0,DOWN,"Meri EMI bounce ho jayegi kya, late fee lagegi?",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Marathi,Settlement_Hold,1356,0.27,0,DEGRADED,"सकाळपासून ₹1,356 चे सेटलमेंट होल्डवर आहे",RELEASE_INSTANT_SETTLEMENT
+Customer,Bengali,Fraud_Unauthorized_Txn,34879,0.87,0,UP,"আমি এই ₹34,879 পেমেন্ট করিনি, কেউ টাকা তুলে নিয়েছে তাড়াতাড়ি!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Marathi,Settlement_Hold,772,0.47,5,DEGRADED,सकाळपासून ₹772 चे सेटलमेंट होल्डवर आहे,FREEZE_AND_HUMAN_HANDOFF
+Customer,Tamil,Fraud_Unauthorized_Txn,31487,0.94,0,UP,"நான் இந்த ₹31,487 பேமெண்ட் பண்ணல, யாரோ பணம் எடுத்துட்டாங்க சீக்கிரம்!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,English,UPI_Pending,4148,0.63,0,UP,"I sent ₹4,148, money got debited but the shop didn't receive it",AUTO_REFUND_INSTANT
+Merchant,Marathi,Soundbox_Sync_Issue,418,0.12,1,DOWN,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Merchant,Hindi,Soundbox_Sync_Issue,3502,0.5,3,DOWN,पेमेंट की आवाज़ नहीं आ रही,REMOTE_IOT_RESTART
+Customer,Hindi,UPI_Pending,14793,0.48,0,UP,"₹14,793 का यूपीआई पेमेंट अटका हुआ है, पैसे कटे",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Telugu,Soundbox_Sync_Issue,376,0.29,5,UP,సౌండ్‌బాక్స్ మాట్లాడట్లేదు,REMOTE_IOT_RESTART
+Merchant,Bengali,Settlement_Hold,19891,0.58,0,UP,"সকাল থেকে ₹19,891 সেটেলমেন্ট আটকে আছে",RELEASE_INSTANT_SETTLEMENT
+Merchant,Bengali,Settlement_Hold,13652,0.31,0,DEGRADED,"সকাল থেকে ₹13,652 সেটেলমেন্ট আটকে আছে",RELEASE_INSTANT_SETTLEMENT
+Merchant,Tamil,Festival_Promo_Broadcast,24680,0.49,0,DOWN,என் வழக்கமான வாடிக்கையாளர்களுக்கு தீபாவளி ஆஃபர் அனுப்புங்க,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Tamil,Fraud_Unauthorized_Txn,27890,0.69,1,UP,"நான் இந்த ₹27,890 பேமெண்ட் பண்ணல, யாரோ பணம் எடுத்துட்டாங்க",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hinglish,UPI_Pending,8229,0.39,0,DEGRADED,"UPI payment pending dikha raha hai, ₹8,229 debit ho gaye",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hinglish,EMI_Bounce_Fear,15891,0.61,1,UP,"Meri EMI bounce ho jayegi kya, late fee lagegi?",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Bengali,Settlement_Hold,7496,0.11,1,UP,"সকাল থেকে ₹7,496 সেটেলমেন্ট আটকে আছে",RELEASE_INSTANT_SETTLEMENT
+Merchant,Tamil,Settlement_Hold,1032,0.4,0,UP,"காலையிலிருந்து ₹1,032 settlement hold ஆகியிருக்கு",RELEASE_INSTANT_SETTLEMENT
+Customer,Hindi,UPI_Pending,38404,0.35,1,UP,"मैंने ₹38,404 भेजे, पैसा कट गया पर दुकानदार को नहीं मिला",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Telugu,Festival_Promo_Broadcast,4892,0.33,1,UP,నా రెగ్యులర్ కస్టమర్లకి దీపావళి ఆఫర్ పంపండి,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,English,Soundbox_Sync_Issue,27809,0.17,1,DEGRADED,"Soundbox is silent, no payment announcements",REMOTE_IOT_RESTART
+Customer,English,UPI_Pending,999,0.63,2,UP,"I sent ₹999, money got debited but the shop didn't receive it",AUTO_REFUND_INSTANT
+Customer,Hindi,EMI_Bounce_Fear,1488,0.73,5,DOWN,"मेरी ईएमआई बाउंस हो जाएगी, लेट फीस लगेगी क्या? बहुत परेशान हूँ",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Marathi,Festival_Promo_Broadcast,965,0.17,1,DOWN,माझ्या नेहमीच्या ग्राहकांना दिवाळी ऑफर पाठवा,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Hinglish,UPI_Pending,14240,0.53,0,UP,"UPI payment pending dikha raha hai, ₹14,240 debit ho gaye",FREEZE_AND_HUMAN_HANDOFF
+Customer,Bengali,Fraud_Unauthorized_Txn,18786,0.9,4,DOWN,"আমি এই ₹18,786 পেমেন্ট করিনি, কেউ টাকা তুলে নিয়েছে তাড়াতাড়ি!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hinglish,EMI_Bounce_Fear,11273,0.62,1,UP,"Meri EMI bounce ho jayegi kya, late fee lagegi?",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Tamil,Festival_Promo_Broadcast,7863,0.15,0,DEGRADED,என் வழக்கமான வாடிக்கையாளர்களுக்கு தீபாவளி ஆஃபர் அனுப்புங்க,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Marathi,Soundbox_Sync_Issue,451,0.35,1,DEGRADED,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Customer,Marathi,UPI_Pending,7259,0.69,0,UP,"मी ₹7,259 पाठवले, पैसे कापले पण दुकानदाराला मिळाले नाहीत",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hindi,Festival_Promo_Broadcast,14436,0.22,3,UP,मेरे रेगुलर ग्राहकों को दिवाली ऑफर भेज दो,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Hinglish,UPI_Pending,1145,0.58,0,UP,paise kat gaye lekin merchant ko credit nahi hua,AUTO_REFUND_INSTANT
+Customer,Telugu,UPI_Pending,11075,0.73,1,DEGRADED,"₹11,075 పంపాను, డబ్బు కట్ అయింది కానీ షాప్ వాళ్ళకి రాలేదు త్వరగా!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Tamil,UPI_Pending,558,0.29,0,UP,"₹558 அனுப்பினேன், பணம் போயிடுச்சு ஆனா கடைக்காரருக்கு வரல",AUTO_REFUND_INSTANT
+Merchant,Bengali,Festival_Promo_Broadcast,13562,0.26,0,UP,আমার নিয়মিত খদ্দেরদের দিওয়ালি অফার পাঠিয়ে দিন,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Marathi,Fraud_Unauthorized_Txn,26647,0.68,0,DOWN,"मी हे ₹26,647 पेमेंट केले नाही, कोणीतरी पैसे काढले",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hindi,Settlement_Hold,8317,0.44,6,UP,कल का सेटलमेंट नहीं आया,FREEZE_AND_HUMAN_HANDOFF
+Customer,Hinglish,UPI_Pending,1419,0.56,4,UP,"UPI payment pending dikha raha hai, ₹1,419 debit ho gaye",AUTO_REFUND_INSTANT
+Merchant,Bengali,Festival_Promo_Broadcast,42353,0.38,2,UP,আমার নিয়মিত খদ্দেরদের দিওয়ালি অফার পাঠিয়ে দিন,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Marathi,Festival_Promo_Broadcast,2343,0.29,2,UP,माझ्या नेहमीच्या ग्राहकांना दिवाळी ऑफर पाठवा,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Hindi,Festival_Promo_Broadcast,28987,0.29,0,UP,त्योहार का ऑफर सब ग्राहकों को भेजना है,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Telugu,Festival_Promo_Broadcast,3155,0.23,0,UP,నా రెగ్యులర్ కస్టమర్లకి దీపావళి ఆఫర్ పంపండి,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,English,Settlement_Hold,591,0.25,1,UP,Yesterday's settlement didn't arrive,RELEASE_INSTANT_SETTLEMENT
+Customer,Hinglish,EMI_Bounce_Fear,5793,0.59,6,UP,"loan EMI miss ho gayi, ab kya hoga",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Bengali,Settlement_Hold,320,0.0,4,UP,সকাল থেকে ₹320 সেটেলমেন্ট আটকে আছে,RELEASE_INSTANT_SETTLEMENT
+Customer,Marathi,UPI_Pending,1276,0.53,0,UP,"मी ₹1,276 पाठवले, पैसे कापले पण दुकानदाराला मिळाले नाहीत",AUTO_REFUND_INSTANT
+Customer,Tamil,Fraud_Unauthorized_Txn,26555,0.58,0,UP,"நான் இந்த ₹26,555 பேமெண்ட் பண்ணல, யாரோ பணம் எடுத்துட்டாங்க",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Tamil,Settlement_Hold,13875,0.31,0,DEGRADED,"காலையிலிருந்து ₹13,875 settlement hold ஆகியிருக்கு",RELEASE_INSTANT_SETTLEMENT
+Merchant,English,Soundbox_Sync_Issue,4318,0.37,0,UP,"Soundbox is silent, no payment announcements",REMOTE_IOT_RESTART
+Customer,Hinglish,UPI_Pending,7037,0.69,2,UP,paise kat gaye lekin merchant ko credit nahi hua,FREEZE_AND_HUMAN_HANDOFF
+Customer,Hinglish,UPI_Pending,46311,0.56,0,UP,"UPI payment pending dikha raha hai, ₹46,311 debit ho gaye",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Marathi,Settlement_Hold,14050,0.21,1,DEGRADED,"सकाळपासून ₹14,050 चे सेटलमेंट होल्डवर आहे",RELEASE_INSTANT_SETTLEMENT
+Merchant,English,Soundbox_Sync_Issue,8245,0.25,3,UP,"Soundbox is silent, no payment announcements",REMOTE_IOT_RESTART
+Customer,English,UPI_Pending,38697,0.51,0,UP,"I sent ₹38,697, money got debited but the shop didn't receive it",FREEZE_AND_HUMAN_HANDOFF
+Customer,Marathi,EMI_Bounce_Fear,5565,0.68,1,UP,"₹5,565 चा हप्ता भरायची भीती वाटते",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Telugu,Settlement_Hold,1293,0.32,1,UP,"పొద్దున్నుంచి ₹1,293 settlement hold లో ఉంది",RELEASE_INSTANT_SETTLEMENT
+Merchant,Hinglish,Soundbox_Sync_Issue,47347,0.15,1,DOWN,payment ki awaaz nahi aa rahi soundbox se,REMOTE_IOT_RESTART
+Merchant,Hindi,Festival_Promo_Broadcast,29633,0.0,0,DEGRADED,मेरे रेगुलर ग्राहकों को दिवाली ऑफर भेज दो,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Tamil,Settlement_Hold,7604,0.59,0,UP,"காலையிலிருந்து ₹7,604 settlement hold ஆகியிருக்கு",RELEASE_INSTANT_SETTLEMENT
+Customer,Bengali,Fraud_Unauthorized_Txn,25829,1.0,2,UP,"আমি এই ₹25,829 পেমেন্ট করিনি, কেউ টাকা তুলে নিয়েছে তাড়াতাড়ি!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Marathi,Festival_Promo_Broadcast,1188,0.15,1,UP,माझ्या नेहमीच्या ग्राहकांना दिवाळी ऑफर पाठवा,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Marathi,Festival_Promo_Broadcast,399,0.58,1,UP,माझ्या नेहमीच्या ग्राहकांना दिवाळी ऑफर पाठवा,RELEASE_INSTANT_SETTLEMENT
+Customer,Bengali,Fraud_Unauthorized_Txn,39885,0.91,0,DEGRADED,"আমি এই ₹39,885 পেমেন্ট করিনি, কেউ টাকা তুলে নিয়েছে তাড়াতাড়ি!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Telugu,EMI_Bounce_Fear,1739,0.65,0,UP,"నా EMI bounce అవుతుందా, late fee పడుతుందా?",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Tamil,UPI_Pending,12486,0.59,2,UP,"UPI பேமெண்ட் pending ஆகுது, ₹12,486 கழிஞ்சுருச்சு",FREEZE_AND_HUMAN_HANDOFF
+Customer,Telugu,Fraud_Unauthorized_Txn,21782,0.82,4,UP,"నేను ఈ ₹21,782 పేమెంట్ చేయలేదు, ఎవరో డబ్బు తీసుకున్నారు త్వరగా!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hindi,UPI_Pending,17267,0.5,1,UP,"₹17,267 का यूपीआई पेमेंट अटका हुआ है, पैसे कटे",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Telugu,Festival_Promo_Broadcast,13129,0.14,3,UP,నా రెగ్యులర్ కస్టమర్లకి దీపావళి ఆఫర్ పంపండి,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Tamil,EMI_Bounce_Fear,234,0.91,1,UP,"என் EMI கட்ட பயமா இருக்கு, late fee வருமா? சீக்கிரம்!!",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Tamil,Fraud_Unauthorized_Txn,30764,0.81,1,UP,"நான் இந்த ₹30,764 பேமெண்ட் பண்ணல, யாரோ பணம் எடுத்துட்டாங்க சீக்கிரம்!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Tamil,Soundbox_Sync_Issue,1083,0.06,1,UP,சவுண்ட்பாக்ஸ் பேசல,REMOTE_IOT_RESTART
+Merchant,Telugu,Festival_Promo_Broadcast,18227,0.3,4,DOWN,నా రెగ్యులర్ కస్టమర్లకి దీపావళి ఆఫర్ పంపండి,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Marathi,UPI_Pending,9699,0.85,6,UP,"UPI पेमेंट अडकले आहे, ₹9,699 कापले गेले लवकर!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hindi,Fraud_Unauthorized_Txn,17373,0.8,1,DEGRADED,"मैंने ये ₹17,373 का पेमेंट नहीं किया, किसी ने पैसे निकाल लिए जल्दी करो!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hindi,EMI_Bounce_Fear,22556,0.67,0,DEGRADED,"मेरी ईएमआई बाउंस हो जाएगी, लेट फीस लगेगी क्या?",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Marathi,EMI_Bounce_Fear,1312,0.89,6,UP,"₹1,312 चा हप्ता भरायची भीती वाटते लवकर!!",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,English,Fraud_Unauthorized_Txn,1107,1.0,0,UP,"I didn't make this ₹1,107 payment, someone stole my money urgent",FREEZE_AND_HUMAN_HANDOFF
+Customer,Marathi,UPI_Pending,1063,0.73,1,DOWN,"मी ₹1,063 पाठवले, पैसे कापले पण दुकानदाराला मिळाले नाहीत लवकर!!",AUTO_REFUND_INSTANT
+Merchant,Hindi,Settlement_Hold,10017,0.52,0,UP,कल का सेटलमेंट नहीं आया,RELEASE_INSTANT_SETTLEMENT
+Customer,Hinglish,EMI_Bounce_Fear,38096,0.88,0,UP,"₹38,096 ki kisht bharni hai, darr lag raha hai penalty ka please help",FREEZE_AND_HUMAN_HANDOFF
+Customer,Telugu,EMI_Bounce_Fear,32701,0.61,0,DEGRADED,"నా EMI bounce అవుతుందా, late fee పడుతుందా?",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Bengali,EMI_Bounce_Fear,6650,0.75,0,UP,"₹6,650 কিস্তি দিতে ভয় লাগছে তাড়াতাড়ি!!",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Hindi,Soundbox_Sync_Issue,1742,0.39,0,UP,साउंडबॉक्स बोल नहीं रहा,REMOTE_IOT_RESTART
+Customer,Tamil,UPI_Pending,1746,0.79,0,UP,"UPI பேமெண்ட் pending ஆகுது, ₹1,746 கழிஞ்சுருச்சு சீக்கிரம்!!",AUTO_REFUND_INSTANT
+Merchant,Hindi,Festival_Promo_Broadcast,34656,0.29,0,UP,मेरे रेगुलर ग्राहकों को दिवाली ऑफर भेज दो,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Hinglish,Festival_Promo_Broadcast,13498,0.41,0,DOWN,festival offer sab customers ko WhatsApp kar do,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Bengali,Fraud_Unauthorized_Txn,32130,1.0,1,DOWN,"আমি এই ₹32,130 পেমেন্ট করিনি, কেউ টাকা তুলে নিয়েছে তাড়াতাড়ি!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Marathi,UPI_Pending,24866,0.64,0,UP,"मी ₹24,866 पाठवले, पैसे कापले पण दुकानदाराला मिळाले नाहीत",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hindi,Fraud_Unauthorized_Txn,3791,0.83,2,DEGRADED,"मेरे खाते से बिना बताए ₹3,791 कट गए जल्दी करो!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Marathi,Settlement_Hold,24162,0.06,2,UP,"सकाळपासून ₹24,162 चे सेटलमेंट होल्डवर आहे",RELEASE_INSTANT_SETTLEMENT
+Customer,Bengali,UPI_Pending,8701,0.2,0,UP,"₹8,701 পাঠিয়েছি, টাকা কেটে গেছে কিন্তু দোকানদার পায়নি",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hindi,Fraud_Unauthorized_Txn,29406,0.92,1,UP,"मैंने ये ₹29,406 का पेमेंट नहीं किया, किसी ने पैसे निकाल लिए बहुत परेशान हूँ",FREEZE_AND_HUMAN_HANDOFF
+Customer,Bengali,EMI_Bounce_Fear,8493,0.62,0,DEGRADED,"₹8,493 কিস্তি দিতে ভয় লাগছে",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Hindi,Settlement_Hold,44823,0.26,0,UP,कल का सेटलमेंट नहीं आया,RELEASE_INSTANT_SETTLEMENT
+Customer,English,EMI_Bounce_Fear,4327,0.81,0,UP,Will my EMI bounce? I'm worried about the late fee urgent,SEND_EMI_LINK_WITH_REASSURANCE
+Customer,English,Fraud_Unauthorized_Txn,44878,0.7,2,UP,"Unauthorized transaction of ₹44,878 on my account",FREEZE_AND_HUMAN_HANDOFF
+Customer,Bengali,Fraud_Unauthorized_Txn,22790,0.86,0,UP,"আমি এই ₹22,790 পেমেন্ট করিনি, কেউ টাকা তুলে নিয়েছে তাড়াতাড়ি!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Telugu,EMI_Bounce_Fear,1638,0.53,8,UP,"₹1,638 EMI కట్టాలి, భయంగా ఉంది",FREEZE_AND_HUMAN_HANDOFF
+Customer,English,UPI_Pending,8980,0.72,2,DEGRADED,"UPI payment stuck in pending, ₹8,980 deducted please help!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Marathi,Soundbox_Sync_Issue,1164,0.29,3,DEGRADED,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Customer,Hindi,Fraud_Unauthorized_Txn,30830,0.76,0,UP,"मेरे खाते से बिना बताए ₹30,830 कट गए जल्दी करो!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Telugu,EMI_Bounce_Fear,1076,0.64,1,UP,"₹1,076 EMI కట్టాలి, భయంగా ఉంది",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Bengali,Soundbox_Sync_Issue,13195,0.35,0,UP,সাউন্ডবক্স আওয়াজ করছে না,REMOTE_IOT_RESTART
+Merchant,Hinglish,Festival_Promo_Broadcast,11765,0.2,3,UP,purane grahakon ko discount message bhejo,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Tamil,Settlement_Hold,14494,0.44,2,DOWN,"காலையிலிருந்து ₹14,494 settlement hold ஆகியிருக்கு",FREEZE_AND_HUMAN_HANDOFF
+Customer,Marathi,Fraud_Unauthorized_Txn,44965,0.74,2,UP,"मी हे ₹44,965 पेमेंट केले नाही, कोणीतरी पैसे काढले लवकर!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hinglish,Festival_Promo_Broadcast,304,0.4,0,UP,festival offer sab customers ko WhatsApp kar do,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Hinglish,UPI_Pending,33,0.73,0,UP,"UPI payment pending dikha raha hai, ₹33 debit ho gaye bahut pareshan hoon",AUTO_REFUND_INSTANT
+Merchant,Marathi,Festival_Promo_Broadcast,48012,0.13,0,UP,माझ्या नेहमीच्या ग्राहकांना दिवाळी ऑफर पाठवा,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Bengali,Festival_Promo_Broadcast,5796,0.17,0,DEGRADED,আমার নিয়মিত খদ্দেরদের দিওয়ালি অফার পাঠিয়ে দিন,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Hindi,EMI_Bounce_Fear,11076,0.6,2,UP,"₹11,076 की किस्त भरने में डर लग रहा है",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Hinglish,Festival_Promo_Broadcast,11810,0.11,2,UP,festival offer sab customers ko WhatsApp kar do,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Marathi,Festival_Promo_Broadcast,45583,0.34,2,UP,माझ्या नेहमीच्या ग्राहकांना दिवाळी ऑफर पाठवा,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Tamil,UPI_Pending,5061,0.4,1,UP,"₹5,061 அனுப்பினேன், பணம் போயிடுச்சு ஆனா கடைக்காரருக்கு வரல",FREEZE_AND_HUMAN_HANDOFF
+Customer,Tamil,EMI_Bounce_Fear,13762,0.63,0,DEGRADED,"என் EMI கட்ட பயமா இருக்கு, late fee வருமா?",RELEASE_INSTANT_SETTLEMENT
+Merchant,Tamil,Settlement_Hold,48106,0.45,1,UP,"காலையிலிருந்து ₹48,106 settlement hold ஆகியிருக்கு",RELEASE_INSTANT_SETTLEMENT
+Customer,Tamil,Fraud_Unauthorized_Txn,29655,0.85,0,UP,"நான் இந்த ₹29,655 பேமெண்ட் பண்ணல, யாரோ பணம் எடுத்துட்டாங்க சீக்கிரம்!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hinglish,UPI_Pending,6610,0.53,0,UP,"Maine ₹6,610 bheje, paisa kat gaya par dukaan wale ko nahi mila",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Bengali,Festival_Promo_Broadcast,3101,0.0,3,DEGRADED,আমার নিয়মিত খদ্দেরদের দিওয়ালি অফার পাঠিয়ে দিন,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Tamil,EMI_Bounce_Fear,6636,0.64,2,UP,"என் EMI கட்ட பயமா இருக்கு, late fee வருமா?",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,English,Soundbox_Sync_Issue,17735,0.23,0,UP,"Soundbox is silent, no payment announcements",REMOTE_IOT_RESTART
+Merchant,Hinglish,Festival_Promo_Broadcast,12157,0.39,1,DEGRADED,purane grahakon ko discount message bhejo,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Telugu,EMI_Bounce_Fear,9296,0.8,1,UP,"₹9,296 EMI కట్టాలి, భయంగా ఉంది త్వరగా!!",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,English,UPI_Pending,29592,0.49,0,UP,"I sent ₹29,592, money got debited but the shop didn't receive it",FREEZE_AND_HUMAN_HANDOFF
+Customer,Bengali,EMI_Bounce_Fear,39186,0.7,2,UP,"আমার EMI বাউন্স হবে না তো, লেট ফি লাগবে?",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Telugu,UPI_Pending,43496,0.5,3,DEGRADED,"UPI పేమెంట్ pending లో ఉంది, ₹43,496 కట్ అయింది",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hindi,EMI_Bounce_Fear,8557,0.65,1,UP,"₹8,557 की किस्त भरने में डर लग रहा है",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Hinglish,UPI_Pending,9292,0.46,4,DEGRADED,"UPI payment pending dikha raha hai, ₹9,292 debit ho gaye",FREEZE_AND_HUMAN_HANDOFF
+Customer,Telugu,UPI_Pending,668,0.46,1,UP,"UPI పేమెంట్ pending లో ఉంది, ₹668 కట్ అయింది",AUTO_REFUND_INSTANT
+Merchant,Hindi,Settlement_Hold,14183,0.27,0,DEGRADED,कल का सेटलमेंट नहीं आया,RELEASE_INSTANT_SETTLEMENT
+Merchant,English,Settlement_Hold,16635,0.4,1,DEGRADED,Yesterday's settlement didn't arrive,RELEASE_INSTANT_SETTLEMENT
+Customer,Bengali,UPI_Pending,7764,0.58,3,UP,"UPI পেমেন্ট আটকে আছে, ₹7,764 কেটেছে",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hinglish,UPI_Pending,839,0.35,3,UP,paise kat gaye lekin merchant ko credit nahi hua,AUTO_REFUND_INSTANT
+Customer,Hindi,EMI_Bounce_Fear,1749,0.68,0,UP,"मेरी ईएमआई बाउंस हो जाएगी, लेट फीस लगेगी क्या?",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,English,EMI_Bounce_Fear,1485,0.62,2,UP,"Scared I'll miss my ₹1,485 loan installment",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Hindi,Settlement_Hold,24922,0.41,3,UP,"सुबह से ₹24,922 का सेटलमेंट होल्ड पर है",RELEASE_INSTANT_SETTLEMENT
+Merchant,Hinglish,Settlement_Hold,400,0.22,2,UP,"payout ruka hua hai, ₹400 abhi tak nahi aaye",RELEASE_INSTANT_SETTLEMENT
+Customer,Hindi,EMI_Bounce_Fear,260,0.61,4,DEGRADED,"मेरी ईएमआई बाउंस हो जाएगी, लेट फीस लगेगी क्या?",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Telugu,UPI_Pending,1450,0.37,1,DOWN,"UPI పేమెంట్ pending లో ఉంది, ₹1,450 కట్ అయింది",AUTO_REFUND_INSTANT
+Merchant,Tamil,Soundbox_Sync_Issue,1126,0.24,2,DOWN,சவுண்ட்பாக்ஸ் பேசல,REMOTE_IOT_RESTART
+Customer,Hinglish,EMI_Bounce_Fear,8882,0.58,2,UP,"₹8,882 ki kisht bharni hai, darr lag raha hai penalty ka",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Tamil,EMI_Bounce_Fear,13288,0.67,0,DEGRADED,"என் EMI கட்ட பயமா இருக்கு, late fee வருமா?",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Bengali,Festival_Promo_Broadcast,5918,0.33,0,UP,আমার নিয়মিত খদ্দেরদের দিওয়ালি অফার পাঠিয়ে দিন,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Marathi,Settlement_Hold,11908,0.34,0,UP,"सकाळपासून ₹11,908 चे सेटलमेंट होल्डवर आहे",RELEASE_INSTANT_SETTLEMENT
+Merchant,Hindi,Settlement_Hold,17262,0.57,2,UP,कल का सेटलमेंट नहीं आया,RELEASE_INSTANT_SETTLEMENT
+Merchant,Bengali,Soundbox_Sync_Issue,790,0.39,0,UP,সাউন্ডবক্স আওয়াজ করছে না,REMOTE_IOT_RESTART
+Merchant,Hinglish,Settlement_Hold,19357,0.41,0,DEGRADED,"Subah se ₹19,357 ka settlement hold pe hai",RELEASE_INSTANT_SETTLEMENT
+Merchant,Bengali,Settlement_Hold,7186,0.14,0,UP,"সকাল থেকে ₹7,186 সেটেলমেন্ট আটকে আছে",RELEASE_INSTANT_SETTLEMENT
+Customer,Tamil,Fraud_Unauthorized_Txn,15955,0.94,0,DOWN,"நான் இந்த ₹15,955 பேமெண்ட் பண்ணல, யாரோ பணம் எடுத்துட்டாங்க சீக்கிரம்!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Tamil,EMI_Bounce_Fear,13693,0.44,0,DEGRADED,"என் EMI கட்ட பயமா இருக்கு, late fee வருமா?",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Hinglish,Fraud_Unauthorized_Txn,5399,0.7,0,DEGRADED,"kisi ne mere account se ₹5,399 nikaal liye",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Marathi,Festival_Promo_Broadcast,1549,0.2,0,DEGRADED,माझ्या नेहमीच्या ग्राहकांना दिवाळी ऑफर पाठवा,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Bengali,Fraud_Unauthorized_Txn,15916,0.9,2,UP,"আমি এই ₹15,916 পেমেন্ট করিনি, কেউ টাকা তুলে নিয়েছে তাড়াতাড়ি!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Marathi,Fraud_Unauthorized_Txn,7808,1.0,0,UP,"मी हे ₹7,808 पेमेंट केले नाही, कोणीतरी पैसे काढले लवकर!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Tamil,EMI_Bounce_Fear,2465,0.44,1,UP,"₹2,465 EMI bounce ஆயிடுமா?",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Telugu,Settlement_Hold,446,0.39,0,DOWN,పొద్దున్నుంచి ₹446 settlement hold లో ఉంది,FREEZE_AND_HUMAN_HANDOFF
+Customer,Hinglish,EMI_Bounce_Fear,8745,0.54,4,UP,"Meri EMI bounce ho jayegi kya, late fee lagegi?",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Marathi,Settlement_Hold,10939,0.31,1,UP,"सकाळपासून ₹10,939 चे सेटलमेंट होल्डवर आहे",RELEASE_INSTANT_SETTLEMENT
+Customer,Hinglish,EMI_Bounce_Fear,4798,0.68,0,UP,"₹4,798 ki kisht bharni hai, darr lag raha hai penalty ka",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Hindi,Festival_Promo_Broadcast,2702,0.24,0,UP,मेरे रेगुलर ग्राहकों को दिवाली ऑफर भेज दो,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Tamil,EMI_Bounce_Fear,25299,0.69,1,UP,"என் EMI கட்ட பயமா இருக்கு, late fee வருமா?",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Bengali,Soundbox_Sync_Issue,42646,0.24,0,DEGRADED,সাউন্ডবক্স আওয়াজ করছে না,REMOTE_IOT_RESTART
+Customer,English,UPI_Pending,13099,0.58,0,DEGRADED,"UPI payment stuck in pending, ₹13,099 deducted",FREEZE_AND_HUMAN_HANDOFF
+Customer,Bengali,UPI_Pending,1102,0.32,0,UP,"UPI পেমেন্ট আটকে আছে, ₹1,102 কেটেছে",AUTO_REFUND_INSTANT
+Merchant,English,Settlement_Hold,34352,0.43,0,DEGRADED,Yesterday's settlement didn't arrive,RELEASE_INSTANT_SETTLEMENT
+Customer,Marathi,EMI_Bounce_Fear,8809,0.48,5,DOWN,"माझा EMI बाउन्स होईल का, लेट फी लागेल का?",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Hindi,Fraud_Unauthorized_Txn,25688,0.71,0,UP,"मेरे खाते से बिना बताए ₹25,688 कट गए बहुत परेशान हूँ",FREEZE_AND_HUMAN_HANDOFF
+Customer,English,Fraud_Unauthorized_Txn,38779,1.0,2,UP,"Unauthorized transaction of ₹38,779 on my account please help!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Marathi,UPI_Pending,8871,0.46,0,UP,"UPI पेमेंट अडकले आहे, ₹8,871 कापले गेले",FREEZE_AND_HUMAN_HANDOFF
+Merchant,English,Settlement_Hold,1667,0.11,1,UP,Yesterday's settlement didn't arrive,RELEASE_INSTANT_SETTLEMENT
+Customer,Bengali,Fraud_Unauthorized_Txn,28229,0.94,0,UP,"আমি এই ₹28,229 পেমেন্ট করিনি, কেউ টাকা তুলে নিয়েছে তাড়াতাড়ি!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Marathi,EMI_Bounce_Fear,38034,0.53,3,UP,"₹38,034 चा हप्ता भरायची भीती वाटते",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Tamil,Settlement_Hold,973,0.39,0,DOWN,காலையிலிருந்து ₹973 settlement hold ஆகியிருக்கு,FREEZE_AND_HUMAN_HANDOFF
+Customer,Hindi,UPI_Pending,37111,0.34,0,UP,"₹37,111 का यूपीआई पेमेंट अटका हुआ है, पैसे कटे",FREEZE_AND_HUMAN_HANDOFF
+Customer,Marathi,UPI_Pending,12395,0.48,2,UP,"UPI पेमेंट अडकले आहे, ₹12,395 कापले गेले",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hindi,UPI_Pending,44337,0.41,0,UP,"मैंने ₹44,337 भेजे, पैसा कट गया पर दुकानदार को नहीं मिला",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hinglish,Fraud_Unauthorized_Txn,23128,0.83,0,UP,"kisi ne mere account se ₹23,128 nikaal liye bahut pareshan hoon",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hinglish,Festival_Promo_Broadcast,3185,0.22,1,UP,festival offer sab customers ko WhatsApp kar do,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Bengali,Festival_Promo_Broadcast,9213,0.47,1,UP,আমার নিয়মিত খদ্দেরদের দিওয়ালি অফার পাঠিয়ে দিন,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Tamil,UPI_Pending,32255,0.62,0,UP,"UPI பேமெண்ட் pending ஆகுது, ₹32,255 கழிஞ்சுருச்சு",FREEZE_AND_HUMAN_HANDOFF
+Customer,Bengali,UPI_Pending,26981,0.73,0,UP,"UPI পেমেন্ট আটকে আছে, ₹26,981 কেটেছে তাড়াতাড়ি!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Telugu,EMI_Bounce_Fear,1727,1.0,0,UP,"₹1,727 EMI కట్టాలి, భయంగా ఉంది త్వరగా!!",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Tamil,EMI_Bounce_Fear,10918,0.48,0,DOWN,"என் EMI கட்ட பயமா இருக்கு, late fee வருமா?",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Bengali,EMI_Bounce_Fear,36444,0.36,5,UP,"₹36,444 কিস্তি দিতে ভয় লাগছে",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Marathi,Festival_Promo_Broadcast,42971,0.07,0,UP,माझ्या नेहमीच्या ग्राहकांना दिवाळी ऑफर पाठवा,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Bengali,EMI_Bounce_Fear,214,0.59,0,UP,₹214 কিস্তি দিতে ভয় লাগছে,SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Bengali,Fraud_Unauthorized_Txn,35052,0.96,1,UP,"আমি এই ₹35,052 পেমেন্ট করিনি, কেউ টাকা তুলে নিয়েছে তাড়াতাড়ি!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hindi,EMI_Bounce_Fear,150,0.59,4,UP,₹150 की किस्त भरने में डर लग रहा है,SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Telugu,UPI_Pending,22920,0.53,2,UP,"UPI పేమెంట్ pending లో ఉంది, ₹22,920 కట్ అయింది",FREEZE_AND_HUMAN_HANDOFF
+Customer,Tamil,EMI_Bounce_Fear,79,0.66,0,DEGRADED,₹79 EMI bounce ஆயிடுமா?,SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Marathi,Soundbox_Sync_Issue,6088,0.08,2,UP,साउंडबॉक्स बोलत नाही,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Bengali,Fraud_Unauthorized_Txn,18367,0.7,0,UP,"আমি এই ₹18,367 পেমেন্ট করিনি, কেউ টাকা তুলে নিয়েছে",FREEZE_AND_HUMAN_HANDOFF
+Customer,English,EMI_Bounce_Fear,18798,0.87,1,UP,"Scared I'll miss my ₹18,798 loan installment urgent",FREEZE_AND_HUMAN_HANDOFF
+Customer,Tamil,Fraud_Unauthorized_Txn,15100,0.74,1,DOWN,"நான் இந்த ₹15,100 பேமெண்ட் பண்ணல, யாரோ பணம் எடுத்துட்டாங்க சீக்கிரம்!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Telugu,Settlement_Hold,12872,0.48,0,UP,"పొద్దున్నుంచి ₹12,872 settlement hold లో ఉంది",RELEASE_INSTANT_SETTLEMENT
+Merchant,Tamil,Festival_Promo_Broadcast,12571,0.34,2,UP,என் வழக்கமான வாடிக்கையாளர்களுக்கு தீபாவளி ஆஃபர் அனுப்புங்க,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,English,Soundbox_Sync_Issue,1464,0.37,0,UP,"Soundbox is silent, no payment announcements",REMOTE_IOT_RESTART
+Merchant,Hindi,Settlement_Hold,1216,0.47,4,DEGRADED,कल का सेटलमेंट नहीं आया,RELEASE_INSTANT_SETTLEMENT
+Merchant,Hinglish,Festival_Promo_Broadcast,12586,0.36,0,UP,purane grahakon ko discount message bhejo,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Telugu,UPI_Pending,500,0.65,3,DEGRADED,"₹500 పంపాను, డబ్బు కట్ అయింది కానీ షాప్ వాళ్ళకి రాలేదు",AUTO_REFUND_INSTANT
+Merchant,Telugu,Settlement_Hold,713,0.31,1,UP,పొద్దున్నుంచి ₹713 settlement hold లో ఉంది,RELEASE_INSTANT_SETTLEMENT
+Merchant,English,Soundbox_Sync_Issue,48462,0.25,0,DEGRADED,"Soundbox is silent, no payment announcements",REMOTE_IOT_RESTART
+Customer,English,EMI_Bounce_Fear,12929,0.57,1,DEGRADED,Will my EMI bounce? I'm worried about the late fee,AUTO_REFUND_INSTANT
+Customer,Marathi,EMI_Bounce_Fear,14661,0.52,0,UP,"₹14,661 चा हप्ता भरायची भीती वाटते",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Bengali,Fraud_Unauthorized_Txn,8925,0.97,4,DEGRADED,"আমি এই ₹8,925 পেমেন্ট করিনি, কেউ টাকা তুলে নিয়েছে তাড়াতাড়ি!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hinglish,EMI_Bounce_Fear,534,0.91,10,DEGRADED,"loan EMI miss ho gayi, ab kya hoga jaldi karo!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,English,Soundbox_Sync_Issue,49104,0.5,0,UP,"Soundbox is silent, no payment announcements",REMOTE_IOT_RESTART
+Merchant,Tamil,Soundbox_Sync_Issue,4680,0.48,4,DEGRADED,சவுண்ட்பாக்ஸ் பேசல,REMOTE_IOT_RESTART
+Customer,English,UPI_Pending,46618,0.36,1,UP,"I sent ₹46,618, money got debited but the shop didn't receive it",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Marathi,Soundbox_Sync_Issue,33105,0.43,0,UP,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Merchant,Bengali,Settlement_Hold,46155,0.6,0,UP,"সকাল থেকে ₹46,155 সেটেলমেন্ট আটকে আছে",RELEASE_INSTANT_SETTLEMENT
+Merchant,English,Settlement_Hold,21455,0.51,0,UP,Yesterday's settlement didn't arrive,RELEASE_INSTANT_SETTLEMENT
+Merchant,Marathi,Soundbox_Sync_Issue,42843,0.16,2,DEGRADED,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Customer,Tamil,Fraud_Unauthorized_Txn,29730,0.69,0,UP,"நான் இந்த ₹29,730 பேமெண்ட் பண்ணல, யாரோ பணம் எடுத்துட்டாங்க",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Bengali,Soundbox_Sync_Issue,40883,0.2,2,UP,সাউন্ডবক্স আওয়াজ করছে না,REMOTE_IOT_RESTART
+Merchant,Marathi,Settlement_Hold,2736,0.39,1,DOWN,"सकाळपासून ₹2,736 चे सेटलमेंट होल्डवर आहे",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Tamil,Soundbox_Sync_Issue,39605,0.31,0,UP,சவுண்ட்பாக்ஸ் பேசல,REMOTE_IOT_RESTART
+Customer,Bengali,UPI_Pending,22962,0.49,3,DOWN,"₹22,962 পাঠিয়েছি, টাকা কেটে গেছে কিন্তু দোকানদার পায়নি",FREEZE_AND_HUMAN_HANDOFF
+Customer,English,EMI_Bounce_Fear,40783,0.69,0,UP,Will my EMI bounce? I'm worried about the late fee,SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Tamil,EMI_Bounce_Fear,40286,0.22,0,UP,"₹40,286 EMI bounce ஆயிடுமா?",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Telugu,Settlement_Hold,5691,0.43,1,UP,"పొద్దున్నుంచి ₹5,691 settlement hold లో ఉంది",RELEASE_INSTANT_SETTLEMENT
+Customer,Hinglish,UPI_Pending,11859,0.55,1,UP,paise kat gaye lekin merchant ko credit nahi hua,FREEZE_AND_HUMAN_HANDOFF
+Customer,Bengali,EMI_Bounce_Fear,24085,0.71,6,DOWN,"₹24,085 কিস্তি দিতে ভয় লাগছে তাড়াতাড়ি!!",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Bengali,Soundbox_Sync_Issue,39008,0.1,0,UP,সাউন্ডবক্স আওয়াজ করছে না,REMOTE_IOT_RESTART
+Merchant,Bengali,Festival_Promo_Broadcast,49368,0.35,2,UP,আমার নিয়মিত খদ্দেরদের দিওয়ালি অফার পাঠিয়ে দিন,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Telugu,Fraud_Unauthorized_Txn,47965,0.64,0,UP,"నేను ఈ ₹47,965 పేమెంట్ చేయలేదు, ఎవరో డబ్బు తీసుకున్నారు",FREEZE_AND_HUMAN_HANDOFF
+Customer,English,UPI_Pending,2659,0.45,1,UP,"I sent ₹2,659, money got debited but the shop didn't receive it",AUTO_REFUND_INSTANT
+Merchant,Bengali,Soundbox_Sync_Issue,7250,0.23,0,DEGRADED,সাউন্ডবক্স আওয়াজ করছে না,REMOTE_IOT_RESTART
+Merchant,Hindi,Festival_Promo_Broadcast,3434,0.41,1,UP,मेरे रेगुलर ग्राहकों को दिवाली ऑफर भेज दो,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Telugu,UPI_Pending,9600,0.56,0,DOWN,"UPI పేమెంట్ pending లో ఉంది, ₹9,600 కట్ అయింది",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Marathi,Settlement_Hold,25261,0.16,4,DEGRADED,"सकाळपासून ₹25,261 चे सेटलमेंट होल्डवर आहे",RELEASE_INSTANT_SETTLEMENT
+Customer,Marathi,EMI_Bounce_Fear,2511,0.6,1,DEGRADED,"माझा EMI बाउन्स होईल का, लेट फी लागेल का?",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Tamil,Festival_Promo_Broadcast,698,0.24,0,UP,என் வழக்கமான வாடிக்கையாளர்களுக்கு தீபாவளி ஆஃபர் அனுப்புங்க,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Telugu,Soundbox_Sync_Issue,1622,0.31,1,UP,సౌండ్‌బాక్స్ మాట్లాడట్లేదు,REMOTE_IOT_RESTART
+Merchant,Hinglish,Festival_Promo_Broadcast,44558,0.56,3,DEGRADED,festival offer sab customers ko WhatsApp kar do,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Hindi,Fraud_Unauthorized_Txn,42354,0.48,1,UP,"मेरे खाते से बिना बताए ₹42,354 कट गए",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hinglish,UPI_Pending,32793,0.76,0,DEGRADED,"UPI payment pending dikha raha hai, ₹32,793 debit ho gaye please help",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hindi,Settlement_Hold,1850,0.21,1,UP,"सुबह से ₹1,850 का सेटलमेंट होल्ड पर है",RELEASE_INSTANT_SETTLEMENT
+Customer,Hindi,Fraud_Unauthorized_Txn,34390,0.93,0,UP,"मैंने ये ₹34,390 का पेमेंट नहीं किया, किसी ने पैसे निकाल लिए बहुत परेशान हूँ",FREEZE_AND_HUMAN_HANDOFF
+Customer,Telugu,Fraud_Unauthorized_Txn,21122,0.86,3,UP,"నేను ఈ ₹21,122 పేమెంట్ చేయలేదు, ఎవరో డబ్బు తీసుకున్నారు త్వరగా!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hindi,Soundbox_Sync_Issue,11757,0.52,5,UP,पेमेंट की आवाज़ नहीं आ रही,REMOTE_IOT_RESTART
+Customer,Bengali,UPI_Pending,1544,0.4,0,DEGRADED,"₹1,544 পাঠিয়েছি, টাকা কেটে গেছে কিন্তু দোকানদার পায়নি",AUTO_REFUND_INSTANT
+Customer,Tamil,UPI_Pending,23160,0.65,3,UP,"UPI பேமெண்ட் pending ஆகுது, ₹23,160 கழிஞ்சுருச்சு",FREEZE_AND_HUMAN_HANDOFF
+Customer,Telugu,UPI_Pending,41536,0.34,1,UP,"₹41,536 పంపాను, డబ్బు కట్ అయింది కానీ షాప్ వాళ్ళకి రాలేదు",FREEZE_AND_HUMAN_HANDOFF
+Merchant,English,Soundbox_Sync_Issue,888,0.22,2,UP,"Soundbox is silent, no payment announcements",REMOTE_IOT_RESTART
+Merchant,Hindi,Festival_Promo_Broadcast,187,0.38,1,UP,मेरे रेगुलर ग्राहकों को दिवाली ऑफर भेज दो,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Hinglish,Fraud_Unauthorized_Txn,10103,0.96,0,UP,"unknown transaction aaya hai, mera paisa chori ho gaya jaldi karo!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Marathi,EMI_Bounce_Fear,8082,0.41,0,UP,"₹8,082 चा हप्ता भरायची भीती वाटते",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,English,Soundbox_Sync_Issue,27,0.26,3,UP,"Soundbox is silent, no payment announcements",REMOTE_IOT_RESTART
+Customer,Hindi,EMI_Bounce_Fear,762,0.59,0,DEGRADED,"मेरी ईएमआई बाउंस हो जाएगी, लेट फीस लगेगी क्या?",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,English,Fraud_Unauthorized_Txn,20768,1.0,3,UP,"Unauthorized transaction of ₹20,768 on my account I'm panicking",FREEZE_AND_HUMAN_HANDOFF
+Customer,Tamil,UPI_Pending,45080,0.54,3,UP,"UPI பேமெண்ட் pending ஆகுது, ₹45,080 கழிஞ்சுருச்சு",FREEZE_AND_HUMAN_HANDOFF
+Customer,English,UPI_Pending,1617,0.69,0,UP,"I sent ₹1,617, money got debited but the shop didn't receive it",AUTO_REFUND_INSTANT
+Merchant,Marathi,Settlement_Hold,4640,0.31,0,UP,"सकाळपासून ₹4,640 चे सेटलमेंट होल्डवर आहे",RELEASE_INSTANT_SETTLEMENT
+Merchant,Bengali,Soundbox_Sync_Issue,989,0.3,0,UP,সাউন্ডবক্স আওয়াজ করছে না,REMOTE_IOT_RESTART
+Customer,Tamil,EMI_Bounce_Fear,962,0.55,0,UP,₹962 EMI bounce ஆயிடுமா?,SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Marathi,Fraud_Unauthorized_Txn,6272,1.0,0,UP,"मी हे ₹6,272 पेमेंट केले नाही, कोणीतरी पैसे काढले लवकर!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hindi,Soundbox_Sync_Issue,1952,0.18,0,UP,पेमेंट की आवाज़ नहीं आ रही,REMOTE_IOT_RESTART
+Merchant,Marathi,Festival_Promo_Broadcast,20755,0.06,1,DEGRADED,माझ्या नेहमीच्या ग्राहकांना दिवाळी ऑफर पाठवा,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Bengali,Settlement_Hold,1351,0.45,4,UP,"সকাল থেকে ₹1,351 সেটেলমেন্ট আটকে আছে",RELEASE_INSTANT_SETTLEMENT
+Merchant,English,Soundbox_Sync_Issue,22296,0.36,1,DEGRADED,"Soundbox is silent, no payment announcements",REMOTE_IOT_RESTART
+Merchant,Bengali,Soundbox_Sync_Issue,1049,0.48,1,UP,সাউন্ডবক্স আওয়াজ করছে না,REMOTE_IOT_RESTART
+Merchant,Hinglish,Soundbox_Sync_Issue,18965,0.3,3,DEGRADED,payment ki awaaz nahi aa rahi soundbox se,REMOTE_IOT_RESTART
+Merchant,Hindi,Soundbox_Sync_Issue,1538,0.36,1,DOWN,साउंडबॉक्स बोल नहीं रहा,REMOTE_IOT_RESTART
+Merchant,Hinglish,Settlement_Hold,1732,0.27,0,UP,Kal ka settlement nahi aaya,RELEASE_INSTANT_SETTLEMENT
+Merchant,English,Festival_Promo_Broadcast,3977,0.35,0,DEGRADED,Send a Diwali offer to my regular customers,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Telugu,UPI_Pending,29540,0.7,7,DEGRADED,"UPI పేమెంట్ pending లో ఉంది, ₹29,540 కట్ అయింది",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Marathi,Fraud_Unauthorized_Txn,1681,0.53,0,DEGRADED,"मी हे ₹1,681 पेमेंट केले नाही, कोणीतरी पैसे काढले",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Telugu,Festival_Promo_Broadcast,811,0.06,0,UP,నా రెగ్యులర్ కస్టమర్లకి దీపావళి ఆఫర్ పంపండి,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Marathi,Soundbox_Sync_Issue,21868,0.61,3,DEGRADED,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Merchant,Hindi,Festival_Promo_Broadcast,761,0.42,2,DEGRADED,त्योहार का ऑफर सब ग्राहकों को भेजना है,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Marathi,EMI_Bounce_Fear,706,0.65,0,UP,"माझा EMI बाउन्स होईल का, लेट फी लागेल का?",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Tamil,Festival_Promo_Broadcast,1140,0.0,4,UP,என் வழக்கமான வாடிக்கையாளர்களுக்கு தீபாவளி ஆஃபர் அனுப்புங்க,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Telugu,Settlement_Hold,16823,0.4,3,UP,"పొద్దున్నుంచి ₹16,823 settlement hold లో ఉంది",RELEASE_INSTANT_SETTLEMENT
+Customer,Hinglish,EMI_Bounce_Fear,1541,0.65,7,UP,"loan EMI miss ho gayi, ab kya hoga",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Telugu,Soundbox_Sync_Issue,24167,0.46,0,UP,సౌండ్‌బాక్స్ మాట్లాడట్లేదు,REMOTE_IOT_RESTART
+Customer,Tamil,UPI_Pending,1156,0.46,2,DEGRADED,"UPI பேமெண்ட் pending ஆகுது, ₹1,156 கழிஞ்சுருச்சு",AUTO_REFUND_INSTANT
+Customer,Telugu,UPI_Pending,1852,0.48,3,UP,"₹1,852 పంపాను, డబ్బు కట్ అయింది కానీ షాప్ వాళ్ళకి రాలేదు",AUTO_REFUND_INSTANT
+Customer,Marathi,Fraud_Unauthorized_Txn,33171,0.85,0,UP,"मी हे ₹33,171 पेमेंट केले नाही, कोणीतरी पैसे काढले लवकर!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Bengali,EMI_Bounce_Fear,1616,0.72,5,UP,"₹1,616 কিস্তি দিতে ভয় লাগছে তাড়াতাড়ি!!",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Hindi,Festival_Promo_Broadcast,14282,0.0,0,UP,त्योहार का ऑफर सब ग्राहकों को भेजना है,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,English,UPI_Pending,1782,0.37,1,DEGRADED,"I sent ₹1,782, money got debited but the shop didn't receive it",AUTO_REFUND_INSTANT
+Merchant,Marathi,Settlement_Hold,38083,0.21,1,UP,"सकाळपासून ₹38,083 चे सेटलमेंट होल्डवर आहे",RELEASE_INSTANT_SETTLEMENT
+Merchant,Tamil,Settlement_Hold,29529,0.22,0,UP,"காலையிலிருந்து ₹29,529 settlement hold ஆகியிருக்கு",RELEASE_INSTANT_SETTLEMENT
+Merchant,English,Soundbox_Sync_Issue,33459,0.17,1,UP,"Soundbox is silent, no payment announcements",REMOTE_IOT_RESTART
+Customer,Hindi,Fraud_Unauthorized_Txn,19955,1.0,0,DEGRADED,"मेरे खाते से बिना बताए ₹19,955 कट गए जल्दी करो!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hinglish,UPI_Pending,969,0.54,2,UP,"UPI payment pending dikha raha hai, ₹969 debit ho gaye",TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Hindi,Soundbox_Sync_Issue,134,0.2,2,UP,पेमेंट की आवाज़ नहीं आ रही,REMOTE_IOT_RESTART
+Merchant,Hindi,Festival_Promo_Broadcast,1468,0.4,0,UP,त्योहार का ऑफर सब ग्राहकों को भेजना है,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Bengali,Festival_Promo_Broadcast,22679,0.06,0,UP,আমার নিয়মিত খদ্দেরদের দিওয়ালি অফার পাঠিয়ে দিন,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,English,Festival_Promo_Broadcast,6160,0.43,1,UP,Broadcast a festive discount to repeat buyers,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,English,Fraud_Unauthorized_Txn,30800,0.91,0,UP,"Unauthorized transaction of ₹30,800 on my account I'm panicking",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Telugu,Settlement_Hold,1960,0.37,1,UP,"పొద్దున్నుంచి ₹1,960 settlement hold లో ఉంది",RELEASE_INSTANT_SETTLEMENT
+Customer,Telugu,UPI_Pending,8946,0.6,0,DOWN,"₹8,946 పంపాను, డబ్బు కట్ అయింది కానీ షాప్ వాళ్ళకి రాలేదు",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hinglish,Festival_Promo_Broadcast,1290,0.19,0,DEGRADED,Mere regular customers ko Diwali offer bhej do,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,English,Fraud_Unauthorized_Txn,22327,0.89,1,UP,"I didn't make this ₹22,327 payment, someone stole my money please help!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Tamil,UPI_Pending,41197,0.35,2,UP,"₹41,197 அனுப்பினேன், பணம் போயிடுச்சு ஆனா கடைக்காரருக்கு வரல",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Tamil,Festival_Promo_Broadcast,12139,0.27,5,UP,என் வழக்கமான வாடிக்கையாளர்களுக்கு தீபாவளி ஆஃபர் அனுப்புங்க,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Tamil,Festival_Promo_Broadcast,28415,0.36,0,UP,என் வழக்கமான வாடிக்கையாளர்களுக்கு தீபாவளி ஆஃபர் அனுப்புங்க,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Tamil,Fraud_Unauthorized_Txn,12690,0.7,0,UP,"நான் இந்த ₹12,690 பேமெண்ட் பண்ணல, யாரோ பணம் எடுத்துட்டாங்க",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hindi,Soundbox_Sync_Issue,1308,0.29,0,DOWN,पेमेंट की आवाज़ नहीं आ रही,REMOTE_IOT_RESTART
+Customer,Telugu,EMI_Bounce_Fear,11149,0.68,1,UP,"నా EMI bounce అవుతుందా, late fee పడుతుందా?",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Telugu,UPI_Pending,12545,0.48,0,DEGRADED,"₹12,545 పంపాను, డబ్బు కట్ అయింది కానీ షాప్ వాళ్ళకి రాలేదు",FREEZE_AND_HUMAN_HANDOFF
+Merchant,English,Settlement_Hold,1097,0.47,2,UP,Yesterday's settlement didn't arrive,RELEASE_INSTANT_SETTLEMENT
+Merchant,Marathi,Soundbox_Sync_Issue,2596,0.17,1,UP,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Merchant,English,Settlement_Hold,1950,0.3,0,UP,Yesterday's settlement didn't arrive,RELEASE_INSTANT_SETTLEMENT
+Merchant,Tamil,Festival_Promo_Broadcast,3948,0.42,1,DOWN,என் வழக்கமான வாடிக்கையாளர்களுக்கு தீபாவளி ஆஃபர் அனுப்புங்க,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Hindi,UPI_Pending,11440,0.52,1,UP,"मैंने ₹11,440 भेजे, पैसा कट गया पर दुकानदार को नहीं मिला",FREEZE_AND_HUMAN_HANDOFF
+Customer,Bengali,EMI_Bounce_Fear,18674,0.81,0,DEGRADED,"₹18,674 কিস্তি দিতে ভয় লাগছে তাড়াতাড়ি!!",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Telugu,Festival_Promo_Broadcast,939,0.32,0,UP,నా రెగ్యులర్ కస్టమర్లకి దీపావళి ఆఫర్ పంపండి,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Bengali,EMI_Bounce_Fear,12696,0.67,1,UP,"আমার EMI বাউন্স হবে না তো, লেট ফি লাগবে?",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Marathi,Fraud_Unauthorized_Txn,26679,0.63,0,DOWN,"मी हे ₹26,679 पेमेंट केले नाही, कोणीतरी पैसे काढले",FREEZE_AND_HUMAN_HANDOFF
+Customer,Marathi,EMI_Bounce_Fear,1467,0.38,1,UP,"माझा EMI बाउन्स होईल का, लेट फी लागेल का?",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Hindi,Settlement_Hold,496,0.14,0,UP,कल का सेटलमेंट नहीं आया,RELEASE_INSTANT_SETTLEMENT
+Customer,Hinglish,UPI_Pending,6216,0.57,1,DEGRADED,paise kat gaye lekin merchant ko credit nahi hua,FREEZE_AND_HUMAN_HANDOFF
+Merchant,Bengali,Settlement_Hold,36034,0.38,0,UP,"সকাল থেকে ₹36,034 সেটেলমেন্ট আটকে আছে",RELEASE_INSTANT_SETTLEMENT
+Customer,Hinglish,Fraud_Unauthorized_Txn,46231,0.88,2,UP,"unknown transaction aaya hai, mera paisa chori ho gaya please help",FREEZE_AND_HUMAN_HANDOFF
+Customer,Tamil,EMI_Bounce_Fear,4621,0.62,0,UP,"₹4,621 EMI bounce ஆயிடுமா?",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,English,UPI_Pending,912,0.44,0,DEGRADED,"I sent ₹912, money got debited but the shop didn't receive it",AUTO_REFUND_INSTANT
+Merchant,Tamil,Settlement_Hold,42521,0.27,0,UP,"காலையிலிருந்து ₹42,521 settlement hold ஆகியிருக்கு",RELEASE_INSTANT_SETTLEMENT
+Customer,Marathi,EMI_Bounce_Fear,1996,0.55,1,UP,"₹1,996 चा हप्ता भरायची भीती वाटते",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,English,Settlement_Hold,390,0.29,0,UP,My ₹390 settlement has been on hold since morning,RELEASE_INSTANT_SETTLEMENT
+Customer,Hinglish,EMI_Bounce_Fear,7859,0.46,0,UP,"loan EMI miss ho gayi, ab kya hoga",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Bengali,Fraud_Unauthorized_Txn,24878,0.78,3,UP,"আমি এই ₹24,878 পেমেন্ট করিনি, কেউ টাকা তুলে নিয়েছে তাড়াতাড়ি!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,English,EMI_Bounce_Fear,13637,0.38,0,UP,"Scared I'll miss my ₹13,637 loan installment",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Hinglish,Festival_Promo_Broadcast,41426,0.45,3,UP,purane grahakon ko discount message bhejo,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Telugu,Settlement_Hold,11168,0.37,0,UP,"పొద్దున్నుంచి ₹11,168 settlement hold లో ఉంది",RELEASE_INSTANT_SETTLEMENT
+Customer,English,EMI_Bounce_Fear,540,0.71,2,DOWN,Will my EMI bounce? I'm worried about the late fee urgent,SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Hindi,Festival_Promo_Broadcast,1186,0.44,1,UP,त्योहार का ऑफर सब ग्राहकों को भेजना है,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Hindi,Festival_Promo_Broadcast,7481,0.09,1,UP,मेरे रेगुलर ग्राहकों को दिवाली ऑफर भेज दो,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Hinglish,UPI_Pending,8914,0.24,3,UP,paise kat gaye lekin merchant ko credit nahi hua,FREEZE_AND_HUMAN_HANDOFF
+Merchant,Bengali,Settlement_Hold,49844,0.3,1,DEGRADED,"সকাল থেকে ₹49,844 সেটেলমেন্ট আটকে আছে",RELEASE_INSTANT_SETTLEMENT
+Customer,Hindi,EMI_Bounce_Fear,7595,0.56,0,UP,"मेरी ईएमआई बाउंस हो जाएगी, लेट फीस लगेगी क्या?",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Tamil,Fraud_Unauthorized_Txn,20780,0.97,0,DEGRADED,"நான் இந்த ₹20,780 பேமெண்ட் பண்ணல, யாரோ பணம் எடுத்துட்டாங்க சீக்கிரம்!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Tamil,EMI_Bounce_Fear,2777,0.7,0,DEGRADED,"என் EMI கட்ட பயமா இருக்கு, late fee வருமா?",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,English,EMI_Bounce_Fear,1955,0.79,1,UP,Will my EMI bounce? I'm worried about the late fee urgent,SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Hinglish,EMI_Bounce_Fear,3295,0.33,0,UP,"loan EMI miss ho gayi, ab kya hoga",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Telugu,Soundbox_Sync_Issue,1064,0.37,0,UP,సౌండ్‌బాక్స్ మాట్లాడట్లేదు,REMOTE_IOT_RESTART
+Customer,Telugu,UPI_Pending,25832,0.68,0,DOWN,"₹25,832 పంపాను, డబ్బు కట్ అయింది కానీ షాప్ వాళ్ళకి రాలేదు",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hindi,Festival_Promo_Broadcast,37542,0.37,3,UP,मेरे रेगुलर ग्राहकों को दिवाली ऑफर भेज दो,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Tamil,EMI_Bounce_Fear,16682,0.86,0,UP,"என் EMI கட்ட பயமா இருக்கு, late fee வருமா? சீக்கிரம்!!",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Tamil,Settlement_Hold,1153,0.45,1,DEGRADED,"காலையிலிருந்து ₹1,153 settlement hold ஆகியிருக்கு",RELEASE_INSTANT_SETTLEMENT
+Customer,Hindi,UPI_Pending,1664,0.85,0,UP,"₹1,664 का यूपीआई पेमेंट अटका हुआ है, पैसे कटे जल्दी करो!!",AUTO_REFUND_INSTANT
+Merchant,Hinglish,Settlement_Hold,6133,0.34,0,DEGRADED,Kal ka settlement nahi aaya,RELEASE_INSTANT_SETTLEMENT
+Merchant,Hindi,Soundbox_Sync_Issue,41932,0.2,0,UP,पेमेंट की आवाज़ नहीं आ रही,REMOTE_IOT_RESTART
+Customer,Telugu,EMI_Bounce_Fear,844,0.36,3,UP,"₹844 EMI కట్టాలి, భయంగా ఉంది",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Hinglish,Fraud_Unauthorized_Txn,30998,0.99,1,DEGRADED,"Maine ye ₹30,998 ka payment nahi kiya, fraud hua hai jaldi karo!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Marathi,Settlement_Hold,2656,0.56,0,UP,"सकाळपासून ₹2,656 चे सेटलमेंट होल्डवर आहे",RELEASE_INSTANT_SETTLEMENT
+Merchant,Hindi,Soundbox_Sync_Issue,39132,0.47,3,UP,साउंडबॉक्स बोल नहीं रहा,REMOTE_IOT_RESTART
+Customer,Bengali,EMI_Bounce_Fear,9638,0.75,2,UP,"আমার EMI বাউন্স হবে না তো, লেট ফি লাগবে? তাড়াতাড়ি!!",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Hindi,Soundbox_Sync_Issue,11591,0.05,0,UP,पेमेंट की आवाज़ नहीं आ रही,REMOTE_IOT_RESTART
+Merchant,Hindi,Settlement_Hold,40501,0.43,1,DEGRADED,"सुबह से ₹40,501 का सेटलमेंट होल्ड पर है",RELEASE_INSTANT_SETTLEMENT
+Merchant,Hindi,Settlement_Hold,36126,0.12,1,UP,कल का सेटलमेंट नहीं आया,RELEASE_INSTANT_SETTLEMENT
+Merchant,Tamil,Settlement_Hold,8714,0.26,1,UP,"காலையிலிருந்து ₹8,714 settlement hold ஆகியிருக்கு",RELEASE_INSTANT_SETTLEMENT
+Customer,Hindi,Fraud_Unauthorized_Txn,30939,0.77,0,UP,"मैंने ये ₹30,939 का पेमेंट नहीं किया, किसी ने पैसे निकाल लिए बहुत परेशान हूँ",FREEZE_AND_HUMAN_HANDOFF
+Customer,English,Fraud_Unauthorized_Txn,27480,0.76,0,UP,"I didn't make this ₹27,480 payment, someone stole my money please help!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Marathi,Settlement_Hold,809,0.22,0,DOWN,सकाळपासून ₹809 चे सेटलमेंट होल्डवर आहे,FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hinglish,Festival_Promo_Broadcast,7956,0.33,0,DEGRADED,Mere regular customers ko Diwali offer bhej do,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,English,Settlement_Hold,6642,0.19,1,UP,Yesterday's settlement didn't arrive,RELEASE_INSTANT_SETTLEMENT
+Merchant,Marathi,Soundbox_Sync_Issue,828,0.07,0,UP,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Merchant,Tamil,Soundbox_Sync_Issue,32116,0.14,3,UP,சவுண்ட்பாக்ஸ் பேசல,REMOTE_IOT_RESTART
+Merchant,Hinglish,Festival_Promo_Broadcast,42451,0.28,0,UP,purane grahakon ko discount message bhejo,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Hindi,EMI_Bounce_Fear,795,0.9,0,UP,"मेरी ईएमआई बाउंस हो जाएगी, लेट फीस लगेगी क्या? बहुत परेशान हूँ",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Bengali,UPI_Pending,1428,0.58,6,UP,"₹1,428 পাঠিয়েছি, টাকা কেটে গেছে কিন্তু দোকানদার পায়নি",FREEZE_AND_HUMAN_HANDOFF
+Customer,Telugu,Fraud_Unauthorized_Txn,35200,1.0,0,DEGRADED,"నేను ఈ ₹35,200 పేమెంట్ చేయలేదు, ఎవరో డబ్బు తీసుకున్నారు త్వరగా!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Bengali,EMI_Bounce_Fear,10110,0.9,2,DOWN,"₹10,110 কিস্তি দিতে ভয় লাগছে তাড়াতাড়ি!!",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Marathi,UPI_Pending,8862,0.55,0,UP,"मी ₹8,862 पाठवले, पैसे कापले पण दुकानदाराला मिळाले नाहीत",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hinglish,Settlement_Hold,48259,0.18,0,UP,Kal ka settlement nahi aaya,RELEASE_INSTANT_SETTLEMENT
+Merchant,English,Settlement_Hold,44473,0.58,0,UP,"My ₹44,473 settlement has been on hold since morning",RELEASE_INSTANT_SETTLEMENT
+Merchant,English,Soundbox_Sync_Issue,22038,0.13,2,UP,"Soundbox is silent, no payment announcements",REMOTE_IOT_RESTART
+Merchant,Bengali,Soundbox_Sync_Issue,34247,0.38,1,UP,সাউন্ডবক্স আওয়াজ করছে না,REMOTE_IOT_RESTART
+Customer,Telugu,Fraud_Unauthorized_Txn,8897,0.77,2,UP,"నేను ఈ ₹8,897 పేమెంట్ చేయలేదు, ఎవరో డబ్బు తీసుకున్నారు త్వరగా!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Bengali,UPI_Pending,2643,0.41,5,UP,"₹2,643 পাঠিয়েছি, টাকা কেটে গেছে কিন্তু দোকানদার পায়নি",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hindi,Settlement_Hold,13484,0.55,0,DEGRADED,कल का सेटलमेंट नहीं आया,RELEASE_INSTANT_SETTLEMENT
+Customer,Telugu,UPI_Pending,1118,0.46,0,UP,"UPI పేమెంట్ pending లో ఉంది, ₹1,118 కట్ అయింది",AUTO_REFUND_INSTANT
+Customer,Hinglish,UPI_Pending,1300,0.58,0,DOWN,"Maine ₹1,300 bheje, paisa kat gaya par dukaan wale ko nahi mila",AUTO_REFUND_INSTANT
+Merchant,Tamil,Soundbox_Sync_Issue,153,0.32,0,UP,சவுண்ட்பாக்ஸ் பேசல,REMOTE_IOT_RESTART
+Merchant,English,Settlement_Hold,929,0.49,0,UP,Yesterday's settlement didn't arrive,RELEASE_INSTANT_SETTLEMENT
+Merchant,Marathi,Settlement_Hold,45127,0.31,0,UP,"सकाळपासून ₹45,127 चे सेटलमेंट होल्डवर आहे",RELEASE_INSTANT_SETTLEMENT
+Customer,Hindi,Fraud_Unauthorized_Txn,46524,0.99,0,DEGRADED,"मैंने ये ₹46,524 का पेमेंट नहीं किया, किसी ने पैसे निकाल लिए बहुत परेशान हूँ",FREEZE_AND_HUMAN_HANDOFF
+Customer,Bengali,EMI_Bounce_Fear,42388,0.77,1,UP,"₹42,388 কিস্তি দিতে ভয় লাগছে তাড়াতাড়ি!!",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,English,Settlement_Hold,69,0.28,0,UP,Yesterday's settlement didn't arrive,RELEASE_INSTANT_SETTLEMENT
+Merchant,Bengali,Festival_Promo_Broadcast,46876,0.3,0,UP,আমার নিয়মিত খদ্দেরদের দিওয়ালি অফার পাঠিয়ে দিন,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Tamil,Fraud_Unauthorized_Txn,13228,0.59,0,UP,"நான் இந்த ₹13,228 பேமெண்ட் பண்ணல, யாரோ பணம் எடுத்துட்டாங்க",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hindi,Settlement_Hold,1457,0.38,1,DEGRADED,कल का सेटलमेंट नहीं आया,RELEASE_INSTANT_SETTLEMENT
+Customer,Marathi,EMI_Bounce_Fear,9306,0.58,0,DEGRADED,"माझा EMI बाउन्स होईल का, लेट फी लागेल का?",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Tamil,Fraud_Unauthorized_Txn,45448,1.0,0,UP,"நான் இந்த ₹45,448 பேமெண்ட் பண்ணல, யாரோ பணம் எடுத்துட்டாங்க சீக்கிரம்!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hinglish,Soundbox_Sync_Issue,17309,0.51,1,UP,soundbox offline dikha raha hai,REMOTE_IOT_RESTART
+Customer,Hindi,Fraud_Unauthorized_Txn,23033,1.0,0,UP,"मेरे खाते से बिना बताए ₹23,033 कट गए जल्दी करो!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,English,Festival_Promo_Broadcast,31522,0.57,2,UP,Send a Diwali offer to my regular customers,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Tamil,UPI_Pending,8031,0.86,0,UP,"₹8,031 அனுப்பினேன், பணம் போயிடுச்சு ஆனா கடைக்காரருக்கு வரல சீக்கிரம்!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hinglish,EMI_Bounce_Fear,23714,0.57,1,UP,"₹23,714 ki kisht bharni hai, darr lag raha hai penalty ka",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Hindi,Soundbox_Sync_Issue,6900,0.0,2,DEGRADED,साउंडबॉक्स बोल नहीं रहा,REMOTE_IOT_RESTART
+Customer,English,Fraud_Unauthorized_Txn,49502,1.0,0,UP,"I didn't make this ₹49,502 payment, someone stole my money please help!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hinglish,Fraud_Unauthorized_Txn,26606,0.94,1,UP,"kisi ne mere account se ₹26,606 nikaal liye jaldi karo!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Tamil,Soundbox_Sync_Issue,949,0.42,1,UP,சவுண்ட்பாக்ஸ் பேசல,REMOTE_IOT_RESTART
+Customer,Bengali,EMI_Bounce_Fear,7085,0.53,1,UP,"আমার EMI বাউন্স হবে না তো, লেট ফি লাগবে?",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Hindi,Soundbox_Sync_Issue,77,0.26,0,UP,साउंडबॉक्स बोल नहीं रहा,REMOTE_IOT_RESTART
+Customer,Hinglish,UPI_Pending,1232,0.64,3,DEGRADED,"UPI payment pending dikha raha hai, ₹1,232 debit ho gaye",AUTO_REFUND_INSTANT
+Merchant,Bengali,Festival_Promo_Broadcast,17482,0.28,0,UP,আমার নিয়মিত খদ্দেরদের দিওয়ালি অফার পাঠিয়ে দিন,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Hinglish,Festival_Promo_Broadcast,37073,0.23,1,DEGRADED,purane grahakon ko discount message bhejo,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Telugu,Fraud_Unauthorized_Txn,49026,1.0,0,UP,"నేను ఈ ₹49,026 పేమెంట్ చేయలేదు, ఎవరో డబ్బు తీసుకున్నారు త్వరగా!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Tamil,Settlement_Hold,2905,0.11,0,DEGRADED,"காலையிலிருந்து ₹2,905 settlement hold ஆகியிருக்கு",RELEASE_INSTANT_SETTLEMENT
+Customer,Bengali,Fraud_Unauthorized_Txn,29768,0.78,4,UP,"আমি এই ₹29,768 পেমেন্ট করিনি, কেউ টাকা তুলে নিয়েছে তাড়াতাড়ি!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,English,Fraud_Unauthorized_Txn,38885,1.0,2,DEGRADED,"I didn't make this ₹38,885 payment, someone stole my money please help!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Marathi,EMI_Bounce_Fear,1141,0.61,0,DOWN,"₹1,141 चा हप्ता भरायची भीती वाटते",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Hindi,Settlement_Hold,47470,0.36,0,UP,"सुबह से ₹47,470 का सेटलमेंट होल्ड पर है",RELEASE_INSTANT_SETTLEMENT
+Customer,Marathi,UPI_Pending,28235,0.54,0,UP,"मी ₹28,235 पाठवले, पैसे कापले पण दुकानदाराला मिळाले नाहीत",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hindi,Festival_Promo_Broadcast,13593,0.21,1,UP,मेरे रेगुलर ग्राहकों को दिवाली ऑफर भेज दो,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Marathi,Soundbox_Sync_Issue,1385,0.47,0,DEGRADED,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Merchant,Hinglish,Settlement_Hold,48052,0.46,4,DEGRADED,Kal ka settlement nahi aaya,RELEASE_INSTANT_SETTLEMENT
+Merchant,Hindi,Soundbox_Sync_Issue,4743,0.0,0,UP,साउंडबॉक्स बोल नहीं रहा,REMOTE_IOT_RESTART
+Merchant,Telugu,Settlement_Hold,22098,0.29,1,UP,"పొద్దున్నుంచి ₹22,098 settlement hold లో ఉంది",RELEASE_INSTANT_SETTLEMENT
+Customer,English,EMI_Bounce_Fear,4573,0.86,0,UP,Will my EMI bounce? I'm worried about the late fee urgent,SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Tamil,Fraud_Unauthorized_Txn,27168,1.0,2,UP,"நான் இந்த ₹27,168 பேமெண்ட் பண்ணல, யாரோ பணம் எடுத்துட்டாங்க சீக்கிரம்!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Tamil,Fraud_Unauthorized_Txn,11802,0.93,3,UP,"நான் இந்த ₹11,802 பேமெண்ட் பண்ணல, யாரோ பணம் எடுத்துட்டாங்க சீக்கிரம்!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,English,Festival_Promo_Broadcast,38063,0.36,0,UP,Send a Diwali offer to my regular customers,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Telugu,EMI_Bounce_Fear,24581,0.64,1,UP,"నా EMI bounce అవుతుందా, late fee పడుతుందా?",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,English,Festival_Promo_Broadcast,1784,0.17,3,UP,Send a Diwali offer to my regular customers,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Tamil,EMI_Bounce_Fear,4473,0.46,0,DEGRADED,"₹4,473 EMI bounce ஆயிடுமா?",FREEZE_AND_HUMAN_HANDOFF
+Merchant,English,Festival_Promo_Broadcast,45253,0.48,0,DOWN,Broadcast a festive discount to repeat buyers,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,English,Settlement_Hold,47021,0.28,5,UP,Yesterday's settlement didn't arrive,FREEZE_AND_HUMAN_HANDOFF
+Customer,Marathi,UPI_Pending,1720,0.7,0,UP,"मी ₹1,720 पाठवले, पैसे कापले पण दुकानदाराला मिळाले नाहीत",AUTO_REFUND_INSTANT
+Customer,Tamil,Fraud_Unauthorized_Txn,18262,0.91,0,DEGRADED,"நான் இந்த ₹18,262 பேமெண்ட் பண்ணல, யாரோ பணம் எடுத்துட்டாங்க சீக்கிரம்!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hinglish,Festival_Promo_Broadcast,6203,0.48,0,UP,purane grahakon ko discount message bhejo,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Tamil,Settlement_Hold,7710,0.49,1,DEGRADED,"காலையிலிருந்து ₹7,710 settlement hold ஆகியிருக்கு",RELEASE_INSTANT_SETTLEMENT
+Customer,Tamil,Fraud_Unauthorized_Txn,11405,0.89,5,UP,"நான் இந்த ₹11,405 பேமெண்ட் பண்ணல, யாரோ பணம் எடுத்துட்டாங்க சீக்கிரம்!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Bengali,Settlement_Hold,23214,0.1,5,DEGRADED,"সকাল থেকে ₹23,214 সেটেলমেন্ট আটকে আছে",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hindi,EMI_Bounce_Fear,14830,0.44,1,UP,"मेरी ईएमआई बाउंस हो जाएगी, लेट फीस लगेगी क्या?",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Hinglish,UPI_Pending,12061,0.78,0,DEGRADED,paise kat gaye lekin merchant ko credit nahi hua please help,FREEZE_AND_HUMAN_HANDOFF
+Merchant,Marathi,Soundbox_Sync_Issue,49072,0.68,2,DEGRADED,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Customer,Tamil,Fraud_Unauthorized_Txn,16072,0.96,0,UP,"நான் இந்த ₹16,072 பேமெண்ட் பண்ணல, யாரோ பணம் எடுத்துட்டாங்க சீக்கிரம்!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,English,Fraud_Unauthorized_Txn,41983,0.7,0,DEGRADED,"I didn't make this ₹41,983 payment, someone stole my money",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hinglish,UPI_Pending,1358,0.33,7,DEGRADED,"Maine ₹1,358 bheje, paisa kat gaya par dukaan wale ko nahi mila",FREEZE_AND_HUMAN_HANDOFF
+Customer,Marathi,UPI_Pending,16321,0.51,2,DOWN,"मी ₹16,321 पाठवले, पैसे कापले पण दुकानदाराला मिळाले नाहीत",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hindi,UPI_Pending,8669,0.64,1,UP,"₹8,669 का यूपीआई पेमेंट अटका हुआ है, पैसे कटे",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hindi,Soundbox_Sync_Issue,27908,0.27,7,UP,पेमेंट की आवाज़ नहीं आ रही,FREEZE_AND_HUMAN_HANDOFF
+Customer,English,UPI_Pending,22623,0.54,6,UP,"I sent ₹22,623, money got debited but the shop didn't receive it",FREEZE_AND_HUMAN_HANDOFF
+Customer,Tamil,Fraud_Unauthorized_Txn,25901,0.69,1,UP,"நான் இந்த ₹25,901 பேமெண்ட் பண்ணல, யாரோ பணம் எடுத்துட்டாங்க",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Telugu,Settlement_Hold,25005,0.63,0,UP,"పొద్దున్నుంచి ₹25,005 settlement hold లో ఉంది",RELEASE_INSTANT_SETTLEMENT
+Customer,Marathi,Fraud_Unauthorized_Txn,34401,0.88,0,UP,"मी हे ₹34,401 पेमेंट केले नाही, कोणीतरी पैसे काढले लवकर!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hinglish,EMI_Bounce_Fear,1205,0.77,2,DOWN,"Meri EMI bounce ho jayegi kya, late fee lagegi? jaldi karo!!",REMOTE_IOT_RESTART
+Merchant,English,Settlement_Hold,11396,0.39,0,DEGRADED,"My ₹11,396 settlement has been on hold since morning",RELEASE_INSTANT_SETTLEMENT
+Customer,Hinglish,UPI_Pending,27357,0.48,4,UP,"UPI payment pending dikha raha hai, ₹27,357 debit ho gaye",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Marathi,Festival_Promo_Broadcast,7191,0.36,1,UP,माझ्या नेहमीच्या ग्राहकांना दिवाळी ऑफर पाठवा,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Telugu,UPI_Pending,4283,0.57,0,UP,"UPI పేమెంట్ pending లో ఉంది, ₹4,283 కట్ అయింది",AUTO_REFUND_INSTANT
+Merchant,Hindi,Settlement_Hold,17538,0.25,0,DOWN,कल का सेटलमेंट नहीं आया,FREEZE_AND_HUMAN_HANDOFF
+Customer,Hinglish,Fraud_Unauthorized_Txn,18160,0.91,1,UP,"kisi ne mere account se ₹18,160 nikaal liye please help",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Telugu,Settlement_Hold,747,0.21,0,UP,పొద్దున్నుంచి ₹747 settlement hold లో ఉంది,RELEASE_INSTANT_SETTLEMENT
+Merchant,Marathi,Settlement_Hold,8334,0.56,1,UP,"सकाळपासून ₹8,334 चे सेटलमेंट होल्डवर आहे",RELEASE_INSTANT_SETTLEMENT
+Customer,Marathi,UPI_Pending,43118,0.67,4,UP,"UPI पेमेंट अडकले आहे, ₹43,118 कापले गेले",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Bengali,Soundbox_Sync_Issue,29760,0.14,2,UP,সাউন্ডবক্স আওয়াজ করছে না,REMOTE_IOT_RESTART
+Merchant,Tamil,Settlement_Hold,1627,0.29,0,UP,"காலையிலிருந்து ₹1,627 settlement hold ஆகியிருக்கு",RELEASE_INSTANT_SETTLEMENT
+Merchant,English,Festival_Promo_Broadcast,34033,0.38,0,UP,Send a Diwali offer to my regular customers,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Tamil,Soundbox_Sync_Issue,15079,0.27,1,DEGRADED,சவுண்ட்பாக்ஸ் பேசல,REMOTE_IOT_RESTART
+Customer,Tamil,UPI_Pending,12074,0.49,3,UP,"UPI பேமெண்ட் pending ஆகுது, ₹12,074 கழிஞ்சுருச்சு",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hinglish,UPI_Pending,3681,0.62,0,DEGRADED,"Maine ₹3,681 bheje, paisa kat gaya par dukaan wale ko nahi mila",AUTO_REFUND_INSTANT
+Customer,Bengali,EMI_Bounce_Fear,733,0.68,1,UP,"আমার EMI বাউন্স হবে না তো, লেট ফি লাগবে?",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Bengali,Settlement_Hold,1746,0.22,0,UP,"সকাল থেকে ₹1,746 সেটেলমেন্ট আটকে আছে",RELEASE_INSTANT_SETTLEMENT
+Customer,Tamil,EMI_Bounce_Fear,47018,0.7,2,UP,"₹47,018 EMI bounce ஆயிடுமா?",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Tamil,EMI_Bounce_Fear,31812,0.78,2,DEGRADED,"என் EMI கட்ட பயமா இருக்கு, late fee வருமா? சீக்கிரம்!!",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Marathi,Settlement_Hold,11095,0.24,6,DEGRADED,"सकाळपासून ₹11,095 चे सेटलमेंट होल्डवर आहे",FREEZE_AND_HUMAN_HANDOFF
+Customer,Bengali,UPI_Pending,1561,0.4,1,UP,"UPI পেমেন্ট আটকে আছে, ₹1,561 কেটেছে",AUTO_REFUND_INSTANT
+Merchant,English,Soundbox_Sync_Issue,112,0.29,2,UP,"Soundbox is silent, no payment announcements",REMOTE_IOT_RESTART
+Merchant,Marathi,Festival_Promo_Broadcast,42124,0.5,1,UP,माझ्या नेहमीच्या ग्राहकांना दिवाळी ऑफर पाठवा,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Bengali,Festival_Promo_Broadcast,1930,0.53,0,DEGRADED,আমার নিয়মিত খদ্দেরদের দিওয়ালি অফার পাঠিয়ে দিন,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Marathi,Settlement_Hold,27771,0.34,1,UP,"सकाळपासून ₹27,771 चे सेटलमेंट होल्डवर आहे",RELEASE_INSTANT_SETTLEMENT
+Customer,Telugu,EMI_Bounce_Fear,49379,0.55,2,DEGRADED,"నా EMI bounce అవుతుందా, late fee పడుతుందా?",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,English,EMI_Bounce_Fear,30241,0.73,0,UP,Will my EMI bounce? I'm worried about the late fee please help!!,SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Hinglish,Festival_Promo_Broadcast,8460,0.32,0,UP,Mere regular customers ko Diwali offer bhej do,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Tamil,Settlement_Hold,775,0.09,3,UP,காலையிலிருந்து ₹775 settlement hold ஆகியிருக்கு,RELEASE_INSTANT_SETTLEMENT
+Customer,Hindi,EMI_Bounce_Fear,247,0.63,0,DEGRADED,"मेरी ईएमआई बाउंस हो जाएगी, लेट फीस लगेगी क्या?",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,English,UPI_Pending,1356,0.59,1,UP,"I sent ₹1,356, money got debited but the shop didn't receive it",AUTO_REFUND_INSTANT
+Merchant,Bengali,Soundbox_Sync_Issue,12404,0.53,2,UP,সাউন্ডবক্স আওয়াজ করছে না,REMOTE_IOT_RESTART
+Merchant,Tamil,Soundbox_Sync_Issue,7646,0.34,1,UP,சவுண்ட்பாக்ஸ் பேசல,REMOTE_IOT_RESTART
+Merchant,Marathi,Settlement_Hold,4651,0.26,0,UP,"सकाळपासून ₹4,651 चे सेटलमेंट होल्डवर आहे",RELEASE_INSTANT_SETTLEMENT
+Customer,Hindi,UPI_Pending,30571,0.67,0,UP,"₹30,571 का यूपीआई पेमेंट अटका हुआ है, पैसे कटे",FREEZE_AND_HUMAN_HANDOFF
+Customer,English,UPI_Pending,3332,0.47,0,UP,"I sent ₹3,332, money got debited but the shop didn't receive it",AUTO_REFUND_INSTANT
+Merchant,Telugu,Settlement_Hold,12985,0.47,0,UP,"పొద్దున్నుంచి ₹12,985 settlement hold లో ఉంది",RELEASE_INSTANT_SETTLEMENT
+Merchant,English,Festival_Promo_Broadcast,1068,0.47,1,UP,Send a Diwali offer to my regular customers,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Bengali,Settlement_Hold,25383,0.29,0,UP,"সকাল থেকে ₹25,383 সেটেলমেন্ট আটকে আছে",RELEASE_INSTANT_SETTLEMENT
+Customer,Hindi,EMI_Bounce_Fear,9251,0.64,3,DOWN,"₹9,251 की किस्त भरने में डर लग रहा है",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Hinglish,Soundbox_Sync_Issue,47179,0.24,0,UP,payment ki awaaz nahi aa rahi soundbox se,REMOTE_IOT_RESTART
+Merchant,English,Settlement_Hold,8179,0.2,1,UP,Yesterday's settlement didn't arrive,RELEASE_INSTANT_SETTLEMENT
+Customer,Bengali,EMI_Bounce_Fear,664,0.47,1,DEGRADED,"আমার EMI বাউন্স হবে না তো, লেট ফি লাগবে?",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Hinglish,Festival_Promo_Broadcast,13550,0.21,0,UP,Mere regular customers ko Diwali offer bhej do,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Tamil,Settlement_Hold,7873,0.31,3,UP,"காலையிலிருந்து ₹7,873 settlement hold ஆகியிருக்கு",RELEASE_INSTANT_SETTLEMENT
+Customer,Hinglish,UPI_Pending,28284,0.68,2,UP,paise kat gaye lekin merchant ko credit nahi hua,FREEZE_AND_HUMAN_HANDOFF
+Merchant,Bengali,Settlement_Hold,35429,0.26,0,UP,"সকাল থেকে ₹35,429 সেটেলমেন্ট আটকে আছে",RELEASE_INSTANT_SETTLEMENT
+Customer,Tamil,Fraud_Unauthorized_Txn,11246,0.83,0,UP,"நான் இந்த ₹11,246 பேமெண்ட் பண்ணல, யாரோ பணம் எடுத்துட்டாங்க சீக்கிரம்!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Marathi,EMI_Bounce_Fear,367,0.63,1,UP,₹367 चा हप्ता भरायची भीती वाटते,SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,English,Festival_Promo_Broadcast,36231,0.25,2,UP,Broadcast a festive discount to repeat buyers,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Marathi,Festival_Promo_Broadcast,1955,0.15,0,UP,माझ्या नेहमीच्या ग्राहकांना दिवाळी ऑफर पाठवा,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Telugu,EMI_Bounce_Fear,27109,0.47,1,UP,"నా EMI bounce అవుతుందా, late fee పడుతుందా?",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Tamil,UPI_Pending,309,0.46,1,UP,"UPI பேமெண்ட் pending ஆகுது, ₹309 கழிஞ்சுருச்சு",AUTO_REFUND_INSTANT
+Customer,Hindi,EMI_Bounce_Fear,38790,0.47,0,UP,"मेरी ईएमआई बाउंस हो जाएगी, लेट फीस लगेगी क्या?",RELEASE_INSTANT_SETTLEMENT
+Customer,Tamil,UPI_Pending,43138,0.36,2,UP,"₹43,138 அனுப்பினேன், பணம் போயிடுச்சு ஆனா கடைக்காரருக்கு வரல",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hinglish,Festival_Promo_Broadcast,9591,0.48,0,UP,purane grahakon ko discount message bhejo,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Tamil,Festival_Promo_Broadcast,46555,0.15,1,UP,என் வழக்கமான வாடிக்கையாளர்களுக்கு தீபாவளி ஆஃபர் அனுப்புங்க,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,English,Festival_Promo_Broadcast,78,0.27,2,DEGRADED,Send a Diwali offer to my regular customers,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Hindi,UPI_Pending,15860,0.67,0,UP,"₹15,860 का यूपीआई पेमेंट अटका हुआ है, पैसे कटे",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hinglish,Fraud_Unauthorized_Txn,26741,0.89,0,DOWN,"Maine ye ₹26,741 ka payment nahi kiya, fraud hua hai jaldi karo!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Telugu,EMI_Bounce_Fear,763,0.73,1,UP,"₹763 EMI కట్టాలి, భయంగా ఉంది త్వరగా!!",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,Marathi,Soundbox_Sync_Issue,12176,0.11,0,UP,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Customer,Hinglish,UPI_Pending,773,0.75,0,UP,"Maine ₹773 bheje, paisa kat gaya par dukaan wale ko nahi mila jaldi karo!!",AUTO_REFUND_INSTANT
+Merchant,Hinglish,Festival_Promo_Broadcast,1383,0.41,5,UP,Mere regular customers ko Diwali offer bhej do,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Hindi,Soundbox_Sync_Issue,1337,0.36,2,DEGRADED,पेमेंट की आवाज़ नहीं आ रही,REMOTE_IOT_RESTART
+Merchant,Hinglish,Soundbox_Sync_Issue,8456,0.22,1,UP,Soundbox bol nahi raha,REMOTE_IOT_RESTART
+Merchant,Marathi,Soundbox_Sync_Issue,9003,0.42,4,UP,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Customer,English,Fraud_Unauthorized_Txn,13029,1.0,0,UP,"I didn't make this ₹13,029 payment, someone stole my money urgent",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Marathi,Soundbox_Sync_Issue,6165,0.11,0,UP,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Merchant,Tamil,Festival_Promo_Broadcast,27596,0.19,4,UP,என் வழக்கமான வாடிக்கையாளர்களுக்கு தீபாவளி ஆஃபர் அனுப்புங்க,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Bengali,UPI_Pending,44474,0.52,0,UP,"₹44,474 পাঠিয়েছি, টাকা কেটে গেছে কিন্তু দোকানদার পায়নি",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hindi,UPI_Pending,10105,0.44,4,UP,"₹10,105 का यूपीआई पेमेंट अटका हुआ है, पैसे कटे",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Marathi,Festival_Promo_Broadcast,1295,0.26,1,DEGRADED,माझ्या नेहमीच्या ग्राहकांना दिवाळी ऑफर पाठवा,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,English,UPI_Pending,34538,0.34,0,UP,"I sent ₹34,538, money got debited but the shop didn't receive it",FREEZE_AND_HUMAN_HANDOFF
+Customer,Bengali,Fraud_Unauthorized_Txn,11646,1.0,0,UP,"আমি এই ₹11,646 পেমেন্ট করিনি, কেউ টাকা তুলে নিয়েছে তাড়াতাড়ি!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,English,UPI_Pending,156,0.62,0,DEGRADED,"UPI payment stuck in pending, ₹156 deducted",AUTO_REFUND_INSTANT
+Customer,Tamil,Fraud_Unauthorized_Txn,8689,0.71,2,UP,"நான் இந்த ₹8,689 பேமெண்ட் பண்ணல, யாரோ பணம் எடுத்துட்டாங்க சீக்கிரம்!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Telugu,Festival_Promo_Broadcast,39266,0.29,8,UP,నా రెగ్యులర్ కస్టమర్లకి దీపావళి ఆఫర్ పంపండి,FREEZE_AND_HUMAN_HANDOFF
+Merchant,Bengali,Soundbox_Sync_Issue,12233,0.17,4,UP,সাউন্ডবক্স আওয়াজ করছে না,REMOTE_IOT_RESTART
+Merchant,Bengali,Soundbox_Sync_Issue,1335,0.15,1,UP,সাউন্ডবক্স আওয়াজ করছে না,REMOTE_IOT_RESTART
+Merchant,Telugu,Settlement_Hold,1200,0.17,1,UP,"పొద్దున్నుంచి ₹1,200 settlement hold లో ఉంది",RELEASE_INSTANT_SETTLEMENT
+Merchant,Hinglish,Festival_Promo_Broadcast,3081,0.23,1,UP,Mere regular customers ko Diwali offer bhej do,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Telugu,UPI_Pending,9097,0.58,6,UP,"₹9,097 పంపాను, డబ్బు కట్ అయింది కానీ షాప్ వాళ్ళకి రాలేదు",FREEZE_AND_HUMAN_HANDOFF
+Customer,English,Fraud_Unauthorized_Txn,23040,1.0,0,UP,"Unauthorized transaction of ₹23,040 on my account urgent",FREEZE_AND_HUMAN_HANDOFF
+Customer,Bengali,Fraud_Unauthorized_Txn,40466,0.82,0,UP,"আমি এই ₹40,466 পেমেন্ট করিনি, কেউ টাকা তুলে নিয়েছে তাড়াতাড়ি!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Telugu,Settlement_Hold,30471,0.53,1,UP,"పొద్దున్నుంచి ₹30,471 settlement hold లో ఉంది",RELEASE_INSTANT_SETTLEMENT
+Merchant,Hindi,Soundbox_Sync_Issue,12547,0.31,2,UP,साउंडबॉक्स बोल नहीं रहा,FREEZE_AND_HUMAN_HANDOFF
+Customer,Hindi,UPI_Pending,297,0.65,0,UP,"मैंने ₹297 भेजे, पैसा कट गया पर दुकानदार को नहीं मिला",AUTO_REFUND_INSTANT
+Customer,Hinglish,Fraud_Unauthorized_Txn,4136,0.87,0,UP,"kisi ne mere account se ₹4,136 nikaal liye jaldi karo!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Bengali,EMI_Bounce_Fear,1836,0.74,3,DEGRADED,"₹1,836 কিস্তি দিতে ভয় লাগছে তাড়াতাড়ি!!",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Hindi,Fraud_Unauthorized_Txn,46689,0.93,0,UP,"मैंने ये ₹46,689 का पेमेंट नहीं किया, किसी ने पैसे निकाल लिए बहुत परेशान हूँ",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Hindi,Soundbox_Sync_Issue,29749,0.2,3,DEGRADED,साउंडबॉक्स बोल नहीं रहा,REMOTE_IOT_RESTART
+Customer,Hindi,EMI_Bounce_Fear,180,0.52,3,DEGRADED,₹180 की किस्त भरने में डर लग रहा है,SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Hinglish,UPI_Pending,10816,0.58,1,DEGRADED,"Maine ₹10,816 bheje, paisa kat gaya par dukaan wale ko nahi mila",FREEZE_AND_HUMAN_HANDOFF
+Customer,English,EMI_Bounce_Fear,9809,0.5,0,UP,"Scared I'll miss my ₹9,809 loan installment",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Bengali,Fraud_Unauthorized_Txn,10348,0.83,0,UP,"আমি এই ₹10,348 পেমেন্ট করিনি, কেউ টাকা তুলে নিয়েছে তাড়াতাড়ি!!",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hindi,UPI_Pending,2000,0.43,0,DOWN,"₹2,000 का यूपीआई पेमेंट अटका हुआ है, पैसे कटे",AUTO_REFUND_INSTANT
+Merchant,Telugu,Festival_Promo_Broadcast,35319,0.64,0,UP,నా రెగ్యులర్ కస్టమర్లకి దీపావళి ఆఫర్ పంపండి,TRIGGER_WHATSAPP_CAMPAIGN
+Customer,Tamil,UPI_Pending,13346,0.52,3,UP,"₹13,346 அனுப்பினேன், பணம் போயிடுச்சு ஆனா கடைக்காரருக்கு வரல",FREEZE_AND_HUMAN_HANDOFF
+Customer,Hindi,UPI_Pending,1879,0.65,6,UP,"मैंने ₹1,879 भेजे, पैसा कट गया पर दुकानदार को नहीं मिला",FREEZE_AND_HUMAN_HANDOFF
+Customer,Telugu,Fraud_Unauthorized_Txn,25943,0.82,1,DEGRADED,"నేను ఈ ₹25,943 పేమెంట్ చేయలేదు, ఎవరో డబ్బు తీసుకున్నారు త్వరగా!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Bengali,Festival_Promo_Broadcast,7687,0.13,2,DOWN,আমার নিয়মিত খদ্দেরদের দিওয়ালি অফার পাঠিয়ে দিন,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Bengali,Settlement_Hold,5507,0.43,2,DEGRADED,"সকাল থেকে ₹5,507 সেটেলমেন্ট আটকে আছে",RELEASE_INSTANT_SETTLEMENT
+Customer,English,UPI_Pending,837,0.25,1,UP,"I sent ₹837, money got debited but the shop didn't receive it",AUTO_REFUND_INSTANT
+Merchant,Telugu,Festival_Promo_Broadcast,27195,0.33,2,UP,నా రెగ్యులర్ కస్టమర్లకి దీపావళి ఆఫర్ పంపండి,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Marathi,Soundbox_Sync_Issue,36555,0.35,1,UP,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Merchant,Hinglish,Settlement_Hold,33760,0.58,1,UP,"payout ruka hua hai, ₹33,760 abhi tak nahi aaye",RELEASE_INSTANT_SETTLEMENT
+Customer,Hinglish,EMI_Bounce_Fear,1942,0.78,5,UP,"loan EMI miss ho gayi, ab kya hoga bahut pareshan hoon",SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Bengali,Fraud_Unauthorized_Txn,37571,0.85,3,UP,"আমি এই ₹37,571 পেমেন্ট করিনি, কেউ টাকা তুলে নিয়েছে তাড়াতাড়ি!!",FREEZE_AND_HUMAN_HANDOFF
+Merchant,English,Soundbox_Sync_Issue,25796,0.19,0,UP,"Soundbox is silent, no payment announcements",TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Hindi,Soundbox_Sync_Issue,15044,0.52,0,UP,साउंडबॉक्स बोल नहीं रहा,REMOTE_IOT_RESTART
+Customer,English,EMI_Bounce_Fear,29629,0.72,5,UP,Will my EMI bounce? I'm worried about the late fee I'm panicking,SEND_EMI_LINK_WITH_REASSURANCE
+Customer,Marathi,Fraud_Unauthorized_Txn,13099,0.69,0,UP,"मी हे ₹13,099 पेमेंट केले नाही, कोणीतरी पैसे काढले",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Telugu,Festival_Promo_Broadcast,36430,0.31,0,UP,నా రెగ్యులర్ కస్టమర్లకి దీపావళి ఆఫర్ పంపండి,TRIGGER_WHATSAPP_CAMPAIGN
+Merchant,Marathi,Soundbox_Sync_Issue,1869,0.44,0,UP,साउंडबॉक्स बोलत नाही,REMOTE_IOT_RESTART
+Customer,Hindi,UPI_Pending,1333,0.65,1,DEGRADED,"मैंने ₹1,333 भेजे, पैसा कट गया पर दुकानदार को नहीं मिला",AUTO_REFUND_INSTANT
+Customer,Telugu,EMI_Bounce_Fear,13867,0.79,0,UP,"నా EMI bounce అవుతుందా, late fee పడుతుందా? త్వరగా!!",SEND_EMI_LINK_WITH_REASSURANCE
+Merchant,English,Settlement_Hold,1867,0.37,2,DOWN,"My ₹1,867 settlement has been on hold since morning",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Marathi,Settlement_Hold,7258,0.34,0,UP,"सकाळपासून ₹7,258 चे सेटलमेंट होल्डवर आहे",RELEASE_INSTANT_SETTLEMENT
+Merchant,Bengali,Soundbox_Sync_Issue,22376,0.43,2,UP,সাউন্ডবক্স আওয়াজ করছে না,REMOTE_IOT_RESTART
+Customer,Hinglish,Fraud_Unauthorized_Txn,42722,0.85,7,DEGRADED,"Maine ye ₹42,722 ka payment nahi kiya, fraud hua hai bahut pareshan hoon",FREEZE_AND_HUMAN_HANDOFF
+Merchant,Bengali,Settlement_Hold,12788,0.22,0,DOWN,"সকাল থেকে ₹12,788 সেটেলমেন্ট আটকে আছে",FREEZE_AND_HUMAN_HANDOFF
+Customer,Marathi,Fraud_Unauthorized_Txn,27123,0.87,0,UP,"मी हे ₹27,123 पेमेंट केले नाही, कोणीतरी पैसे काढले लवकर!!",FREEZE_AND_HUMAN_HANDOFF
