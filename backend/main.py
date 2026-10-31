@@ -799,6 +799,10 @@ def ml_route(s, text, proactive=False):
         resolve(s, "Instant refund verified"); return True
     if cust and act == "SEND_EMI_LINK_WITH_REASSURANCE":
         open_ticket(s, "emi"); e = call(s, "check_emi")
+        if e["paid"]:  # already paid: reassure, never ask for money twice
+            audit(s, "VERIFY", "EMI already PAID for this cycle — no payment link sent", e)
+            speak(s, f"Chinta mat kijiye — is mahine ki EMI {inr(e['emi'])} aap pehle hi bhar chuke hain ✅ Koi late fee nahi lagegi, aapka credit score safe hai. Agli EMI ka reminder main time pe bhej dunga.", d)
+            resolve(s, "EMI already paid"); return True
         w = call(s, "waive_late_fee") if CUSTOMERS[uid]["disputes"] <= 1 else None
         link = call(s, "send_emi_payment_link")
         speak(s, f"Chinta mat kijiye, aapki EMI abhi bounce nahi hui hai. ₹{e['late_fee']} late fee maaf kar di hai. Neeche button se ₹{e['emi']:,} abhi bhar dijiye, bas ek click.", d,
@@ -853,6 +857,9 @@ def launch_campaign(s):
 
 def pay_emi(s):
     c = CUSTOMERS[s["merchant"]]; e = c["emi"]
+    if e["paid"]:  # idempotent: an old Pay button can never charge twice
+        audit(s, "ACT", "🛑 Duplicate EMI payment blocked (already PAID)", e)
+        reply(s, f"Ye EMI {inr(e['emi'])} pehle hi bhar di gayi hai ✅ Dobara koi paisa nahi kata."); return view(s)
     for x in MSGS:
         if x.get("cta") and x.get("merchant") == s["merchant"]: x["cta_done"] = True
     e["paid"] = True; audit(s, "ACT", f"💳 EMI ₹{e['emi']:,} paid via link", e)
@@ -1242,6 +1249,8 @@ def lead(sid: str, product: str = "Business Loan", amount: int = 0):
         if x.get("cta"): x["cta_done"] = True
     if product == "EMI": return pay_emi(s)
     if product == "CAMPAIGN": return launch_campaign(s)
+    if s["merchant"] in CUSTOMERS:  # customers only get EMI CTAs; "Abhi nahi" just closes it
+        reply(s, "Theek hai 🙏 Jab chahein, yahin likh dijiye."); return view(s)
     MERCHANTS[s["merchant"]]["pitched"] = True
     if product == "decline":
         audit(s, "ACT", "🙅 Offer declined — will not pitch again", {})

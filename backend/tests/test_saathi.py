@@ -119,6 +119,15 @@ def test_customer_emi_waiver_and_pay(c):
     r = c.post(f"/lead/{r['session_id']}?product=EMI&amount=2150").json()
     assert r["status"] == "VERIFIED" and main.CUSTOMERS["C2002"]["emi"]["paid"]
 
+def test_emi_never_charged_twice(c):
+    r = chat(c, "Meri EMI bounce ho jayegi kya, late fee lagegi?", "C2002"); first = r["session_id"]
+    c.post(f"/lead/{first}?product=EMI&amount=2150")
+    r = chat(c, "என் EMI கட்ட பயமா இருக்கு, late fee வருமா?", "C2002")
+    assert not r["messages"][-1].get("cta") and r["status"] == "VERIFIED" and "pehle hi" in r["messages"][-1]["text"]
+    r = c.post(f"/lead/{first}?product=EMI&amount=2150").json()  # stale Pay button pressed again
+    assert "Dobara koi paisa nahi" in r["messages"][-1]["text"]
+    assert c.post(f"/lead/{first}?product=decline").status_code == 200  # customer 'Abhi nahi' must not crash
+
 def test_fraud_freezes_and_hands_off(c):
     r = chat(c, "I did NOT make this ₹12,000 payment!! someone stole my money", "C2003")
     assert main.CUSTOMERS["C2003"]["frozen"] and [a["tool"] for a in r["approvals"]] == ["fraud_case_handoff"]
