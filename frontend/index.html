@@ -196,14 +196,21 @@ function renderState(s) {
   put('audit', s.audit.map(a => `<div><span class="text-slate-500">${a.ts.slice(11)}</span> <span class="text-slate-500">${a.ticket}</span> <b class="${COL[a.phase]}">${a.phase}</b> ${esc(a.event)} <span class="text-slate-500">${esc(a.detail).slice(0, 110)}</span></div>`).join(''));
 }
 async function run(promise) { busy = true; tab('brain'); setBadge('DIAGNOSING'); try { await apply(await promise); } catch (e) { err(e); } busy = false; }
-function err(e) { H.audit = null; $('audit').insertAdjacentHTML('afterbegin', `<div class="text-red-400">ERR ${esc(e.message)} — backend on :8000?</div>`); }
+function toast(msg, bad = true) {
+  let t = $('toast'); if (!t) { t = document.createElement('div'); t.id = 'toast'; document.body.appendChild(t); }
+  t.className = `fixed top-16 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-lg shadow-lg text-sm font-semibold ${bad ? 'bg-red-600 text-white' : 'bg-emerald-600 text-white'}`;
+  t.textContent = msg; clearTimeout(t._h); t._h = setTimeout(() => t.remove(), 5000);
+}
+function err(e) { let m = e.message; try { m = JSON.parse(m).detail || m; } catch {}
+  toast(m === 'no pending approval' ? 'This approval is no longer pending (already handled or server restarted) — queue refreshed.' : m === 'bad approver PIN' ? 'Wrong approver PIN.' : 'Error: ' + m);
+  H.queue = H.handq = null; get(sq()).then(renderState).catch(() => {}); H.audit = null; $('audit').insertAdjacentHTML('afterbegin', `<div class="text-red-400">ERR ${esc(e.message)} — backend on :8000?</div>`); }
 async function say(text) {
   if (busy || !text.trim()) return; $('inp').value = '';
   S.messages = [...(S.messages || []), {from: 'merchant', text, ts: Date.now() / 1000}]; renderChat(S.messages); shown = S.messages.length; traceLen = 0;
   await run(api('/chat', {body: JSON.stringify({text, session_id: sid, merchant_id: MID})}));
 }
 const send = e => { e.preventDefault(); say($('inp').value); };
-const decide = (id, d) => run(api(`/approvals/${id}/${d}`, {headers: {'Content-Type': 'application/json', 'x-approver-pin': $('pin').value}}));
+const decide = (id, d) => !$('pin').value ? (tab('agent'), $('pin').focus(), $('pin').classList.add('ring-2', 'ring-red-500'), toast('Enter the approver PIN first (demo PIN: 2468)')) : run(api(`/approvals/${id}/${d}`, {headers: {'Content-Type': 'application/json', 'x-approver-pin': $('pin').value}}));
 const csat = (t, v) => run(api(`/csat/${t}/${v}`));
 const lead = (t, p, a) => run(api(`/lead/${t}?product=${encodeURIComponent(p)}&amount=${a}`));
 let rec, chunks;

@@ -134,12 +134,15 @@ def user(uid): return CUSTOMERS.get(uid) or MERCHANTS[uid]
 def save_world():
     msgs = [{**{k: v for k, v in m.items() if k != "voice"}, **({"voice": {"source": "browser"}} if m.get("voice") else {})} for m in MSGS]
     with LOCK:
-        db.execute("INSERT INTO kv VALUES(?,?) ON CONFLICT(k) DO UPDATE SET v=excluded.v", ("world", json.dumps({"m": MERCHANTS, "d": DEVICES, "c": CACHE, "msgs": msgs}, ensure_ascii=False))); db.commit()
+        db.execute("INSERT INTO kv VALUES(?,?) ON CONFLICT(k) DO UPDATE SET v=excluded.v", ("world", json.dumps({"m": MERCHANTS, "d": DEVICES, "c": CACHE, "msgs": msgs,
+            "s": {k: {f: v for f, v in x.items() if f != "ctx"} for k, x in SESSIONS.items()}, "a": APPROVALS}, ensure_ascii=False, default=str))); db.commit()
 
 def load_world():
     global MERCHANTS, DEVICES, CACHE, MSGS
     r = db.execute("SELECT v FROM kv WHERE k='world'").fetchone()
-    if r: w = json.loads(r[0]); MERCHANTS, DEVICES, CACHE, MSGS = w["m"], w["d"], w["c"], w["msgs"]
+    if r:
+        w = json.loads(r[0]); MERCHANTS, DEVICES, CACHE, MSGS = w["m"], w["d"], w["c"], w["msgs"]
+        SESSIONS.update({k: {**x, "ctx": lambda t, a, x=x: f"{x.get('query', '')} → {t} {a}"} for k, x in w.get("s", {}).items()}); APPROVALS.update(w.get("a", {}))
 
 # ---------------- PII masking + immutable audit ----------------
 def mask(s: str) -> str:
@@ -781,10 +784,11 @@ def ml_route(s, text, proactive=False):
             k = call(s, "check_ledger_and_kyc", settlement_id=sid_)
             if k["kyc"] != "GREEN" or BANK_STATUS == "DOWN":
                 speak(s, f"₹{v['amount']:,} ka settlement {k['hold_reason'] or 'review'} ki wajah se ruka hai. Bank server {BANK_STATUS} hai — aaj 4 PM ke batch mein pakka aa jayega, main khud confirm karunga.", d); s["status"] = "NEEDS_INFO"; return True
+            before_status = v["status"]
             r = call(s, "release_instant_settlement", settlement_id=sid_, amount=v["amount"], ml_risk=d["risk"])
             if r is None: return speak(s, f"Ledger aur KYC theek hai. ₹{v['amount']:,} instant release ke liye senior approval le raha hoon.", d) or True
-            after = MERCHANTS[uid]["settlements"][sid_]; s["diff"] = {"before": {"status": v["status"]}, "after": {"status": after["status"], "utr": after.get("utr")}}
-            audit(s, "VERIFY", f"{sid_}: {v['status']} → {after['status']} · UTR {after.get('utr')}", s["diff"])
+            after = MERCHANTS[uid]["settlements"][sid_]; s["diff"] = {"before": {"status": before_status}, "after": {"status": after["status"], "utr": after.get("utr")}}
+            audit(s, "VERIFY", f"{sid_}: {before_status} → {after['status']} · UTR {after.get('utr')}", s["diff"])
             speak(s, f"Ledger match aur KYC green hai, isliye ₹{v['amount']:,} ka settlement abhi instant release kar diya ✅ UTR {after['utr']}. 30 min mein bank mein dikhega.", d, voice=True)
         resolve(s, "Instant settlement verified"); return True
     return False
