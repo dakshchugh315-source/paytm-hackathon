@@ -98,6 +98,7 @@ def audit(s, phase, event, detail="", tokens=0):
     d = mask(detail if isinstance(detail, str) else json.dumps(detail, ensure_ascii=False))
     with LOCK:
         global LAST_HASH
+        row = db.execute("SELECT hash FROM audit_chain ORDER BY id DESC LIMIT 1").fetchone(); LAST_HASH = row[0] if row else "GENESIS"  # DB is the source of truth
         ts = datetime.now().isoformat(timespec="milliseconds"); h = hashlib.sha256(f"{LAST_HASH}|{ts}|{s['id']}|{phase}|{event}|{d}".encode()).hexdigest()
         db.execute("INSERT INTO audit_chain(ts, ticket, phase, event, detail, prev, hash) VALUES(?,?,?,?,?,?,?)", (ts, s["id"], phase, event, d, LAST_HASH, h)); db.commit(); LAST_HASH = h
     s["phase"] = phase; s["tokens"] += tokens
