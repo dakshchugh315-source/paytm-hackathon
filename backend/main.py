@@ -19,7 +19,7 @@ if os.path.exists(_env):
 SARVAM_KEY = os.getenv("SARVAM_API_KEY", "")
 PROVIDERS = {"gemini": ("https://generativelanguage.googleapis.com/v1beta/openai", "gemini-2.5-flash"),
              "grok": ("https://api.x.ai/v1", "grok-3-mini"),
-             "groq": ("https://api.groq.com/openai/v1", "llama-3.3-70b-versatile"),
+             "groq": ("https://api.groq.com/openai/v1", "openai/gpt-oss-120b"),
              "openai": ("https://api.openai.com/v1", "gpt-4o-mini"),
              "sarvam": ("https://api.sarvam.ai/v1", "sarvam-m")}
 # Fallback chain: first provider with a key is primary; on rate-limit/quota/outage the next one takes over.
@@ -512,9 +512,24 @@ def llm_loop(s, acted=False):
                 out = {"error": str(e)}; audit(s, "ACT", f"⚠ {name} failed: {e}", c["function"])
             s["llm_msgs"].append({"role": "tool", "tool_call_id": c.get("id", name), "content": json.dumps(out, ensure_ascii=False, default=str)})
     pending = any(a["ticket"] == s["id"] and a["status"] == "PENDING" for a in APPROVALS.values())
-    if pending: s["status"] = "WAITING_APPROVAL"
-    elif acted: resolve(s, "Verified by live agent")
-    else: s["status"] = "NEEDS_INFO"
+    if pending: s["status"] = "WAITING_APPROVAL"; return
+    if not acted: s["status"] = "NEEDS_INFO"; return
+    ok, why = healthy(s)
+    if ok: return resolve(s, "Verified by live agent")
+    s["nudges"] = s.get("nudges", 0) + 1
+    audit(s, "VERIFY", f"❌ Verification failed: {why} → agent must continue", snapshot(s["merchant"]))
+    if s["nudges"] > 2: s["status"] = "ESCALATED"; return reply(s, "Ye case main senior ko poori summary ke saath de raha hoon 🙏")
+    s["llm_msgs"].append({"role": "user", "content": f"[SYSTEM] Not resolved yet: {why}. Continue the SOP (use the approval-gated tool if needed). Do not tell the merchant it is fixed until verified."})
+    return llm_loop(s, acted)
+
+def healthy(s):
+    """Ground-truth check of the world state, independent of what the LLM claims."""
+    snap = snapshot(s["merchant"])
+    bad = [k for k, v in snap["settlements"].items() if v != "SETTLED"]
+    if s["intent"] == "settlement" and bad: return False, f"settlement {', '.join(bad)} still FAILED"
+    if s["intent"] == "soundbox" and not snap["soundbox_online"]: return False, "Soundbox still offline"
+    if s["intent"] == "kyc_bank" and not snap["bank_verified"]: return False, "bank not verified"
+    return True, ""
 
 def llm_agent(s, text, proactive=False):
     m = MERCHANTS[s["merchant"]]; s["status"] = "DIAGNOSING"; s["llm"] = True
