@@ -32,7 +32,7 @@ header{background:#fff;box-shadow:0 1px 0 #e5e9f0}header .text-white{color:#002e
   <div class="text-[11px] font-bold text-slate-500 mb-2 flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-[#00a884]"></span>MERCHANT'S PHONE · what the customer sees</div>
   <div class="flex flex-col rounded-[28px] overflow-hidden bg-[#efeae2] flex-1 min-h-0 border-[6px] border-slate-800 shadow-xl">
     <div class="bg-[#075e54] text-white px-3 py-2 flex items-center gap-2"><div class="w-8 h-8 rounded-full bg-[#00baf2] grid place-items-center font-bold text-[#002e6e]">S</div>
-      <div><div class="font-semibold">Saathi · Paytm</div><div class="text-[10px] text-white/70">Ramesh ji · Sharma General Store</div></div>
+      <div><div class="font-semibold">Saathi · Paytm</div><select id="msel" onchange="switchMerchant(this.value)" class="text-[11px] bg-white/15 text-white rounded px-1 outline-none" title="Which merchant is chatting"></select></div>
       <span id="badge" class="ml-auto text-[11px] px-2 py-1 rounded-full bg-white/20">Online</span></div>
     <div id="chat" class="flex-1 overflow-y-auto p-3 space-y-2"></div>
     <div id="chips" class="px-2 pt-2 flex gap-1 flex-wrap text-[11px]"></div>
@@ -82,6 +82,8 @@ const BADGE = {NEEDS_INFO:['Waiting for merchant reply','bg-sky-600'],DIAGNOSING
 const COL = {UNDERSTAND:'text-violet-400',DIAGNOSE:'text-amber-400',ACT:'text-sky-400',VERIFY:'text-emerald-400',HUMAN:'text-orange-400',FOLLOWUP:'text-pink-400'};
 const $ = id => document.getElementById(id), esc = s => String(s ?? '').replace(/[&<>"']/g, c => `&#${c.charCodeAt(0)};`), sleep = ms => new Promise(r => setTimeout(r, ms));
 let AQ = Promise.resolve(); speechSynthesis.getVoices();
+let MID = 'M1001';
+async function switchMerchant(id) { MID = id; $('msel').value = id; sid = null; traceLen = 0; H.chatKey = null; H.profile = null; const st = await get('/state?mid=' + id); shown = st.messages.length; seen = shown; renderState(st); }
 let sid = null, busy = false, shown = -1, traceLen = 0, S = {}, seen = 0;
 const H = {}; function put(id, h) { if (H[id] === h) return false; H[id] = h; $(id).innerHTML = h; return true; }
 [['🎙 1 · Settlement','demo1()','bg-[#002e6e] text-white'],['🔊 2 · Soundbox','demo2()','bg-emerald-600 text-white'],
@@ -131,10 +133,16 @@ function renderState(s) {
   S = s; renderChat(s.messages);
   $('llm').textContent = (s.live_llm ? `🟢 LIVE agent: ${s.live_llm}` : s.sarvam ? '● Sarvam-M · Saarika · Bulbul LIVE' : '● Scripted fallback (no LLM key)') + ` · 🗄 ${s.db}`;
   put('chain', s.chain_ok ? '<span class="text-emerald-600">🔒 SHA-256 chain verified</span>' : '<span class="text-red-600 font-bold">⚠ CHAIN BROKEN</span>');
+  if ($('msel').options.length !== s.merchants.length) $('msel').innerHTML = s.merchants.map(m => `<option class="text-black" value="${m.id}">${esc(m.owner)} · ${esc(m.name)}</option>`).join(''); $('msel').value = MID;
   const p = s.profile, pill = (ok, a, b) => `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${ok ? 'bg-emerald-500/20 text-emerald-300' : 'bg-red-500/20 text-red-300 pulse'}">${ok ? a : b}</span>`;
   put('profile', `<div class="flex items-center"><div><div class="text-white font-semibold">${p.name}</div><div class="text-[11px] text-slate-400">${p.owner} · ${p.id} · GMV ₹${p.gmv.toLocaleString('en-IN')}/mo · Bank ${p.bank}</div></div></div>
     <div class="flex gap-1.5 mt-2 flex-wrap">${pill(p.soundbox_online, '🔊 ' + p.soundbox + ' online', '🔇 ' + p.soundbox + ' offline')}${pill(p.settlement === 'OK', '💸 Settlements OK', '💸 Settlement on HOLD')}
-    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-yellow-500/20 text-yellow-300">🏦 ${p.offer.product}${p.offer.pre_approved ? ' ₹' + p.offer.pre_approved.toLocaleString('en-IN') + ' pre-approved' : ''}</span></div>`);
+    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-yellow-500/20 text-yellow-300">🏦 ${p.offer.product}${p.offer.pre_approved ? ' ₹' + p.offer.pre_approved.toLocaleString('en-IN') + ' pre-approved' : ''}</span></div>
+    <div class="mt-3 text-[10px] font-bold text-slate-500">RECENT UPI PAYMENTS</div>
+    <table class="w-full text-[11px] mt-1"><tr class="text-slate-400 text-left"><th>Time</th><th>Ref (RRN)</th><th>Payer</th><th class="text-right">₹</th><th class="text-right">Status</th></tr>
+    ${p.txns.map(t => `<tr class="border-t border-slate-100"><td>${esc(t.time)}</td><td class="font-mono">${t.id}</td><td>${esc(t.payer.replace(/^(.{3}).*@/, '$1…@'))}</td><td class="text-right">${t.amount.toLocaleString('en-IN')}</td><td class="text-right font-semibold ${t.status === 'SUCCESS' ? 'text-emerald-600' : t.status === 'REFUNDED' ? 'text-sky-600' : 'text-red-600'}">${t.status}</td></tr>`).join('')}</table>
+    <div class="mt-3 text-[10px] font-bold text-slate-500">SETTLEMENTS</div>
+    <table class="w-full text-[11px] mt-1">${p.settlements.map(t => `<tr class="border-t border-slate-100"><td class="font-mono">${t.id}</td><td>${esc(t.date)}</td><td class="text-right">₹${t.amount.toLocaleString('en-IN')}</td><td class="text-right font-semibold ${t.status === 'SETTLED' ? 'text-emerald-600' : 'text-red-600'}">${t.status}</td><td class="text-right font-mono text-slate-400">${t.utr || ''}</td></tr>`).join('')}</table>`);
   const m = s.metrics, tile = (v, k, tgt, ok) => `<div class="bg-black/20 rounded-lg p-2"><div class="text-xl font-bold ${ok ? 'text-emerald-400' : 'text-white'}">${v}</div><div class="text-[10px] text-slate-400">${k}</div><div class="text-[9px] text-slate-500">${tgt}</div></div>`;
   put('metrics', tile(m.median_ttr_s + 's', 'Median resolution', 'target < 10 min', m.resolved && m.median_ttr_s < 600)
     + tile(m.auto_pct + '%', 'Auto-resolved', 'target 50%+', m.auto_pct >= 50)
@@ -159,7 +167,7 @@ function err(e) { H.audit = null; $('audit').insertAdjacentHTML('afterbegin', `<
 async function say(text) {
   if (busy || !text.trim()) return; $('inp').value = '';
   S.messages = [...(S.messages || []), {from: 'merchant', text, ts: Date.now() / 1000}]; renderChat(S.messages); shown = S.messages.length; traceLen = 0;
-  await run(api('/chat', {body: JSON.stringify({text, session_id: sid})}));
+  await run(api('/chat', {body: JSON.stringify({text, session_id: sid, merchant_id: MID})}));
 }
 const send = e => { e.preventDefault(); say($('inp').value); };
 const decide = (id, d) => run(api(`/approvals/${id}/${d}`, {headers: {'Content-Type': 'application/json', 'x-approver-pin': $('pin').value}}));
@@ -172,7 +180,7 @@ async function mic() {
     const st = await navigator.mediaDevices.getUserMedia({audio: true}); rec = new MediaRecorder(st); chunks = [];
     rec.ondataavailable = e => chunks.push(e.data); $('mic').classList.add('bg-red-500', 'pulse');
     rec.onstop = () => { st.getTracks().forEach(t => t.stop()); $('mic').classList.remove('bg-red-500', 'pulse');
-      const f = new FormData(); f.append('file', new Blob(chunks, {type: 'audio/webm'}), 'note.webm'); f.append('hint', $('inp').value); traceLen = 0;
+      const f = new FormData(); f.append('file', new Blob(chunks, {type: 'audio/webm'}), 'note.webm'); f.append('hint', $('inp').value); f.append('merchant_id', MID); traceLen = 0;
       run(api('/voice', {body: f})); };
     rec.start();
   } catch { say('🎤 Kal ka settlement nahi aaya'); }
@@ -181,14 +189,14 @@ async function autoApprove() {
   await sleep(2200); const a = S.approvals?.find(x => x.ticket === sid); if (!a) return;  // only this demo's own approval
   $('pin').value = '2468'; $('ap-' + a.id)?.classList.add('ring-4', 'ring-emerald-300', 'pulse'); await sleep(1600); await decide(a.id, 'approve');
 }
-async function reset() { await api('/reset'); sid = null; shown = 0; seen = 0; H.chatKey = null; traceLen = 0; $('trace').innerHTML = ''; $('sop').textContent = $('diff').textContent = '—'; $('cachebadge').classList.add('hidden'); setPhase(''); setBadge('OPEN'); renderState(await get('/state')); }
-async function demo1() { await reset(); await say('🎤 Kal ka settlement nahi aaya'); await autoApprove(); }
-async function demo2() { await api('/demo/soundbox_offline'); renderState(await get('/state')); await sleep(600); await say('Soundbox bol nahi raha, payment ki awaaz nahi aa rahi'); }
-async function demo3() { traceLen = 0; await run(api('/webhook/settlement_failed')); await autoApprove(); }
+async function reset() { await api('/reset'); sid = null; shown = 0; seen = 0; H.chatKey = null; traceLen = 0; $('trace').innerHTML = ''; $('sop').textContent = $('diff').textContent = '—'; $('cachebadge').classList.add('hidden'); setPhase(''); setBadge('OPEN'); renderState(await get('/state?mid=' + MID)); }
+async function demo1() { await reset(); await switchMerchant('M1001'); await say('🎤 Kal ka settlement nahi aaya'); await autoApprove(); }
+async function demo2() { await api('/demo/soundbox_offline?merchant_id=' + MID); renderState(await get('/state?mid=' + MID)); await sleep(600); await say('Soundbox bol nahi raha, payment ki awaaz nahi aa rahi'); }
+async function demo3() { traceLen = 0; await run(api('/webhook/settlement_failed?merchant_id=' + MID)); await autoApprove(); }
 async function ff() { traceLen = 0; await run(api('/followup')); }
 function tab(t) { document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b.dataset.tab === t)); document.querySelectorAll('.panel').forEach(p => p.classList.toggle('hidden', p.dataset.panel !== t)); }
 document.querySelectorAll('.tab').forEach(b => b.onclick = () => tab(b.dataset.tab)); tab('brain');
 let lastQ = 0;
-setPhase(''); get('/state').then(renderState).catch(err);
-setInterval(() => !busy && get('/state').then(renderState).catch(() => {}), 4000);
+setPhase(''); get('/state?mid=' + MID).then(renderState).catch(err);
+setInterval(() => !busy && get('/state?mid=' + MID).then(renderState).catch(() => {}), 4000);
 </script></body></html>
