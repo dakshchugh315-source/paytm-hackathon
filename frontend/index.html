@@ -123,9 +123,14 @@ header{background:#fff;box-shadow:0 1px 0 #e5e9f0}header b.text-white{color:#002
     </div>
   </div>
 
-  <!-- CUSTOMER 360 -->
-  <div data-panel="c360" class="panel hidden flex-col flex-1 min-h-0 overflow-y-auto">
-    <div class="card p-6 max-w-4xl w-full mx-auto">
+  <!-- CUSTOMER 360: admin can browse every merchant and customer -->
+  <div data-panel="c360" class="panel hidden flex-1 min-h-0 gap-4">
+    <div class="card p-4 w-72 shrink-0 flex flex-col min-h-0">
+      <div class="text-lg font-bold text-slate-900">All users</div>
+      <input id="dirq" oninput="H.dir = null; renderDir(S)" placeholder="Search name, ID, city…" class="mt-2 mb-3 px-3 py-2 border border-slate-300 rounded-lg text-sm outline-none">
+      <div id="dir" class="flex-1 overflow-y-auto space-y-1.5"></div>
+    </div>
+    <div class="card p-6 flex-1 min-h-0 overflow-y-auto">
       <div class="text-lg font-bold text-slate-900 mb-1" id="viewing">Customer 360</div>
       <div id="profile" class="mt-3"></div>
     </div>
@@ -241,7 +246,7 @@ function renderState(s) {
   if (s.agent_profile) H.lastAP = s.agent_profile;
   const P = AID && AID !== MID ? (s.agent_profile || H.lastAP || s.profile) : s.profile;
   put('viewing', `${P.persona === 'customer' ? 'CUSTOMER' : 'MERCHANT'} 360 · ${esc(P.name)} ${AID ? `<button onclick="follow()" class="ml-2 text-[10px] font-normal underline text-slate-500">↺ follow phone</button>` : '<span class="font-normal text-slate-400">(following phone)</span>'}`);
-  renderTickets(s);
+  renderTickets(s); renderDir(s);
   if (P.persona === 'customer') { renderCustomer(P); } else {
   const p = P, pill = (ok, a, b) => `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${ok ? 'bg-emerald-500/20 text-emerald-300' : 'bg-red-500/20 text-red-300 pulse'}">${ok ? a : b}</span>`;
   put('profile', `<div class="flex items-center"><div><div class="text-white font-semibold">${p.name}</div><div class="text-[11px] text-slate-400">${p.owner} · ${p.id} · GMV ₹${p.gmv.toLocaleString('en-IN')}/mo · Bank ${p.bank}</div></div></div>
@@ -340,6 +345,20 @@ function renderTickets(s) {
     <button onclick="closeT('${t.id}')" class="border border-slate-300 text-[11px] px-2 py-0.5 rounded">Close manually</button>
     <button onclick="tab('c360')" class="text-[11px] px-2 py-0.5 rounded text-[#0086c9] underline">Open ${esc(t.name)}'s 360 →</button></div></div>` : '<div class="text-sm text-slate-400">← Pick a ticket to correct its issue, close it, or open the customer 360.</div>');
 }
+function renderDir(s) {
+  const q = ($('dirq')?.value || '').toLowerCase(), open = {};
+  (s.tickets || []).forEach(t => { if (!['VERIFIED', 'CLOSED', 'REASSIGNED', 'ANSWERED'].includes(t.status)) open[t.user] = (open[t.user] || 0) + 1; });
+  const cur = AID || MID, grp = (label, list) => list.length ? `<div class="text-[10px] font-bold text-slate-400 mt-2 mb-1">${label}</div>` + list.map(u => `
+    <button onclick="viewUser('${u.id}')" class="w-full text-left rounded-xl px-3 py-2 border ${u.id === cur ? 'border-[#00baf2] bg-sky-50' : 'border-transparent hover:bg-slate-50'}">
+      <div class="flex items-center gap-2"><span>${u.persona === 'customer' ? '👤' : '🏪'}</span><span class="font-semibold text-sm text-slate-800 truncate">${esc(u.persona === 'customer' ? u.name : u.owner)}</span>
+        ${open[u.id] ? `<span class="ml-auto text-[10px] px-1.5 rounded-full bg-orange-100 text-orange-700 font-bold">${open[u.id]} open</span>` : ''}${u.id === MID ? '<span class="ml-auto text-[10px] text-slate-400">📱</span>' : ''}</div>
+      <div class="text-[11px] text-slate-500 truncate">${u.persona === 'customer' ? '' : esc(u.name) + ' · '}${u.id} · ${esc(u.city)}</div>
+      ${u.alerts.length ? `<div class="flex flex-wrap gap-1 mt-1">${u.alerts.map(a => `<span class="text-[10px] px-1.5 rounded bg-red-50 text-red-700">${esc(a)}</span>`).join('')}</div>` : '<div class="text-[10px] text-emerald-600 mt-1">✓ No issues</div>'}
+    </button>`).join('') : '';
+  const all = (s.merchants || []).filter(u => !q || [u.name, u.owner, u.id, u.city].join(' ').toLowerCase().includes(q));
+  put('dir', grp('MERCHANTS', all.filter(u => u.persona === 'merchant')) + grp('CUSTOMERS', all.filter(u => u.persona === 'customer')) || '<div class="text-sm text-slate-400">No match.</div>');
+}
+function viewUser(uid) { AID = uid === MID ? null : uid; SELT = null; H.profile = H.viewing = H.dir = H.manual = null; get(sq()).then(renderState); }
 function pick(tid, uid) { SELT = tid; AID = uid; H.tickets = H.manual = H.profile = null; get(sq()).then(renderState); }
 function follow() { AID = null; SELT = null; H.manual = H.profile = null; get(sq()).then(renderState); }
 async function overrideT(tid) { const v = $('ovr').value; traceLen = 0; await run(api(`/api/tickets/${tid}/override?issue=${v}`)); }

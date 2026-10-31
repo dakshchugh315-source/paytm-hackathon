@@ -1123,8 +1123,12 @@ def state(mid: str = "M1001", agent: str = ""):
     cs = db.execute("SELECT AVG(score), COUNT(*) FROM csat").fetchone()
     lc = db.execute("SELECT COUNT(*), COALESCE(SUM(amount),0) FROM leads").fetchone()
     return {"messages": [x for x in MSGS if x.get("merchant", "M1001") == mid], "profile": profile(mid),
-            "merchants": [{"id": k, "name": v["name"], "owner": v["owner"], "persona": "merchant"} for k, v in MERCHANTS.items()]
-                         + [{"id": k, "name": v["name"], "owner": v["name"], "persona": "customer"} for k, v in CUSTOMERS.items()], "cache": CACHE,
+            "merchants": [{"id": k, "name": v["name"], "owner": v["owner"], "persona": "merchant", "city": v.get("city", ""),
+                           "alerts": [a for a, on in (("Settlement hold", any(x["status"] != "SETTLED" for x in v["settlements"].values())),
+                                                      ("Soundbox offline", not DEVICES[v["soundbox"]]["online"]), ("Bank unverified", not v["bank"]["verified"])) if on]} for k, v in MERCHANTS.items()]
+                         + [{"id": k, "name": v["name"], "owner": v["name"], "persona": "customer", "city": v.get("city", ""),
+                             "alerts": [a for a, on in (("Account frozen", v["frozen"]), ("EMI unpaid", bool(v.get("emi")) and not v["emi"]["paid"]),
+                                                        ("Payment pending", any(t["status"] == "PENDING" for t in v["txns"].values()))) if on]} for k, v in CUSTOMERS.items()], "cache": CACHE,
             "exec": exec_metrics(rows), "tickets": [ticket_row(x) for x in sorted(SESSIONS.values(), key=lambda x: -x["opened"])][:40],
             "agent_profile": profile(agent) if agent in MERCHANTS or agent in CUSTOMERS else None, "ml_report": ml_engine.load()["report"], "bank_status": BANK_STATUS,
             "approvals": [{k: v for k, v in a.items()} for a in APPROVALS.values() if a["status"] == "PENDING"],
